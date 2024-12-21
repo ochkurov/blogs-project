@@ -1,6 +1,7 @@
 import {Router, Request, Response} from "express";
-import {BlogType} from "../types/blog-types";
+import {APIErrorResultType, BlogInputType, BlogType} from "../types/blog-types";
 import {db} from "../db/db";
+import {nameValidaor, nameValidator} from "../validation/field-validator";
 
 export const blogsRouter = Router();
 
@@ -9,7 +10,7 @@ const blogsController = {
         const blogs = db.blogs
         res.status(200).json(blogs)
     },
-    getBlogsById(req: Request, res: Response<BlogType>) {
+    getBlogsById(req: Request<{ id: string }, {}, {}>, res: Response<BlogType>) {
         const blogId = req.params.id
         const findedBlog = db.blogs.find((blog) => blog.id === blogId)
         if (!findedBlog) {
@@ -18,7 +19,17 @@ const blogsController = {
         }
         res.status(200).json(findedBlog)
     },
-    postBlog(req: Request, res: Response) {
+    postBlog(
+        req: Request<{}, {}, BlogInputType>,
+        res: Response<BlogType | APIErrorResultType>) {
+
+        const name = req.body.name
+        const description = req.body.description
+        const websiteUrl = req.body.websiteUrl
+
+        const errorsArray: Array<{ field: string, message: string }> = []
+        nameValidator(name , errorsArray)
+
 
     },
     updateBlog(req: Request, res: Response) {
