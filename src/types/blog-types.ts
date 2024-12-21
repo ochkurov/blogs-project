@@ -15,5 +15,20 @@ export type ErrorType = {
 }
 
 export type APIErrorResultType = {
-    errorsMessages:ErrorType[]
+    errorsMessages: ErrorType[]
+}
+
+export type PostViewModel = {
+    id: string
+    title: string
+    shortDescription: string
+    content: string
+    blogId: string
+    blogName: string
+}
+export type PostInputModel = {
+    title: string,
+    shortDescription: string,
+    content: string,
+    blogId: string
 }

@@ -63,21 +63,32 @@ const blogsController = {
             res.status(400).json({errorsMessages: errorsArray})
             return
         }
+
         let updatedBlog: BlogType = db.blogs.find((blog) => blog.id === blogId)
+
         if (updatedBlog) {
             updatedBlog.id = blogId
             updatedBlog.name = name
             updatedBlog.description = description
             updatedBlog.websiteUrl = websiteUrl
             res.sendStatus(204)
+            return;
         }
         if (!updatedBlog) {
             res.sendStatus(404)
         }
 
     },
-    deleteBlog(req: Request, res: Response) {
-
+    deleteBlog(req: Request<{ id: string }, any, any>,
+               res: Response) {
+        const blogId = req.params.id
+        if (!blogId) {
+            res.sendStatus(404)
+            return
+        }
+        db.blogs = db.blogs.filter(blog => blog.id !== blogId)
+        res.sendStatus(204)
+        return
     },
 }
 

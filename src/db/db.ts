@@ -1,9 +1,11 @@
+import {BlogType, PostViewModel} from "../types/blog-types";
+
 export type DBType = {
-    blogs: any[],
+    blogs: any[] ,
     posts: any[]
 }
 
 export const db: DBType = {
-    blogs:[],
+    blogs: [] ,
     posts: []
 }
