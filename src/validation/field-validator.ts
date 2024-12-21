@@ -22,8 +22,9 @@ export const descriptionValidator = (description: string , errorsArray: Array<{ 
     }
 }
 export const websiteURLValidator = (websiteUrl: string , errorsArray: Array<{ field: string, message: string }>) => {
+    const RegExpDate = new RegExp('^https://([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$');
 
-    if (!websiteUrl) {
+    if (!websiteUrl || typeof websiteUrl !== 'string' || !RegExpDate.test(websiteUrl)) {
         errorsArray.push({field: 'websiteUrl', message: 'add websiteUrl'})
     }
     if (websiteUrl && websiteUrl.trim().length < 1) {
@@ -32,4 +33,5 @@ export const websiteURLValidator = (websiteUrl: string , errorsArray: Array<{ fi
     if (websiteUrl && websiteUrl.trim().length > 100) {
         errorsArray.push({field: 'websiteUrl', message: 'websiteUrl cannot be more than 500 symbols'})
     }
+
 }
