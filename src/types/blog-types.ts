@@ -15,5 +15,5 @@ export type ErrorType = {
 }
 
 export type APIErrorResultType = {
-    errorMessages:ErrorType[]
+    errorsMessages:ErrorType[]
 }

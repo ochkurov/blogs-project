@@ -2,10 +2,10 @@ import {APIErrorResultType, ErrorType} from "../types/blog-types";
 
 export const errorResponse = (errorsArray:ErrorType[]):APIErrorResultType => {
 let error_:APIErrorResultType = {
-errorMessages : []
+    errorsMessages : []
 }
 errorsArray.forEach((error:ErrorType)=>{
-error_.errorMessages.push(error)
+error_.errorsMessages.push(error)
 })
 return error_;
 }
