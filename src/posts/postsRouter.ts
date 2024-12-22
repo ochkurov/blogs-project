@@ -60,7 +60,9 @@ const postsController = {
             blogName: findedBlog.name
         }
         db.posts = [...db.posts , newPost]
-        db.posts = db.posts.push(newPost)
+        //db.posts = db.posts.push(newPost) почему так нельзя?
+        res.status(201).json(newPost)
+
 
     },
     updatePost(req:Request<{ id: string }, {}, PostInputModel>,
