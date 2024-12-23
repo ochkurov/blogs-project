@@ -75,6 +75,10 @@ const blogsController = {
             res.sendStatus(204)
             return;
         }
+        if (!blogId)  {
+            res.sendStatus(404)
+        }
+
         if (!updatedBlog) {
             res.sendStatus(404)
         }

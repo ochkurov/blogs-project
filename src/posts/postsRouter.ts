@@ -101,6 +101,11 @@ const postsController = {
             res.sendStatus(404)
             return
         }
+        if (!blogId)  {
+            res.sendStatus(404)
+        }
+
+
 
     },
     deletePost(req: Request<{ id: string }, any, any>,
