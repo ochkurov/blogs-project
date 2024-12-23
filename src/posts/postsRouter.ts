@@ -88,7 +88,7 @@ const postsController = {
             return;
         }
 
-        if (blogId.trim().length < 1)  {
+        if (!blogId)  {
             res.sendStatus(404)
         }
         const updatedPost = db.posts.find((post) => post.id === id)
