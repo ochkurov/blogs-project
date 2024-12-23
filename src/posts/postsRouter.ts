@@ -111,7 +111,7 @@ const postsController = {
             return
         }
         db.posts = db.posts.filter((post) => post.id !== id)
-        res.sendStatus(204)
+        res.sendStatus(204)zz
         return
     }
 }
