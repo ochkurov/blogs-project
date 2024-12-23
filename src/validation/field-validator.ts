@@ -57,14 +57,14 @@ export const titleValidator = (title: string | undefined,
     }
 }
 
-export const shortDescriptionValidator = (description: string, errorsArray: Array<{ field: string, message: string }>) => {
-    if (!description) {
+export const shortDescriptionValidator = (shortDescription: string, errorsArray: Array<{ field: string, message: string }>) => {
+    if (!shortDescription) {
         errorsArray.push({field: 'shortDescription', message: 'add description'});
     }
-    if (description && description.trim().length < 1) {
+    if (shortDescription && shortDescription.trim().length < 1) {
         errorsArray.push({field: 'shortDescription', message: 'add description '})
     }
-    if (description && description.trim().length > 100) {
+    if (shortDescription && shortDescription.trim().length > 100) {
         errorsArray.push({field: 'shortDescription', message: 'description cannot be more than 100 symbols'})
     }
 }
