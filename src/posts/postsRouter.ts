@@ -79,6 +79,9 @@ const postsController = {
             res.sendStatus(400).json({errorsMessages: errorsArray})
         }
 
+        if (!blogId)  {
+            res.sendStatus(404)
+        }
         const updatedPost = db.posts.find((post) => post.id === id)
         const findedBlog:BlogType = db.blogs.find((blog) => blog.id === blogId)
         if (!findedBlog) {
@@ -101,11 +104,6 @@ const postsController = {
             res.sendStatus(404)
             return
         }
-        if (!blogId)  {
-            res.sendStatus(404)
-        }
-
-
 
     },
     deletePost(req: Request<{ id: string }, any, any>,

@@ -64,6 +64,9 @@ const blogsController = {
             res.status(400).json({errorsMessages: errorsArray})
             return
         }
+        if (!blogId)  {
+            res.sendStatus(404)
+        }
 
         let updatedBlog: BlogType = db.blogs.find((blog) => blog.id === blogId)
 
@@ -74,9 +77,6 @@ const blogsController = {
             updatedBlog.websiteUrl = websiteUrl
             res.sendStatus(204)
             return;
-        }
-        if (!blogId)  {
-            res.sendStatus(404)
         }
 
         if (!updatedBlog) {
