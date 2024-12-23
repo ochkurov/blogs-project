@@ -1,19 +1,14 @@
-import {Router, Request, Response} from "express";
+import {Request, Response, Router} from "express";
 import {db} from "../db/db";
-import {
-    APIErrorResultType,
-    BlogInputType,
-    BlogType,
-    ErrorType,
-    PostInputModel,
-    PostViewModel
-} from "../types/blog-types";
+import {APIErrorResultType, BlogType, ErrorType, PostInputModel, PostViewModel} from "../types/blog-types";
 import {
     blogIdValidator,
     contentValidator,
     shortDescriptionValidator,
     titleValidator
 } from "../validation/field-validator";
+import {authorizationMiidleware} from "../middlewares/authorizationMiidleware";
+import {errorsResultMiddleware} from "../middlewares/errorsResultMiddleware";
 
 export const postsRouter = Router();
 
@@ -123,6 +118,6 @@ const postsController = {
 
 postsRouter.get('/', postsController.getPosts)
 postsRouter.get('/:id', postsController.getPostsById)
-postsRouter.post('/', postsController.addPost)
-postsRouter.put('/:id', postsController.updatePost)
-postsRouter.delete('/:id', postsController.deletePost)
+postsRouter.post('/', authorizationMiidleware, errorsResultMiddleware , postsController.addPost)
+postsRouter.put('/:id', authorizationMiidleware,errorsResultMiddleware, postsController.updatePost)
+postsRouter.delete('/:id', authorizationMiidleware, postsController.deletePost)

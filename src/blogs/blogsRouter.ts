@@ -1,8 +1,9 @@
-import {Router, Request, Response} from "express";
+import {Request, Response, Router} from "express";
 import {APIErrorResultType, BlogInputType, BlogType, ErrorType} from "../types/blog-types";
 import {db} from "../db/db";
 import {descriptionValidator, nameValidator, websiteURLValidator} from "../validation/field-validator";
-import {errorResponse} from "../validation/errorResponse";
+import {authorizationMiidleware} from "../middlewares/authorizationMiidleware";
+import {errorsResultMiddleware} from "../middlewares/errorsResultMiddleware";
 
 export const blogsRouter = Router();
 
@@ -93,8 +94,8 @@ const blogsController = {
 }
 
 
-blogsRouter.get('/', blogsController.getBlogs)
+blogsRouter.get('/',  blogsController.getBlogs)
 blogsRouter.get('/:id', blogsController.getBlogsById)
-blogsRouter.post('/', blogsController.postBlog)
-blogsRouter.put('/:id', blogsController.updateBlog)
-blogsRouter.delete('/:id', blogsController.deleteBlog)
+blogsRouter.post('/',authorizationMiidleware, errorsResultMiddleware , blogsController.postBlog)
+blogsRouter.put('/:id', authorizationMiidleware,errorsResultMiddleware ,blogsController.updateBlog)
+blogsRouter.delete('/:id',authorizationMiidleware, blogsController.deleteBlog)
