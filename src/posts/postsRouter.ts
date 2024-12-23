@@ -42,10 +42,10 @@ const postsController = {
         contentValidator(content, errorsArray)
         blogIdValidator(blogId, errorsArray)
 
-        if (errorsArray.length > 0) {
+      /*  if (errorsArray.length > 0) {
             res.status(400).json({errorsMessages: errorsArray})
             return
-        }
+        }*/
 
         let id: number = (Date.now() + Math.random());
         const findedBlog:BlogType = db.blogs.find((blog) => blog.id === blogId)
@@ -84,11 +84,11 @@ const postsController = {
         shortDescriptionValidator(shortDescription, errorsArray)
         contentValidator(content, errorsArray)
         blogIdValidator(blogId, errorsArray)
-
+/*
         if (errorsArray.length > 0) {
             res.status(400).json({errorsMessages: errorsArray})
             return;
-        }
+        }*/
 
         if (!blogId)  {
             res.sendStatus(404)

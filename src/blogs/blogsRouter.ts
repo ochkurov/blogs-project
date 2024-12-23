@@ -34,11 +34,11 @@ const blogsController = {
         descriptionValidator(description, errorsArray)
         websiteURLValidator(websiteUrl, errorsArray)
 
-        if (errorsArray.length > 0) {
+      /*  if (errorsArray.length > 0) {
             //let errors = errorResponse(errorsArray)
             res.status(400).json({errorsMessages: errorsArray})
             return
-        }
+        }*/
         let id: number = (Date.now() + Math.random());
         let newBlog: BlogType = {
             id: parseInt(String(id)).toString(),
@@ -59,11 +59,11 @@ const blogsController = {
         nameValidator(name, errorsArray)
         descriptionValidator(description, errorsArray)
         websiteURLValidator(websiteUrl, errorsArray)
-        if (errorsArray.length > 0) {
+      /*  if (errorsArray.length > 0) {
             ///let errors = errorResponse(errorsArray)
             res.status(400).json({errorsMessages: errorsArray})
             return
-        }
+        }*/
         if (!blogId)  {
             res.sendStatus(404)
         }
