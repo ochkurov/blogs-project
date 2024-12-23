@@ -113,6 +113,11 @@ const postsController = {
             res.sendStatus(404)
             return
         }
+        let findPost = db.posts.find((post) => post.id === id)
+        if (!findPost) {
+            res.sendStatus(404)
+            return;
+        }
         db.posts = db.posts.filter((post) => post.id !== id)
 
         res.sendStatus(204)

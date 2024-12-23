@@ -91,6 +91,12 @@ const blogsController = {
             res.sendStatus(404)
             return
         }
+        let findBlog = db.blogs.find(blog => blog.id === blogId);
+        if (!findBlog) {
+            res.sendStatus(404)
+            return
+        }
+
         db.blogs = db.blogs.filter(blog => blog.id !== blogId)
         res.sendStatus(204)
         return
