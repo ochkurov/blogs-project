@@ -43,6 +43,7 @@ const postsController = {
 
         if (errorsArray.length > 0) {
             res.sendStatus(400).json({errorsMessages: errorsArray})
+            return
         }
         let id: number = (Date.now() + Math.random());
         const findedBlog:BlogType = db.blogs.find((blog) => blog.id === blogId)
@@ -77,6 +78,7 @@ const postsController = {
 
         if (errorsArray.length > 0) {
             res.sendStatus(400).json({errorsMessages: errorsArray})
+            return;
         }
 
         if (!blogId)  {
