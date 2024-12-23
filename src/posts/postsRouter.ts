@@ -26,14 +26,15 @@ const postsController = {
         }
         res.status(200).json(findedPost)
     },
-    addPost(req:Request<{} , {} , PostInputModel>,
-            res:Response<PostViewModel | APIErrorResultType>) {
+    addPost(
+        req:Request<{} , {} , PostInputModel>,
+            res:Response<PostViewModel | APIErrorResultType>
+    ) {
 
         const title = req.body.title
         const shortDescription = req.body.shortDescription
         const content = req.body.content
         const blogId = req.body.blogId
-
         const errorsArray: ErrorType[] = []
 
         titleValidator(title, errorsArray)
@@ -42,9 +43,10 @@ const postsController = {
         blogIdValidator(blogId, errorsArray)
 
         if (errorsArray.length > 0) {
-            res.sendStatus(400).json({errorsMessages: errorsArray})
+            res.status(400).json({errorsMessages: errorsArray})
             return
         }
+
         let id: number = (Date.now() + Math.random());
         const findedBlog:BlogType = db.blogs.find((blog) => blog.id === blogId)
 
@@ -84,7 +86,7 @@ const postsController = {
         blogIdValidator(blogId, errorsArray)
 
         if (errorsArray.length > 0) {
-            res.sendStatus(400).json({errorsMessages: errorsArray})
+            res.status(400).json({errorsMessages: errorsArray})
             return;
         }
 

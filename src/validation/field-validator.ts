@@ -38,7 +38,7 @@ export const websiteURLValidator = (websiteUrl: string, errorsArray: Array<{ fie
 
 }
 
-export const titleValidator = (title: string | undefined,
+export const titleValidator = (title: string ,
                                errorsArray: Array<{ field: string, message: string }>) => {
     if (!title) {
         errorsArray.push({field: 'title', message: 'no title'});
@@ -46,7 +46,7 @@ export const titleValidator = (title: string | undefined,
     if (title && title.trim().length > 30) {
         errorsArray.push({
             field: 'title',
-            message: 'more than 40 symbols'
+            message: 'more than 30 symbols'
         });
     }
     if (title && title.trim().length < 1) {
