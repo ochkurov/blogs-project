@@ -7,7 +7,7 @@ import {
     shortDescriptionValidator,
     titleValidator
 } from "../validation/field-validator";
-import {authorizationMiidleware} from "../middlewares/authorizationMiidleware";
+import {authorizationMidleware} from "../middlewares/authorizationMidleware";
 import {errorsResultMiddleware} from "../middlewares/errorsResultMiddleware";
 
 export const postsRouter = Router();
@@ -119,6 +119,6 @@ const postsController = {
 
 postsRouter.get('/', postsController.getPosts)
 postsRouter.get('/:id', postsController.getPostsById)
-postsRouter.post('/', authorizationMiidleware, errorsResultMiddleware , postsController.addPost)
-postsRouter.put('/:id', authorizationMiidleware,errorsResultMiddleware, postsController.updatePost)
-postsRouter.delete('/:id', authorizationMiidleware, postsController.deletePost)
+postsRouter.post('/', authorizationMidleware, errorsResultMiddleware , postsController.addPost)
+postsRouter.put('/:id', authorizationMidleware,errorsResultMiddleware, postsController.updatePost)
+postsRouter.delete('/:id', authorizationMidleware, postsController.deletePost)
