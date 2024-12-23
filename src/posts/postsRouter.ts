@@ -47,6 +47,12 @@ const postsController = {
         }
         let id: number = (Date.now() + Math.random());
         const findedBlog:BlogType = db.blogs.find((blog) => blog.id === blogId)
+
+        if (!findedBlog) {
+            res.sendStatus(404)
+            return
+        }
+
         let newPost: PostViewModel = {
             id: parseInt(String(id)).toString(),
             title,
@@ -55,6 +61,7 @@ const postsController = {
             blogId,
             blogName: findedBlog.name
         }
+
         db.posts = [...db.posts , newPost]
         //db.posts = db.posts.push(newPost) почему так нельзя?
         res.status(201).json(newPost)
@@ -81,15 +88,18 @@ const postsController = {
             return;
         }
 
-        if (!blogId)  {
+        if (blogId.trim().length < 1)  {
             res.sendStatus(404)
         }
         const updatedPost = db.posts.find((post) => post.id === id)
+
         const findedBlog:BlogType = db.blogs.find((blog) => blog.id === blogId)
+
         if (!findedBlog) {
             res.sendStatus(404)
             return
         }
+
         if (updatedPost) {
             updatedPost.id = id
             updatedPost.title = title
@@ -97,15 +107,12 @@ const postsController = {
             updatedPost.content = content
             updatedPost.blogId = blogId
             updatedPost.blogName = findedBlog.name
-
-            res.sendStatus(204)
-            return;
         }
-
         if (!updatedPost) {
             res.sendStatus(404)
-            return
+            return;
         }
+        res.sendStatus(204)
 
     },
     deletePost(req: Request<{ id: string }, any, any>,
