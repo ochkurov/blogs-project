@@ -7,9 +7,7 @@ export const errorsResultMiddleware = (
     next: NextFunction
 )=> {
     const errors = validationResult(req)
-    console.log(errors)
     if(!errors.isEmpty()) {
-        console.log(errors)
         res.status(400).send({errorsMessages: errors
                 .array({onlyFirstError: true})
                 .map((err) => {
