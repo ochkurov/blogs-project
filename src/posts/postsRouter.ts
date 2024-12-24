@@ -1,14 +1,9 @@
 import {Request, Response, Router} from "express";
 import {db} from "../db/db";
 import {APIErrorResultType, BlogType, ErrorType, PostInputModel, PostViewModel} from "../types/blog-types";
-import {
-    blogIdValidator,
-    contentValidator,
-    shortDescriptionValidator,
-    titleValidator
-} from "../validation/field-validator";
 import {authorizationMidleware} from "../middlewares/authorizationMidleware";
 import {errorsResultMiddleware} from "../middlewares/errorsResultMiddleware";
+import {postBodyValidation} from "../validation/field-validator";
 
 export const postsRouter = Router();
 
@@ -36,11 +31,11 @@ const postsController = {
         const content = req.body.content
         const blogId = req.body.blogId
         const errorsArray: ErrorType[] = []
-
+/*
         titleValidator(title, errorsArray)
         shortDescriptionValidator(shortDescription, errorsArray)
         contentValidator(content, errorsArray)
-        blogIdValidator(blogId, errorsArray)
+        blogIdValidator(blogId, errorsArray)*/
 
       /*  if (errorsArray.length > 0) {
             res.status(400).json({errorsMessages: errorsArray})
@@ -79,11 +74,11 @@ const postsController = {
         const id = req.params.id
 
         const errorsArray: ErrorType[] = []
-
+/*
         titleValidator(title, errorsArray)
         shortDescriptionValidator(shortDescription, errorsArray)
         contentValidator(content, errorsArray)
-        blogIdValidator(blogId, errorsArray)
+        blogIdValidator(blogId, errorsArray)*/
 /*
         if (errorsArray.length > 0) {
             res.status(400).json({errorsMessages: errorsArray})
@@ -138,6 +133,6 @@ const postsController = {
 
 postsRouter.get('/', postsController.getPosts)
 postsRouter.get('/:id', postsController.getPostsById)
-postsRouter.post('/', authorizationMidleware, errorsResultMiddleware , postsController.addPost)
-postsRouter.put('/:id', authorizationMidleware,errorsResultMiddleware, postsController.updatePost)
-postsRouter.delete('/:id', authorizationMidleware, postsController.deletePost)
+postsRouter.post('/', authorizationMidleware, postBodyValidation,errorsResultMiddleware , postsController.addPost)
+postsRouter.put('/:id', authorizationMidleware,postBodyValidation,errorsResultMiddleware, postsController.updatePost)
+postsRouter.delete('/:id', authorizationMidleware, postBodyValidation,postsController.deletePost)
