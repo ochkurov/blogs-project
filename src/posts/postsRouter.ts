@@ -31,16 +31,6 @@ const postsController = {
         const content = req.body.content
         const blogId = req.body.blogId
         const errorsArray: ErrorType[] = []
-/*
-        titleValidator(title, errorsArray)
-        shortDescriptionValidator(shortDescription, errorsArray)
-        contentValidator(content, errorsArray)
-        blogIdValidator(blogId, errorsArray)*/
-
-      /*  if (errorsArray.length > 0) {
-            res.status(400).json({errorsMessages: errorsArray})
-            return
-        }*/
 
         let id: number = (Date.now() + Math.random());
         const findedBlog:BlogType = db.blogs.find((blog) => blog.id === blogId)
@@ -72,18 +62,6 @@ const postsController = {
         const content = req.body.content
         const blogId = req.body.blogId
         const id = req.params.id
-
-        const errorsArray: ErrorType[] = []
-/*
-        titleValidator(title, errorsArray)
-        shortDescriptionValidator(shortDescription, errorsArray)
-        contentValidator(content, errorsArray)
-        blogIdValidator(blogId, errorsArray)*/
-/*
-        if (errorsArray.length > 0) {
-            res.status(400).json({errorsMessages: errorsArray})
-            return;
-        }*/
 
         if (!blogId)  {
             res.sendStatus(404)

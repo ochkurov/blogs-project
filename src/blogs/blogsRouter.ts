@@ -28,16 +28,7 @@ const blogsController = {
         const name = req.body.name
         const description = req.body.description
         const websiteUrl = req.body.websiteUrl
-        const errorsArray: ErrorType[] = []
 
-      /*  nameValidator(name, errorsArray)
-        descriptionValidator(description, errorsArray)
-        websiteURLValidator(websiteUrl, errorsArray)
-
-      /!*  if (errorsArray.length > 0) {
-            res.status(400).json({errorsMessages: errorsArray})
-            return
-        }*!/*/
 
         let id: number = (Date.now() + Math.random());
         let newBlog: BlogType = {
@@ -55,10 +46,7 @@ const blogsController = {
         const name = req.body.name
         const description = req.body.description
         const websiteUrl = req.body.websiteUrl
-        const errorsArray: Array<{ field: string, message: string }> = []
-       /* nameValidator(name, errorsArray)
-        descriptionValidator(description, errorsArray)
-        websiteURLValidator(websiteUrl, errorsArray)*/
+
 
         if (!blogId)  {
             res.sendStatus(404)
