@@ -8,8 +8,8 @@ export const blogsBodyValidation = [
 
 export const postBodyValidation = [
     body('title').isString().trim().trim().notEmpty().isLength({min:1 , max:30}).withMessage('should be string'),
-    body('shortDescription').isString().trim().notEmpty().isLength({min:1 , max:100}).withMessage('should be string'),
     body('content').isString().trim().notEmpty().isLength({min:1 , max:1000}).withMessage('should be string'),
+    body('shortDescription').isString().trim().notEmpty().isLength({min:1 , max:100}).withMessage('should be string'),
     body('blogId').isString().trim().notEmpty().withMessage('should be string'),
 ]
 /*
