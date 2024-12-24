@@ -4,6 +4,7 @@ import {db} from "../db/db";
 import {descriptionValidator, nameValidator, websiteURLValidator} from "../validation/field-validator";
 import {authorizationMidleware} from "../middlewares/authorizationMidleware";
 import {errorsResultMiddleware} from "../middlewares/errorsResultMiddleware";
+import {body} from "express-validator";
 
 export const blogsRouter = Router();
 
@@ -35,10 +36,10 @@ const blogsController = {
         websiteURLValidator(websiteUrl, errorsArray)
 
       /*  if (errorsArray.length > 0) {
-            //let errors = errorResponse(errorsArray)
             res.status(400).json({errorsMessages: errorsArray})
             return
         }*/
+
         let id: number = (Date.now() + Math.random());
         let newBlog: BlogType = {
             id: parseInt(String(id)).toString(),
@@ -59,11 +60,7 @@ const blogsController = {
         nameValidator(name, errorsArray)
         descriptionValidator(description, errorsArray)
         websiteURLValidator(websiteUrl, errorsArray)
-      /*  if (errorsArray.length > 0) {
-            ///let errors = errorResponse(errorsArray)
-            res.status(400).json({errorsMessages: errorsArray})
-            return
-        }*/
+
         if (!blogId)  {
             res.sendStatus(404)
         }
@@ -106,6 +103,6 @@ const blogsController = {
 
 blogsRouter.get('/',  blogsController.getBlogs)
 blogsRouter.get('/:id', blogsController.getBlogsById)
-blogsRouter.post('/',authorizationMidleware, errorsResultMiddleware , blogsController.postBlog)
+blogsRouter.post('/',authorizationMidleware, ,  errorsResultMiddleware , blogsController.postBlog)
 blogsRouter.put('/:id', authorizationMidleware,errorsResultMiddleware ,blogsController.updateBlog)
 blogsRouter.delete('/:id',authorizationMidleware, blogsController.deleteBlog)

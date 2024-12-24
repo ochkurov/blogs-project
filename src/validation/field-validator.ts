@@ -1,15 +1,17 @@
-export const nameValidator = (name: string, errorsArray: Array<{ field: string, message: string }>) => {
-    if (!name) {
-        errorsArray.push({field: 'name', message: 'add name'})
-    }
-    if (name && name.trim().length < 1) {
-        errorsArray.push({field: 'name', message: 'add name '})
-    }
-    if (name && name.trim().length > 15) {
-        errorsArray.push({field: 'name', message: 'name cannot be more than 15 symbols'})
-    }
-}
+import {body} from "express-validator";
 
+export const BlogsBodyValidation = [
+    body('name').isString().trim().notEmpty().isLength({min:1 , max:15}).withMessage('should be string'),
+    body('websiteUrl').isString().trim().notEmpty().matches(new RegExp('^https://([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$')).isLength({min:1 , max:500}).withMessage('should be string'),
+    body('description').isString().trim().notEmpty().isLength({min:1 , max:100}).withMessage('should be string'),
+]
+
+export const PostBodyValidation = [
+    body('title').isString().trim().trim().notEmpty().isLength({min:1 , max:30}).withMessage('should be string'),
+    body('shortDescription').isString().trim().notEmpty().isLength({min:1 , max:100}).withMessage('should be string'),
+    body('content').isString().trim().notEmpty().isLength({min:1 , max:1000}).withMessage('should be string'),
+    body('blogId').isString().trim().notEmpty().withMessage('should be string'),
+]
 export const descriptionValidator = (description: string, errorsArray: Array<{ field: string, message: string }>) => {
 
     if (!description) {
@@ -38,7 +40,7 @@ export const websiteURLValidator = (websiteUrl: string, errorsArray: Array<{ fie
 
 }
 
-export const titleValidator = (title: string ,
+export const titleValidator = (title: string,
                                errorsArray: Array<{ field: string, message: string }>) => {
     if (!title) {
         errorsArray.push({field: 'title', message: 'no title'});
@@ -57,7 +59,10 @@ export const titleValidator = (title: string ,
     }
 }
 
-export const shortDescriptionValidator = (shortDescription: string, errorsArray: Array<{ field: string, message: string }>) => {
+export const shortDescriptionValidator = (shortDescription: string, errorsArray: Array<{
+    field: string,
+    message: string
+}>) => {
     if (!shortDescription) {
         errorsArray.push({field: 'shortDescription', message: 'add description'});
     }
