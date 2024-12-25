@@ -17,5 +17,5 @@ export const updatePostController = (
         res.sendStatus(404)
         return
     }
-
+    res.sendStatus(204)
 }

@@ -26,7 +26,7 @@ export const postsRepository = {
         db.posts = [...db.posts, newPost]
         return newPost
     },
-    updatePost(id: string, body: PostInputModel) : boolean | PostViewModel {
+    updatePost(id: string, body: PostInputModel): boolean | PostViewModel {
 
         const blogId = body.blogId
         const findedBlog = db.blogs.find(blog => blog.id === blogId);
@@ -48,7 +48,14 @@ export const postsRepository = {
         }
 
     },
-    deletePost(id: string) {
+    deletePost(id: string): boolean {
+        const findPost = this.getPostById(id)
+        if (!findPost) {
+            return false
+        } else {
+            db.posts = db.posts.filter(post => post.id !== id)
+            return true
+        }
 
     }
 }
