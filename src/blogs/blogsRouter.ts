@@ -52,7 +52,7 @@ const blogsController = {
             res.sendStatus(404)
         }
 
-        let updatedBlog: BlogType = db.blogs.find((blog) => blog.id === blogId)
+        let updatedBlog = db.blogs.find((blog) => blog.id === blogId)
 
         if (updatedBlog) {
             updatedBlog.id = blogId
@@ -90,6 +90,6 @@ const blogsController = {
 
 blogsRouter.get('/',  blogsController.getBlogs)
 blogsRouter.get('/:id', blogsController.getBlogsById)
-blogsRouter.post('/',authorizationMidleware,blogsBodyValidation ,  errorsResultMiddleware , blogsController.postBlog)
+blogsRouter.post('/',authorizationMidleware, blogsBodyValidation ,  errorsResultMiddleware , blogsController.postBlog)
 blogsRouter.put('/:id', authorizationMidleware,blogsBodyValidation,errorsResultMiddleware ,blogsController.updateBlog)
 blogsRouter.delete('/:id',authorizationMidleware, blogsController.deleteBlog)

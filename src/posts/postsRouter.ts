@@ -8,8 +8,8 @@ import {postBodyValidation} from "../validation/field-validator";
 export const postsRouter = Router();
 
 const postsController = {
-    getPosts(req:Request, res:Response<PostViewModel[]>) {
-        const posts = db.posts
+     getPosts(req:Request, res:Response<PostViewModel[]>) {
+        const posts =  db.posts
         res.status(200).json(posts)
     },
     getPostsById(req: Request<{ id: string }, {}, {}>, res: Response<PostViewModel>) {
@@ -30,12 +30,12 @@ const postsController = {
         const shortDescription = req.body.shortDescription
         const content = req.body.content
         const blogId = req.body.blogId
-        const errorsArray: ErrorType[] = []
+
 
         let id: number = (Date.now() + Math.random());
-        const findedBlog:BlogType = db.blogs.find((blog) => blog.id === blogId)
+        const findBlog = db.blogs.find((blog) => blog.id === blogId)
 
-        if (!findedBlog) {
+        if (!findBlog) {
             res.sendStatus(404)
             return
         }
@@ -46,7 +46,7 @@ const postsController = {
             shortDescription,
             content,
             blogId,
-            blogName: findedBlog.name
+            blogName: findBlog.name
         }
 
         db.posts = [...db.posts , newPost]
@@ -68,9 +68,9 @@ const postsController = {
         }
         const updatedPost = db.posts.find((post) => post.id === id)
 
-        const findedBlog:BlogType = db.blogs.find((blog) => blog.id === blogId)
+        const findBlog = db.blogs.find((blog) => blog.id === blogId)
 
-        if (!findedBlog) {
+        if (!findBlog) {
             res.sendStatus(404)
             return
         }
@@ -81,7 +81,7 @@ const postsController = {
             updatedPost.shortDescription = shortDescription
             updatedPost.content = content
             updatedPost.blogId = blogId
-            updatedPost.blogName = findedBlog.name
+            updatedPost.blogName = findBlog.name
         }
         if (!updatedPost) {
             res.sendStatus(404)

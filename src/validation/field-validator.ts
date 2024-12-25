@@ -15,5 +15,5 @@ export const postBodyValidation = [
         .trim().custom(blogId => {
         const blog = db.blogs.find(blog => blog.id === blogId)
         return !!blog
-    }).withMessage('no blog'),
+    }).withMessage('invalid blog Id'),
 ]
