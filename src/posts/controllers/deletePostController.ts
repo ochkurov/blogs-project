@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import {postsRepository} from "../postsRepository";
 
-const deletePostController = (
+export const deletePostController = (
     req: Request<{ id: string }, any, any>,
     res: Response) => {
     const id = req.params.id;

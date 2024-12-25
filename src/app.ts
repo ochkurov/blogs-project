@@ -1,9 +1,9 @@
 import express from 'express'
 import cors from 'cors'
 import {SETTINGS} from "./settings";
-import {postsRouter} from "./posts/postsRouter";
 import {db} from "./db/db";
 import {blogsRouter} from "./blogs";
+import {postsRouter} from "./posts";
 
 export const app = express() // создать приложение
 app.use(express.json()) // создание свойств-объектов body и query во всех реквестах
