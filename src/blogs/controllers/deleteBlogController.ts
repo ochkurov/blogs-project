@@ -6,11 +6,6 @@ export const deleteBlogController = (
     res: Response) => {
     const id = req.params.id;
 
-    if (!id) {
-        res.sendStatus(404)
-        return
-    }
-
     const deleteBlog = blogsRepository.deleteBlog(id)
 
     if (!deleteBlog) {
