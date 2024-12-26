@@ -1,7 +1,9 @@
 import {app} from './app'
 import {SETTINGS} from './settings'
 import {runDb} from "./db/mongoDb";
+
 const startApp = async () => {
+
     const res = await runDb(SETTINGS.MONGO_URL)
     if (!res) process.exit(1)
 
