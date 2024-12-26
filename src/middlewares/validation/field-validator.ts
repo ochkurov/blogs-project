@@ -1,5 +1,4 @@
 import {body} from "express-validator";
-import {db} from "../../db/db";
 import {blogsRepository} from "../../blogs/blogsRepository";
 
 export const blogsBodyValidation = [
