@@ -11,6 +11,7 @@ export const deletePostController = async (
         return
     }
     const deletePost = await postsRepository.deletePost(id)
+
     if (!deletePost) {
         res.sendStatus(404)
         return

@@ -1,4 +1,3 @@
-import {db} from "../db/db";
 import {BlogInputType, BlogType} from "../types/blog-types";
 import {blogsCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
@@ -7,19 +6,19 @@ export const blogsRepository = {
 
     async getAllBlogs() {
 
-        return await blogsCollection.find({}).toArray();
+        return await blogsCollection.find({},{projection:{_id:0}}).toArray()
         /*return db.blogs*/
     },
 
-    async getBlogById(id: string) {
+    async getBlogById(id: string)  {
 
-        return await blogsCollection.findOne({id: id}).toArray();
+        return await blogsCollection.findOne({id: id} , {projection:{_id:0}});
         /*return db.blogs.find(blog => blog.id === id)*/
     },
 
     async gerVideoByUUID(_id: ObjectId) {
 
-        return await blogsCollection.findOne({_id})
+        return await blogsCollection.findOne({_id} , {projection:{_id:0}})
     },
 
     async createBlog(body: BlogInputType): Promise<ObjectId> {
@@ -69,7 +68,9 @@ export const blogsRepository = {
     },
 
     async deleteBlog(id: string) {
+
         const blog = await blogsCollection.findOne(id)
+
         if (blog) {
             const res = await blogsCollection.deleteOne({_id: blog._id})
             if (res.deletedCount > 0) return true

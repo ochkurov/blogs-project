@@ -16,6 +16,5 @@ export const updatePostController = async (
     if (!updatedPost) {
         res.sendStatus(404)
         return
-    }
-    res.sendStatus(204)
+    } else res.sendStatus(204)
 }
