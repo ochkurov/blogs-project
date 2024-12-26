@@ -9,6 +9,7 @@ app.get('/', (req, res) => {
     // эндпоинт, который будет показывать на верселе какая версия бэкэнда сейчас залита
     res.status(200).json({version: '1.0'})
 })
+
 app.delete('/testing/all-data', (req, res) => {
     db.posts = []
     db.blogs
@@ -25,4 +26,5 @@ const startApp = async () => {
         console.log('...server started in port !!' + SETTINGS.PORT)
     })
 }
+
 startApp()
