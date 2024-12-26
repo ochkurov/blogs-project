@@ -10,8 +10,8 @@ import {errorsResultMiddleware} from "../middlewares/errorsResultMiddleware";
 
 export const blogsRouter = Router()
 
-blogsRouter.post('/', authorizationMidleware, blogsBodyValidation ,  errorsResultMiddleware , createBlogController)
 blogsRouter.get('/',  getBlogController)
 blogsRouter.get('/:id',  getBlogByIdController)
-blogsRouter.delete('/:id', deleteBlogController)
+blogsRouter.post('/', authorizationMidleware, blogsBodyValidation ,  errorsResultMiddleware , createBlogController)
 blogsRouter.put('/:id', authorizationMidleware, blogsBodyValidation ,  errorsResultMiddleware , updateBlogController)
+blogsRouter.delete('/:id', authorizationMidleware ,deleteBlogController)
