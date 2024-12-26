@@ -8,7 +8,9 @@ export const createPostController = async (
 ) => {
 
     const postId = await postsRepository.createPost(req.body)
+
     const newPost = await postsRepository.getPostByUUID(postId)
+
     res.status(201).json(newPost)
 
 }
