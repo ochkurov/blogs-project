@@ -33,7 +33,7 @@ export const postsRepository = {
             shortDescription: body.shortDescription,
             content: body.content,
             blogId: body.blogId,
-            blogName: blog.name || 'newName',
+            blogName: body.blogName || 'newName',
             createdAt: new Date().toISOString(),
             isMembership: false
         }
