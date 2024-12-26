@@ -1,12 +1,12 @@
 import {Request, Response} from "express";
 import {blogsRepository} from "../blogsRepository";
 
-export const deleteBlogController = (
+export const deleteBlogController = async (
     req: Request<{ id: string }, any, any>,
     res: Response) => {
     const id = req.params.id;
 
-    const deleteBlog = blogsRepository.deleteBlog(id)
+    const deleteBlog = await blogsRepository.deleteBlog(id)
 
     if (!deleteBlog) {
         res.sendStatus(404)

@@ -2,7 +2,7 @@ import {Request, Response} from "express";
 import {APIErrorResultType, BlogInputType} from "../../types/blog-types";
 import {blogsRepository} from "../blogsRepository";
 
-export const updateBlogController = (
+export const updateBlogController = async (
     req: Request<{ id: string }, {}, BlogInputType>,
     res: Response<APIErrorResultType>) => {
     const id = req.params.id;
@@ -12,7 +12,7 @@ export const updateBlogController = (
         return;
     }
 
-    const updatedBlog = blogsRepository.updateBlog(id, req.body)
+    const updatedBlog = await blogsRepository.updateBlog(id, req.body)
 
     if (!updatedBlog) {
         res.sendStatus(404)

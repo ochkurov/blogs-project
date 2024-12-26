@@ -3,12 +3,12 @@ import {BlogType} from "../../types/blog-types";
 import {blogsRepository} from "../blogsRepository";
 
 
-export const getBlogController = (
+export const getBlogController = async (
     req: Request,
     res: Response<BlogType[]> ,
     next:NextFunction) => {
 
-    const blogs = blogsRepository.getAllBlogs()
+    const blogs = await blogsRepository.getAllBlogs()
     res.status(200).json(blogs)
 
 }

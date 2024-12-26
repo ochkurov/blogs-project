@@ -1,5 +1,5 @@
 import {body} from "express-validator";
-import {db} from "../db/db";
+import {db} from "../../db/db";
 
 export const blogsBodyValidation = [
     body('name').isString().trim().notEmpty().isLength({min:1 , max:15}),

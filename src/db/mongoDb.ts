@@ -15,7 +15,7 @@ let client = new MongoClient(url)
     try {
         await client.connect();
         await db.command({ping : 1});
-        console.log('OK')
+        console.log('connected to db')
         return true
     }
     catch(err) {

@@ -1,27 +1,61 @@
 import {db} from "../db/db";
 import {BlogInputType, BlogType} from "../types/blog-types";
+import {blogsCollection} from "../db/mongoDb";
+import {ObjectId} from "mongodb";
 
 export const blogsRepository = {
-    getAllBlogs(): BlogType[] {
-        return db.blogs
-    },
-    getBlogById(id: string): BlogType | undefined {
-        return db.blogs.find(blog => blog.id === id)
-    },
-    createBlog(body: BlogInputType): BlogType {
 
-        let id: number = (Date.now() + Math.random());
+    async getAllBlogs() {
 
-        let newBlog: BlogType = {
-            id: parseInt(String(id)).toString(),
-            ...body
+        return await blogsCollection.find({}).toArray();
+        /*return db.blogs*/
+    },
+
+    async getBlogById(id: string) {
+
+        return await blogsCollection.findOne({id: id}).toArray();
+        /*return db.blogs.find(blog => blog.id === id)*/
+    },
+
+    async gerVideoByUUID(_id: ObjectId) {
+
+        return await blogsCollection.findOne({_id})
+    },
+
+    async createBlog(body: BlogInputType): Promise<ObjectId> {
+
+        const newBlog: BlogType = {
+            id: Date.now().toString(),
+            name: body.name,
+            description: body.description,
+            websiteUrl: body.websiteUrl,
+            createdAt: new Date().toISOString(),
+            isMembership: false
         }
-        db.blogs = [...db.blogs, newBlog]
-        return newBlog
+
+        const res = await blogsCollection.insertOne(newBlog)
+        return res.insertedId
+
+
+        /*
+                let id: number = (Date.now() + Math.random());
+
+                let newBlog: BlogType = {
+                    id: parseInt(String(id)).toString(),
+                    ...body
+                }
+                db.blogs = [...db.blogs, newBlog]
+                return newBlog*/
     },
 
-    updateBlog (id: string, body: BlogInputType): BlogType | boolean  {
-        const findBlog = this.getBlogById(id)
+    async updateBlog(id: string, body: BlogInputType): Promise<boolean> {
+        const res = await blogsCollection.updateOne(
+            {id},
+            {$set: {...body}},
+        )
+        return res.matchedCount === 1
+
+        /*const findBlog = this.getBlogById(id)
 
         if (!findBlog) {
             return false
@@ -31,17 +65,24 @@ export const blogsRepository = {
             findBlog.description = body.description
             findBlog.websiteUrl = body.websiteUrl
             return findBlog
-        }
+        }*/
     },
-    deleteBlog (id: string): boolean {
-        const findBlog = db.blogs.find(blog => blog.id === id)
+
+    async deleteBlog(id: string) {
+        const blog = await blogsCollection.findOne(id)
+        if (blog) {
+            const res = await blogsCollection.deleteOne({_id: blog._id})
+            if (res.deletedCount > 0) return true
+        }
+        return false
+        /*const findBlog = db.blogs.find(blog => blog.id === id)
 
         if (!findBlog) {
             return false
         } else {
             db.blogs = db.blogs.filter(blog => blog.id !== id)
             return true
-        }
+        }*/
     }
 
 }

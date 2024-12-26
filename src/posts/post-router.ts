@@ -1,6 +1,6 @@
 import {Router} from "express";
 import {authorizationMidleware} from "../middlewares/authorizationMidleware";
-import {postBodyValidation} from "../validation/field-validator";
+import {postBodyValidation} from "../middlewares/validation/field-validator";
 import {errorsResultMiddleware} from "../middlewares/errorsResultMiddleware";
 import {getPostsController} from "./controllers/getPostsController";
 import {getPostByIdController} from "./controllers/getPostByIdController";

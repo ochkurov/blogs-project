@@ -5,7 +5,7 @@ import {createBlogController} from "./controllers/createBlogController";
 import {updateBlogController} from "./controllers/updateBlogController";
 import {deleteBlogController} from "./controllers/deleteBlogController";
 import {authorizationMidleware} from "../middlewares/authorizationMidleware";
-import {blogsBodyValidation} from "../validation/field-validator";
+import {blogsBodyValidation} from "../middlewares/validation/field-validator";
 import {errorsResultMiddleware} from "../middlewares/errorsResultMiddleware";
 
 export const blogsRouter = Router()
