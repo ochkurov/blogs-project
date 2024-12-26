@@ -38,7 +38,7 @@ export const postsRepository = {
             isMembership: false
         }
 
-        const res = await blogsCollection.insertOne(newPost)
+        const res = await postsCollection.insertOne(newPost)
         return res.insertedId
 
         /* const blogId = body.blogId
