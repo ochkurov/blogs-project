@@ -10,11 +10,11 @@ app.get('/', (req, res) => {
     res.status(200).json({version: '1.0'})
 })
 
-app.delete('/testing/all-data', (req, res) => {
+/*app.delete('/testing/all-data', (req, res) => {
     db.posts = []
     db.blogs
     res.sendStatus(204)
-})
+})*/
 
 const startApp = async () => {
 

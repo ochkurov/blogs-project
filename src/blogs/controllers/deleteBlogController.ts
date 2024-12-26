@@ -4,6 +4,7 @@ import {blogsRepository} from "../blogsRepository";
 export const deleteBlogController = async (
     req: Request<{ id: string }, any, any>,
     res: Response) => {
+
     const id = req.params.id;
 
     if (!id) {

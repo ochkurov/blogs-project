@@ -69,7 +69,7 @@ export const blogsRepository = {
 
     async deleteBlog(id: string) {
 
-        const blog = await blogsCollection.findOne(id)
+        const blog = await blogsCollection.findOne({ id })
 
         if (blog) {
             const res = await blogsCollection.deleteOne({_id: blog._id})
