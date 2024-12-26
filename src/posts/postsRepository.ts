@@ -24,6 +24,7 @@ export const postsRepository = {
     },
 
     async createPost(body: PostInputModel): Promise<ObjectId> {
+
         const blog = await blogsRepository.getBlogById(body.blogId)
 
         let newPost: PostViewModel = {

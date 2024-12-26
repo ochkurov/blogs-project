@@ -1,5 +1,6 @@
 import {body} from "express-validator";
 import {db} from "../../db/db";
+import {blogsRepository} from "../../blogs/blogsRepository";
 
 export const blogsBodyValidation = [
     body('name').isString().trim().notEmpty().isLength({min:1 , max:15}),
@@ -13,7 +14,7 @@ export const postBodyValidation = [
     body('shortDescription').isString().trim().notEmpty().isLength({min:1 , max:100}).withMessage('should be string'),
     body('blogId').isString().withMessage('not string')
         .trim().custom(blogId => {
-        const blog = db.blogs.find(blog => blog.id === blogId)
+        const blog = blogsRepository.getBlogById(blogId)
         return !!blog
     }).withMessage('invalid blog Id'),
 ]
