@@ -28,7 +28,6 @@ export type PostViewModel = {
     blogId: string
     blogName: string
     createdAt: string,
-    isMembership: boolean
 }
 export type PostInputModel = {
     title: string,

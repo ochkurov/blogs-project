@@ -1,5 +1,5 @@
 import {PostInputModel, PostViewModel} from "../types/blog-types";
-import {blogsCollection, postsCollection} from "../db/mongoDb";
+import {postsCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
 import {blogsRepository} from "../blogs/blogsRepository";
 
@@ -35,7 +35,6 @@ export const postsRepository = {
             blogId: body.blogId,
             blogName: body.blogName || 'newName',
             createdAt: new Date().toISOString(),
-            isMembership: false
         }
 
         const res = await postsCollection.insertOne(newPost)
