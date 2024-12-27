@@ -8,6 +8,10 @@ export const createPostController = async (
 ) => {
 
     const postId = await postsRepository.createPost(req.body)
+    if (!postId) {
+         res.sendStatus(404)
+        return
+    }
     const newPost = await postsRepository.getPostByUUID(postId)
 
     res.status(201).json(newPost)

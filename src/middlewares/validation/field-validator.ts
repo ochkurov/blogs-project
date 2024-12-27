@@ -18,7 +18,9 @@ export const postBodyValidation = [
         .trim().custom(async blogId => {
 
         const blog = await blogsRepository.getBlogById(blogId)
-
-        return !!blog
+        if(!blog) {
+            throw new Error("Blog not found")
+        }
+        return true
     }).withMessage('invalid blog Id'),
 ]

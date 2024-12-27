@@ -1,4 +1,4 @@
-import {PostInputModel, PostViewModel} from "../types/blog-types";
+import {BlogType, PostInputModel, PostViewModel} from "../types/blog-types";
 import {postsCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
 import {blogsRepository} from "../blogs/blogsRepository";
@@ -23,9 +23,14 @@ export const postsRepository = {
 
     },
 
-    async createPost(body: PostInputModel): Promise<ObjectId> {
+    async createPost(body: PostInputModel): Promise<ObjectId | null> {
 
-        const blog = await blogsRepository.getBlogById(body.blogId)
+        const blog: BlogType | null = await blogsRepository.getBlogById(body.blogId)
+
+        if (!blog) {
+            return null
+        }
+
 
         let newPost: PostViewModel = {
             id: Date.now().toString(),
@@ -33,7 +38,7 @@ export const postsRepository = {
             shortDescription: body.shortDescription,
             content: body.content,
             blogId: body.blogId,
-            blogName: body.blogName || 'newName',
+            blogName: blog.name || " new Name " ,
             createdAt: new Date().toISOString(),
         }
 
