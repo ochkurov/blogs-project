@@ -3,6 +3,7 @@ import cors from 'cors'
 import {SETTINGS} from "./settings";
 import {blogsRouter} from "./blogs/blogs-router";
 import {postsRouter} from "./posts/post-router";
+import {testingRouter} from "./testing/testing-router";
 
 export const initApp = ()=>{
 
@@ -13,6 +14,8 @@ export const initApp = ()=>{
 
     app.use(SETTINGS.PATH.BLOGS, blogsRouter)
     app.use(SETTINGS.PATH.POSTS, postsRouter)
+    app.use(SETTINGS.PATH.TESTING, testingRouter)
+
 
     return app
 }
