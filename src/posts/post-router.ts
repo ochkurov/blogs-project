@@ -12,6 +12,6 @@ export const postsRouter = Router();
 
 postsRouter.get('/', getPostsController)
 postsRouter.get('/:id', getPostByIdController)
-postsRouter.post('/', authorizationMidleware, postBodyValidation,errorsResultMiddleware , createPostController)
-postsRouter.put('/:id', authorizationMidleware,postBodyValidation,errorsResultMiddleware, updatePostController)
-postsRouter.delete('/:id', authorizationMidleware, postBodyValidation, deletePostController)
+postsRouter.post('/', authorizationMidleware, postBodyValidation , errorsResultMiddleware , createPostController)
+postsRouter.put('/:id', authorizationMidleware,postBodyValidation , errorsResultMiddleware, updatePostController)
+postsRouter.delete('/:id', authorizationMidleware, postBodyValidation , deletePostController)
