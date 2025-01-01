@@ -1,4 +1,4 @@
-export type BlogType = {
+export type BlogViewModel = {
     id: string,
     name: string,
     description: string
@@ -6,7 +6,7 @@ export type BlogType = {
     createdAt: string,
     isMembership: boolean
 }
-export type BlogInputType = {
+export type BlogInputModel = {
     name: string,
     description: string,
     websiteUrl: string
@@ -17,7 +17,7 @@ export type ResponseBlogType = {
     page: number ,
     pageSize: number,
     totalCount: number,
-    items: BlogType[]
+    items: BlogViewModel[]
 }
 
 

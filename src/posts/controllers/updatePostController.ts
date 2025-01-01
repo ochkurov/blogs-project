@@ -1,6 +1,7 @@
 import {Request, Response} from "express";
-import {APIErrorResultType, PostInputModel} from "../../types/blog-types";
-import {postsRepository} from "../postsRepository";
+import {PostInputModel} from "../../types/posts-types";
+import {APIErrorResultType} from "../../types/errors-types";
+import {postsService} from "../posts-service";
 
 export const updatePostController = async (
     req: Request<{ id: string }, {}, PostInputModel>,
@@ -11,7 +12,8 @@ export const updatePostController = async (
         res.sendStatus(404)
         return
     }
-    const updatedPost = await postsRepository.updatePost(id, req.body)
+
+    const updatedPost = await postsService.updatePost(id, req.body)
 
     if (!updatedPost) {
         res.sendStatus(404)

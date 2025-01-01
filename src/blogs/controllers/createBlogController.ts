@@ -1,13 +1,14 @@
 import {Request, Response} from "express";
-import {APIErrorResultType, BlogInputType, BlogType} from "../../types/blog-types";
-import {blogsRepository} from "../blogsRepository";
+import {BlogInputModel, BlogViewModel} from "../../types/blog-types";
+import {APIErrorResultType} from "../../types/errors-types";
+import {blogsService} from "../blogs-service";
 
 export const createBlogController = async (
-    req: Request<{}, {}, BlogInputType>,
-    res: Response<BlogType | APIErrorResultType>) => {
+    req: Request<{}, {}, BlogInputModel>,
+    res: Response<BlogViewModel | APIErrorResultType>) => {
 
-    const blogId = await blogsRepository.createBlog(req.body)
-    const blog = await blogsRepository.gerVideoByUUID(blogId)
+    const blogId = await blogsService.createBlog(req.body)
+    const blog = await blogsService.getBlogByUUID(blogId)
 
     res.status(201).json(blog)
 

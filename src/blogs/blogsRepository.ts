@@ -1,6 +1,6 @@
-import {BlogInputType, BlogType} from "../types/blog-types";
 import {blogsCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
+import {BlogInputModel, BlogViewModel} from "../types/blog-types";
 
 export const blogsRepository = {
 
@@ -16,21 +16,12 @@ export const blogsRepository = {
         /*return db.blogs.find(blog => blog.id === id)*/
     },
 
-    async gerVideoByUUID(_id: ObjectId) {
+    async getVideoByUUID(_id: ObjectId) {
 
         return await blogsCollection.findOne({_id} , {projection:{_id:0}})
     },
 
-    async createBlog(body: BlogInputType): Promise<ObjectId> {
-
-        const newBlog: BlogType = {
-            id: Date.now().toString(),
-            name: body.name,
-            description: body.description,
-            websiteUrl: body.websiteUrl,
-            createdAt: new Date().toISOString(),
-            isMembership: false
-        }
+    async createBlog(newBlog: BlogViewModel): Promise<ObjectId> {
 
         const res = await blogsCollection.insertOne(newBlog)
         return res.insertedId
@@ -47,7 +38,7 @@ export const blogsRepository = {
                 return newBlog*/
     },
 
-    async updateBlog(id: string, body: BlogInputType): Promise<boolean> {
+    async updateBlog(id: string, body: BlogInputModel): Promise<boolean> {
         const res = await blogsCollection.updateOne(
             {id},
             {$set: {...body}},

@@ -12,6 +12,7 @@ export const blogsRouter = Router()
 
 blogsRouter.get('/',  getBlogController)
 blogsRouter.get('/:id',  getBlogByIdController)
+blogsRouter.get('/:id/posts', )
 blogsRouter.post('/', authorizationMidleware, blogsBodyValidation ,  errorsResultMiddleware , createBlogController)
 blogsRouter.put('/:id', authorizationMidleware, blogsBodyValidation ,  errorsResultMiddleware , updateBlogController)
 blogsRouter.delete('/:id', authorizationMidleware ,deleteBlogController)

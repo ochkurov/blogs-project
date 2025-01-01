@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import {postsRepository} from "../postsRepository";
+import {postsService} from "../posts-service";
 
 export const deletePostController = async (
     req: Request<{ id: string }, any, any>,
@@ -10,7 +10,7 @@ export const deletePostController = async (
         res.sendStatus(404)
         return
     }
-    const deletePost = await postsRepository.deletePost(id)
+    const deletePost = await postsService.deletePost(id)
 
     if (!deletePost) {
         res.sendStatus(404)

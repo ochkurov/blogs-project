@@ -1,9 +1,10 @@
 import {Request, Response} from "express";
-import {APIErrorResultType, BlogInputType} from "../../types/blog-types";
-import {blogsRepository} from "../blogsRepository";
+import {APIErrorResultType} from "../../types/errors-types";
+import {BlogInputModel} from "../../types/blog-types";
+import {blogsService} from "../blogs-service";
 
 export const updateBlogController = async (
-    req: Request<{ id: string }, {}, BlogInputType>,
+    req: Request<{ id: string }, {}, BlogInputModel>,
     res: Response<APIErrorResultType>) => {
     const id = req.params.id;
 
@@ -12,7 +13,7 @@ export const updateBlogController = async (
         return;
     }
 
-    const updatedBlog = await blogsRepository.updateBlog(id, req.body)
+    const updatedBlog = await blogsService.updateBlog(id, req.body)
 
     if (!updatedBlog) {
         res.sendStatus(404)

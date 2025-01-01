@@ -1,18 +1,21 @@
 import {Request, Response} from "express";
-import {APIErrorResultType, PostInputModel, PostViewModel} from "../../types/blog-types";
-import {postsRepository} from "../postsRepository";
+import {PostInputModel, PostViewModel} from "../../types/posts-types";
+import {APIErrorResultType} from "../../types/errors-types";
+import {postsService} from "../posts-service";
 
 export const createPostController = async (
     req: Request<{}, {}, PostInputModel>,
     res: Response<PostViewModel | APIErrorResultType>
 ) => {
 
-    const postId = await postsRepository.createPost(req.body)
+    const postId = await postsService.createPost(req.body)
+
     if (!postId) {
          res.sendStatus(404)
         return
     }
-    const newPost = await postsRepository.getPostByUUID(postId)
+
+    const newPost = await postsService.getPostByUUID(postId)
 
     res.status(201).json(newPost)
 

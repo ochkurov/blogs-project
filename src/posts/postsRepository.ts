@@ -1,7 +1,8 @@
-import {BlogType, PostInputModel, PostViewModel} from "../types/blog-types";
 import {postsCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
 import {blogsRepository} from "../blogs/blogsRepository";
+import {BlogViewModel} from "../types/blog-types";
+import {PostInputModel, PostViewModel} from "../types/posts-types";
 
 export const postsRepository = {
 
@@ -25,7 +26,7 @@ export const postsRepository = {
 
     async createPost(body: PostInputModel): Promise<ObjectId | null> {
 
-        const blog: BlogType | null = await blogsRepository.getBlogById(body.blogId)
+        const blog: BlogViewModel | null = await blogsRepository.getBlogById(body.blogId)
 
         if (!blog) {
             return null

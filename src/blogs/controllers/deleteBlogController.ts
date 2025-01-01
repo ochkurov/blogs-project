@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import {blogsRepository} from "../blogsRepository";
+import {blogsService} from "../blogs-service";
 
 export const deleteBlogController = async (
     req: Request<{ id: string }, any, any>,
@@ -12,7 +12,7 @@ export const deleteBlogController = async (
         return
     }
 
-    const deleteBlog = await blogsRepository.deleteBlog(id)
+    const deleteBlog = await blogsService.deleteBlog(id)
 
     if (!deleteBlog) {
         res.sendStatus(404)
