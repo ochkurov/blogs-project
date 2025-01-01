@@ -1,7 +1,8 @@
-import {BlogType, PostViewModel} from "../types/blog-types";
+import {BlogViewModel} from "../types/blog-types";
+import {PostViewModel} from "../types/posts-types";
 
 export type DBType = {
-    blogs: BlogType[] ,
+    blogs: BlogViewModel[] ,
     posts: PostViewModel[]
 }
 

@@ -1,6 +1,8 @@
 import {postsRepository} from "./postsRepository";
-import {PostInputModel} from "../types/posts-types";
+import {PostInputModel, PostViewModel} from "../types/posts-types";
 import {ObjectId} from "mongodb";
+import {BlogViewModel} from "../types/blog-types";
+import {blogsRepository} from "../blogs/blogsRepository";
 
 export const postsService = {
     async getAllPosts () {
@@ -13,8 +15,24 @@ export const postsService = {
         return await postsRepository.getPostByUUID(_id)
     },
     async createPost (body: PostInputModel) {
+        const blog: BlogViewModel | null = await blogsRepository.getBlogById(body.blogId)
 
-        return await postsRepository.createPost(body)
+        if (!blog) {
+            return null
+        }
+
+
+        let newPost: PostViewModel = {
+            id: Date.now().toString(),
+            title: body.title,
+            shortDescription: body.shortDescription,
+            content: body.content,
+            blogId: body.blogId,
+            blogName: blog.name || " new Name " ,
+            createdAt: new Date().toISOString(),
+        }
+
+        return await postsRepository.createPost(newPost)
 
     },
     async updatePost (id: string, body: PostInputModel ) {

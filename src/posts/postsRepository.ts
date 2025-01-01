@@ -24,27 +24,11 @@ export const postsRepository = {
 
     },
 
-    async createPost(body: PostInputModel): Promise<ObjectId | null> {
-
-        const blog: BlogViewModel | null = await blogsRepository.getBlogById(body.blogId)
-
-        if (!blog) {
-            return null
-        }
+    async createPost(newPost: PostInputModel): Promise<ObjectId | null> {
 
 
-        let newPost: PostViewModel = {
-            id: Date.now().toString(),
-            title: body.title,
-            shortDescription: body.shortDescription,
-            content: body.content,
-            blogId: body.blogId,
-            blogName: blog.name || " new Name " ,
-            createdAt: new Date().toISOString(),
-        }
+        return await postsCollection.insertOne(newPost)
 
-        const res = await postsCollection.insertOne(newPost)
-        return res.insertedId
 
         /* const blogId = body.blogId
          const findedBlog = db.blogs.find(blog => blog.id === blogId);
