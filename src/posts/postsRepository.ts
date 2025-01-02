@@ -1,8 +1,6 @@
 import {postsCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
-import {blogsRepository} from "../blogs/blogsRepository";
-import {BlogViewModel} from "../types/blog-types";
-import {PostInputModel, PostViewModel} from "../types/posts-types";
+import {PostInputModel} from "../types/posts-types";
 
 export const postsRepository = {
 
@@ -27,24 +25,9 @@ export const postsRepository = {
     async createPost(newPost: PostInputModel): Promise<ObjectId | null> {
 
 
-        return await postsCollection.insertOne(newPost)
+        const res = await postsCollection.insertOne(newPost)
+        return res.insertedId
 
-
-        /* const blogId = body.blogId
-         const findedBlog = db.blogs.find(blog => blog.id === blogId);
-
-         let id: number = (Date.now() + Math.random())
-
-         let newPost: PostViewModel = {
-             id: parseInt(String(id)).toString(),
-             title: body.title,
-             shortDescription: body.shortDescription,
-             content: body.content,
-             blogId,
-             blogName: findedBlog!.name
-         }
-         db.posts = [...db.posts, newPost]
-         return newPost*/
     },
     async updatePost(id: string, body: PostInputModel): Promise<boolean> {
 
@@ -53,25 +36,6 @@ export const postsRepository = {
             {$set: {...body}}
         )
         return res.matchedCount === 1
-
-        /* const blogId = body.blogId
-         const findedBlog = db.blogs.find(blog => blog.id === blogId);
-         const updatedPost = db.posts.find(post => post.id === id)
-
-         if (!updatedPost) {
-
-             return false
-
-         } else {
-
-             updatedPost.id = id
-             updatedPost.title = body.title
-             updatedPost.shortDescription = body.shortDescription
-             updatedPost.content = body.content
-             updatedPost.blogId = blogId
-             updatedPost.blogName = findedBlog!.name
-             return updatedPost
-         }*/
 
     },
     async deletePost(id: string) {
@@ -84,13 +48,5 @@ export const postsRepository = {
         return false
 
     }
-        /*const findPost = this.getPostById(id)
-        if (!findPost) {
-            return false
-        } else {
-            db.posts = db.posts.filter(post => post.id !== id)
-            return true
-        }
+}
 
-    }*/
-    }

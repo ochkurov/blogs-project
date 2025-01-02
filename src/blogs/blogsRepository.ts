@@ -4,16 +4,41 @@ import {BlogInputModel, BlogViewModel} from "../types/blog-types";
 
 export const blogsRepository = {
 
-    async getAllBlogs() {
+    async getAllBlogs(pageNumber:number,
+                      pageSize:number,
+                      sortBy:string,
+                      sortDirection: 'asc' | 'desc',
+                      searchNameTerm: string | null
+    ) {
+        const filter : any = {}
 
-        return await blogsCollection.find({},{projection:{_id:0}}).toArray()
-        /*return db.blogs*/
+        if (searchNameTerm) {
+            filter.title = { $regex: searchNameTerm , $options: "i" };
+        }
+        return  blogsCollection
+            .find(filter)
+            .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1 })
+            .skip((pageNumber - 1) * pageSize)
+            .limit(pageSize)
+            .toArray()
+
+
+      /*  return await blogsCollection.find({},{projection:{_id:0}}).toArray()
+*/
+    },
+    async getBlogCount (searchNameTerm: string | null) {
+        const filter : any = {}
+
+        if (searchNameTerm) {
+            filter.title = { $regex: searchNameTerm , $options: "i" };
+        }
+        return await blogsCollection.countDocuments(filter)
     },
 
     async getBlogById(id: string)  {
 
         return await blogsCollection.findOne({id: id} , {projection:{_id:0}});
-        /*return db.blogs.find(blog => blog.id === id)*/
+
     },
 
     async getVideoByUUID(_id: ObjectId) {
@@ -26,16 +51,6 @@ export const blogsRepository = {
         const res = await blogsCollection.insertOne(newBlog)
         return res.insertedId
 
-
-        /*
-                let id: number = (Date.now() + Math.random());
-
-                let newBlog: BlogType = {
-                    id: parseInt(String(id)).toString(),
-                    ...body
-                }
-                db.blogs = [...db.blogs, newBlog]
-                return newBlog*/
     },
 
     async updateBlog(id: string, body: BlogInputModel): Promise<boolean> {
@@ -45,17 +60,6 @@ export const blogsRepository = {
         )
         return res.matchedCount === 1
 
-        /*const findBlog = this.getBlogById(id)
-
-        if (!findBlog) {
-            return false
-        } else {
-            findBlog.id = id
-            findBlog.name = body.name
-            findBlog.description = body.description
-            findBlog.websiteUrl = body.websiteUrl
-            return findBlog
-        }*/
     },
 
     async deleteBlog(id: string) {
@@ -67,14 +71,7 @@ export const blogsRepository = {
             if (res.deletedCount > 0) return true
         }
         return false
-        /*const findBlog = db.blogs.find(blog => blog.id === id)
 
-        if (!findBlog) {
-            return false
-        } else {
-            db.blogs = db.blogs.filter(blog => blog.id !== id)
-            return true
-        }*/
     }
 
 }

@@ -1,12 +1,34 @@
 import {blogsRepository} from "./blogsRepository";
-import {BlogInputModel, BlogViewModel} from "../types/blog-types";
+import {BlogInputModel, BlogViewModel, ResponseBlogType} from "../types/blog-types";
 import {ObjectId} from "mongodb";
 
 export const blogsService = {
-    async getBlogs() {
-        return await blogsRepository.getAllBlogs()
+    async getBlogs(
+        pageNumber:number,
+        pageSize:number,
+        sortBy:string,
+        sortDirection: 'asc' | 'desc',
+        searchNameTerm: string | null
+    ) : Promise<ResponseBlogType> {
+        const videos = await blogsRepository.getAllBlogs(
+            pageNumber,
+            pageSize,
+            sortBy,
+            sortDirection,
+            searchNameTerm,
+        )
+        const videosCount = await blogsRepository.getBlogCount(searchNameTerm)
+
+        return {
+            pagesCount: Math.ceil( videosCount / pageSize),
+            page: pageNumber,
+            pageSize,
+            totalCount: videosCount,
+            items : videos
+        }
+
     },
-    async getBlogById(id: string) {
+    async getBlogById(id: string): Promise<ObjectId> {
         return await blogsRepository.getBlogById(id)
     },
 
