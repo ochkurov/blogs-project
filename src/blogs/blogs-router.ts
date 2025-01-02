@@ -8,11 +8,13 @@ import {authorizationMidleware} from "../middlewares/authorizationMidleware";
 import {blogsBodyValidation, postBodyValidation} from "../middlewares/validation/field-validator";
 import {errorsResultMiddleware} from "../middlewares/errorsResultMiddleware";
 import {createPostFromBlogIdController} from "./controllers/createPostFromBlogIdController";
+import {getPostsFromBlogIdController} from "./controllers/getPostsFromBlogIdController";
 
 export const blogsRouter = Router()
 
 blogsRouter.get('/',  getBlogController)
 blogsRouter.get('/:id',  getBlogByIdController)
+blogsRouter.get('/:id/posts' , getPostsFromBlogIdController)
 blogsRouter.post('/:id/posts', authorizationMidleware, postBodyValidation ,createPostFromBlogIdController)
 blogsRouter.post('/', authorizationMidleware, blogsBodyValidation ,  errorsResultMiddleware , createBlogController)
 blogsRouter.put('/:id', authorizationMidleware, blogsBodyValidation ,  errorsResultMiddleware , updateBlogController)

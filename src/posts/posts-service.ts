@@ -4,7 +4,6 @@ import {ObjectId} from "mongodb";
 import {BlogViewModel} from "../types/blog-types";
 import {blogsRepository} from "../blogs/blogsRepository";
 import {sortType} from "../types/sort-types";
-import {getPostsFromBlogIdController} from "../blogs/controllers/getPostsFromBlogIdController";
 
 export const postsService = {
     async getAllPosts (sortData:sortType): Promise<ResponsePostsType>

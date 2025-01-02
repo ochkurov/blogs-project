@@ -1,7 +1,6 @@
 import {blogsRepository} from "./blogsRepository";
 import {BlogInputModel, BlogViewModel, ResponseBlogType} from "../types/blog-types";
 import {ObjectId} from "mongodb";
-import {PostInputModel} from "../types/posts-types";
 
 export const blogsService = {
     async getBlogs(
