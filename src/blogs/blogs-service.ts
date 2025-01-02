@@ -1,6 +1,7 @@
 import {blogsRepository} from "./blogsRepository";
 import {BlogInputModel, BlogViewModel, ResponseBlogType} from "../types/blog-types";
 import {ObjectId} from "mongodb";
+import {PostInputModel} from "../types/posts-types";
 
 export const blogsService = {
     async getBlogs(
@@ -28,15 +29,15 @@ export const blogsService = {
         }
 
     },
-    async getBlogById(id: string): Promise<ObjectId> {
+    async getBlogById(id: string) {
         return await blogsRepository.getBlogById(id)
     },
 
-    async getBlogByUUID(id: ObjectId) {
+    async getBlogByUUID(id: ObjectId): Promise<BlogViewModel> {
         return await blogsRepository.getVideoByUUID(id)
     },
 
-    async createBlog(body: BlogInputModel) {
+    async createBlog(body: BlogInputModel): Promise<ObjectId> {
 
         const newBlog: BlogViewModel = {
             id: Date.now().toString(),
