@@ -1,13 +1,29 @@
-import {postsCollection} from "../db/mongoDb";
+import {blogsCollection, postsCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
 import {PostInputModel} from "../types/posts-types";
 
 export const postsRepository = {
 
-    async getAllPosts() {
+    async getAllPosts(pageNumber:number,
+                      pageSize:number,
+                      sortBy:string,
+                      sortDirection: 'asc' | 'desc',)
+    {
+        const filter : any = {}
 
-        return await postsCollection.find({}, {projection: {_id: 0}}).toArray()
+        return postsCollection
+            .find(filter)
+            .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1 })
+            .skip((pageNumber - 1) * pageSize)
+            .limit(pageSize)
+            .toArray()
 
+        /*return await postsCollection.find({}, {projection: {_id: 0}}).toArray()*/
+
+    },
+    async getPostsCount () {
+
+        return await blogsCollection.countDocuments({})
     },
 
     async getPostById(id: string) {

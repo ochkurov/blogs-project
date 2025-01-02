@@ -1,12 +1,30 @@
 import {postsRepository} from "./postsRepository";
-import {PostInputModel, PostViewModel} from "../types/posts-types";
+import {PostInputModel, PostViewModel, ResponsePostsType} from "../types/posts-types";
 import {ObjectId} from "mongodb";
 import {BlogViewModel} from "../types/blog-types";
 import {blogsRepository} from "../blogs/blogsRepository";
 
 export const postsService = {
-    async getAllPosts () {
-        return await postsRepository.getAllPosts()
+    async getAllPosts (pageNumber:number,
+                       pageSize:number,
+                       sortBy:string,
+                       sortDirection: 'asc' | 'desc',): Promise<ResponsePostsType>
+    {
+        const posts = await postsRepository.getAllPosts(
+            pageNumber,
+            pageSize,
+            sortBy,
+            sortDirection,
+        )
+        const postsCount = await postsRepository.getPostsCount()
+
+        return {
+            pagesCount: Math.ceil( postsCount / pageSize),
+            page: pageNumber,
+            pageSize,
+            totalCount: postsCount,
+            items : posts
+        }
     },
     async getPostById (id: string) {
         return await postsRepository.getPostById(id)
