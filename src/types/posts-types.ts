@@ -23,3 +23,11 @@ export type ResponsePostsType = {
     totalCount: number,
     items: PostViewModel[]
 }
+
+export type PostQueryInputType = {
+    sortBy: string | 'createdAt',
+    sortDirection: "asc" | "desc",
+    pageNumber: number,
+    pageSize: number,
+
+}

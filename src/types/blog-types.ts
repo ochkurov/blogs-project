@@ -20,4 +20,12 @@ export type ResponseBlogType = {
     items: BlogViewModel[]
 }
 
+export type BlogQueryInputType = {
+    searchNameTerm: string | null,
+    sortBy: string | 'createdAt',
+    sortDirection: "asc" | "desc",
+    pageNumber: number,
+    pageSize: number,
+
+}
 

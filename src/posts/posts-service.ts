@@ -6,6 +6,7 @@ import {blogsRepository} from "../blogs/blogsRepository";
 import {sortType} from "../types/sort-types";
 
 export const postsService = {
+
     async getAllPosts (sortData:sortType): Promise<ResponsePostsType>
     {
         const { pageNumber , pageSize , sortBy , sortDirection } = sortData
@@ -27,6 +28,7 @@ export const postsService = {
         const { pageNumber , pageSize , sortBy , sortDirection } = sortData
 
         const posts = await postsRepository.getPostsByBlogId(blogId , sortData)
+        if (posts.length < 1) return null
 
         const postsCount = await postsRepository.getPostsCountById(blogId)
 
@@ -42,12 +44,14 @@ export const postsService = {
     async getPostById (id: string) {
         return await postsRepository.getPostById(id)
     },
-    async getPostByUUID (_id: ObjectId) {
+    async getPostByMongoID (_id: ObjectId) {
         return await postsRepository.getPostByUUID(_id)
     },
 
-    async createPost (body: PostInputModel) {
-        const blog: BlogViewModel | null = await blogsRepository.getBlogById(body.blogId)
+    async createPost (body: PostInputModel) : Promise<ObjectId | null> {
+
+        let blog = await blogsRepository.getBlogById(body.blogId)
+
 
         if (!blog) {
             return null

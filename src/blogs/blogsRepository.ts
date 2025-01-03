@@ -10,13 +10,14 @@ export const blogsRepository = {
                       sortDirection: 'asc' | 'desc',
                       searchNameTerm: string | null
     ) {
-        const filter : any = {}
+        let filter : any = {}
 
         if (searchNameTerm) {
-            filter.title = { $regex: searchNameTerm , $options: "i" };
+            filter = {name: {$regex: searchNameTerm, $options: "i"}};
         }
-        return  blogsCollection
-            .find(filter)
+
+        return await blogsCollection
+            .find(filter, {projection:{_id:0}})
             .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1 })
             .skip((pageNumber - 1) * pageSize)
             .limit(pageSize)
@@ -26,16 +27,16 @@ export const blogsRepository = {
       /*  return await blogsCollection.find({},{projection:{_id:0}}).toArray()
 */
     },
-    async getBlogCount (searchNameTerm: string | null) {
-        const filter : any = {}
+    async getBlogCount (searchNameTerm: string | null):Promise<number> {
+        let filter : any = {}
 
         if (searchNameTerm) {
-            filter.title = { $regex: searchNameTerm , $options: "i" };
+            filter.name = {$regex: searchNameTerm , $options: "i" };
         }
         return await blogsCollection.countDocuments(filter)
     },
 
-    async getBlogById(id: string)  {
+    async getBlogById(id: string): Promise<BlogViewModel | null>  {
 
         return await blogsCollection.findOne({id: id} , {projection:{_id:0}});
 

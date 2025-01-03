@@ -24,3 +24,8 @@ export const postBodyValidation = [
         return true
     }).withMessage('invalid blog Id'),
 ]
+export const postsBodyWhithoutIdValidation = [
+    body('title').isString().trim().trim().notEmpty().isLength({min: 1, max: 30}).withMessage('should be string'),
+    body('content').isString().trim().notEmpty().isLength({min: 1, max: 1000}).withMessage('should be string'),
+    body('shortDescription').isString().trim().notEmpty().isLength({min: 1, max: 100}).withMessage('should be string'),
+]

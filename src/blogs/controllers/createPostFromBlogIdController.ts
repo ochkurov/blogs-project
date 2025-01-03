@@ -1,20 +1,29 @@
 import {Request, Response} from "express";
 import {postsService} from "../../posts/posts-service";
-import {PostInputModel} from "../../types/posts-types";
+import {PostInputModel, PostViewModel} from "../../types/posts-types";
 
 
 export const createPostFromBlogIdController = async (
     req: Request<
-        { id: string }, {}, PostInputModel>,
-    res: Response) => {
-    const blogId = req.params.id;
+        { blogId: string }, {}, PostInputModel>,
+    res: Response<PostViewModel>) => {
+    const blogId = req.params.blogId;
+
+    console.log(blogId)
+
     let body = {...req.body, blogId: blogId};
-    let createdPost = await postsService.createPost(body);
-    if (!createdPost) {
+
+    let postId = await postsService.createPost(body);
+
+
+    if (!postId) {
         res.sendStatus(404)
         return
     }
-    res.status(204).json(createdPost);
 
+    const newPost = await postsService.getPostByMongoID(postId)
+
+
+    res.status(201).json(newPost);
 
 }

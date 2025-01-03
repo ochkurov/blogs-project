@@ -10,6 +10,7 @@ export const blogsService = {
         sortDirection: 'asc' | 'desc',
         searchNameTerm: string | null
     ) : Promise<ResponseBlogType> {
+
         const videos = await blogsRepository.getAllBlogs(
             pageNumber,
             pageSize,
@@ -17,10 +18,11 @@ export const blogsService = {
             sortDirection,
             searchNameTerm,
         )
+
         const videosCount = await blogsRepository.getBlogCount(searchNameTerm)
 
         return {
-            pagesCount: Math.ceil( videosCount / pageSize),
+            pagesCount: Math.ceil(videosCount/pageSize),
             page: pageNumber,
             pageSize,
             totalCount: videosCount,

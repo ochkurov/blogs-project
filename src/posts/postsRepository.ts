@@ -5,14 +5,15 @@ import {sortType} from "../types/sort-types";
 
 export const postsRepository = {
 
-    async getAllPosts(sortData:sortType)
-    {
-        const { pageNumber , pageSize , sortBy , sortDirection } = sortData
-        const filter : any = {}
+    async getAllPosts(sortData: sortType) {
 
-        return postsCollection
-            .find(filter)
-            .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1 })
+        const {pageNumber, pageSize, sortBy, sortDirection} = sortData
+
+        const filter: any = {}
+
+        return await postsCollection
+            .find(filter , {projection:{_id:0}})
+            .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1})
             .skip((pageNumber - 1) * pageSize)
             .limit(pageSize)
             .toArray()
@@ -22,24 +23,27 @@ export const postsRepository = {
     },
     async getPostsByBlogId(blogId: string, sortData: sortType) {
         const {sortBy, sortDirection, pageSize, pageNumber} = sortData;
+
         const filteredPosts: any = {}
+
         if (blogId) {
-            filteredPosts.blogId = {$regex: blogId};
+            filteredPosts.blogId = blogId;
         }
         return await postsCollection
-            .find(filteredPosts)
+            .find(filteredPosts , {projection:{_id:0}})
             .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1})
             .skip((pageNumber - 1) * pageSize)
             .limit(pageSize)
             .toArray()
 
     },
-    async getPostsCount () {
 
-        return await blogsCollection.countDocuments({})
+    async getPostsCount() {
+
+        return await postsCollection.countDocuments({})
     },
-    async getPostsCountById (blogId: string) {
-        return await blogsCollection.countDocuments({$regex: blogId})
+    async getPostsCountById(blogId: string) {
+        return await postsCollection.countDocuments({blogId} , {projection:{_id:0}})
     },
 
     async getPostById(id: string) {
@@ -64,7 +68,7 @@ export const postsRepository = {
     async updatePost(id: string, body: PostInputModel): Promise<boolean> {
 
         const res = await postsCollection.updateOne(
-            { id },
+            {id},
             {$set: {...body}}
         )
         return res.matchedCount === 1
@@ -72,10 +76,10 @@ export const postsRepository = {
     },
     async deletePost(id: string) {
 
-        const post = await postsCollection.findOne({ id })
+        const post = await postsCollection.findOne({id})
         if (post) {
             const res = await postsCollection.deleteOne({_id: post._id})
-            if ( res.deletedCount > 0) return true
+            if (res.deletedCount > 0) return true
         }
         return false
 
