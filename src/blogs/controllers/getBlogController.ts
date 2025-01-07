@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from "express";
-import {BlogQueryInputType, BlogViewModel, ResponseBlogType} from "../../types/blog-types";
-import {paginationQueries} from "../../helpers/blog_paginations_values";
+import {BlogQueryInputType, ResponseBlogType} from "../../types/blog-types";
 import {blogsService} from "../blogs-service";
+import {BlogPaginationQueries} from "../../helpers/blog_paginations_values";
 
 
 export const getBlogController = async (
@@ -10,14 +10,10 @@ export const getBlogController = async (
     next:NextFunction) => {
 
 
-    const { pageNumber, pageSize, sortBy, sortDirection, searchNameTerm } = paginationQueries(req.query)
+    const queryData = BlogPaginationQueries(req.query)
 
     const blogs = await blogsService.getBlogs(
-        pageNumber,
-        pageSize,
-        sortBy,
-        sortDirection,
-        searchNameTerm,
+        queryData
     )
     res.status(200).json(blogs)
 

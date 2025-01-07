@@ -1,7 +1,6 @@
 import {Request, Response} from "express";
 import {PostQueryInputType, ResponsePostsType} from "../../types/posts-types";
 import {postsService} from "../posts-service";
-import {paginationQueries} from "../../helpers/blog_paginations_values";
 import {sortType} from "../../types/sort-types";
 import {postQueryPagingDef} from "../../helpers/post_paginations_values";
 

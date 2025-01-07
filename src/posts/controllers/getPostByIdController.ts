@@ -1,8 +1,6 @@
 import {Request, Response} from "express";
-import {PostViewModel, ResponsePostsType} from "../../types/posts-types";
+import {ResponsePostsType} from "../../types/posts-types";
 import {postsService} from "../posts-service";
-import {paginationQueries} from "../../helpers/blog_paginations_values";
-import {sortType} from "../../types/sort-types";
 
 export const getPostByIdController = async (
     req: Request<{ id: string }, {}, {}>,

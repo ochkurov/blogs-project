@@ -7,7 +7,6 @@ import {deleteBlogController} from "./controllers/deleteBlogController";
 import {authorizationMidleware} from "../middlewares/authorizationMidleware";
 import {
     blogsBodyValidation,
-    postBodyValidation,
     postsBodyWhithoutIdValidation
 } from "../middlewares/validation/field-validator";
 import {errorsResultMiddleware} from "../middlewares/errorsResultMiddleware";

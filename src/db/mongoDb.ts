@@ -4,6 +4,7 @@ import {MongoClient} from "mongodb";
 
 export let postsCollection : any
 export let blogsCollection : any
+export let usersCollection : any
 
 export async function runDb (url : string): Promise<boolean> {
 let client = new MongoClient(url)
@@ -11,6 +12,7 @@ let client = new MongoClient(url)
 
     postsCollection = db.collection<any>(SETTINGS.PATH.POSTS)
     blogsCollection = db.collection<any>(SETTINGS.PATH.BLOGS)
+    usersCollection = db.collection<any>(SETTINGS.PATH.USERS)
 
     try {
         await client.connect();

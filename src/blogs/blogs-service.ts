@@ -1,15 +1,13 @@
 import {blogsRepository} from "./blogsRepository";
-import {BlogInputModel, BlogViewModel, ResponseBlogType} from "../types/blog-types";
+import {BlogInputModel, BlogQueryInputType, BlogViewModel, ResponseBlogType} from "../types/blog-types";
 import {ObjectId} from "mongodb";
 
 export const blogsService = {
     async getBlogs(
-        pageNumber:number,
-        pageSize:number,
-        sortBy:string,
-        sortDirection: 'asc' | 'desc',
-        searchNameTerm: string | null
-    ) : Promise<ResponseBlogType> {
+        query: BlogQueryInputType
+    ): Promise<ResponseBlogType> {
+
+        const { pageNumber, pageSize, sortBy, sortDirection, searchNameTerm } = query
 
         const videos = await blogsRepository.getAllBlogs(
             pageNumber,
@@ -22,11 +20,11 @@ export const blogsService = {
         const videosCount = await blogsRepository.getBlogCount(searchNameTerm)
 
         return {
-            pagesCount: Math.ceil(videosCount/pageSize),
+            pagesCount: Math.ceil(videosCount / pageSize),
             page: pageNumber,
             pageSize,
             totalCount: videosCount,
-            items : videos
+            items: videos
         }
 
     },

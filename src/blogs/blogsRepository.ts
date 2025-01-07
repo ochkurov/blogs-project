@@ -18,14 +18,12 @@ export const blogsRepository = {
 
         return await blogsCollection
             .find(filter, {projection:{_id:0}})
-            .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1 })
+            .sort({[sortBy]: sortDirection})
             .skip((pageNumber - 1) * pageSize)
             .limit(pageSize)
             .toArray()
 
 
-      /*  return await blogsCollection.find({},{projection:{_id:0}}).toArray()
-*/
     },
     async getBlogCount (searchNameTerm: string | null):Promise<number> {
         let filter : any = {}

@@ -18,6 +18,7 @@ export const SETTINGS = {
     PATH: {
         BLOGS: '/blogs',
         POSTS: '/posts',
+        USERS: '/users',
         TESTING: '/testing',
     },
     MONGO_URL: process.env.MONGO_URL || 'mongodb://0.0.0.0:27017',

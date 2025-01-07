@@ -1,6 +1,7 @@
 import {BlogQueryInputType} from "../types/blog-types";
 
-export const paginationQueries = (query: BlogQueryInputType): BlogQueryInputType => {
+export const BlogPaginationQueries = (query: BlogQueryInputType): BlogQueryInputType => {
+
     const pageNumber: number = query.pageNumber ? +query.pageNumber : 1;
     const pageSize: number = query.pageSize ? +query.pageSize : 10;
     const sortBy: string = query.sortBy ? query.sortBy.toString() : 'createdAt';
