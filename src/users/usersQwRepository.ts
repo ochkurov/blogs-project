@@ -1,8 +1,9 @@
-import {UsersQueryInputType} from "../types/users-types";
+import {ResponseUserType, UsersQueryInputType} from "../types/users-types";
 import {usersCollection} from "../db/mongoDb";
 
 export const usersQwRepository = {
-    async getUsers(query: UsersQueryInputType) {
+
+    async getUsers(query: UsersQueryInputType): Promise<ResponseUserType> {
 
         const {sortBy, sortDirection, pageNumber, pageSize, searchLoginTerm, searchEmailTerm} = query
 
@@ -15,12 +16,22 @@ export const usersQwRepository = {
             filter = {email: {$regex: searchEmailTerm, $options: "i"}}
         }
 
-        return await usersCollection
+        const users = await usersCollection
             .find(filter, {projection:{_id:0}})
             .sort({[sortBy]: sortDirection})
             .skip((pageNumber - 1) * pageSize)
             .limit(pageSize)
             .toArray()
+        const usersCount = await usersCollection.countDocuments(filter);
+
+        return {
+            pagesCount: Math.ceil(usersCount / pageSize),
+            page: pageNumber,
+            pageSize,
+            totalCount:usersCount,
+            items: users
+
+        }
 
     }
 }
