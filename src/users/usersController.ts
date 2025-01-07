@@ -1,7 +1,9 @@
 import { Request, Response} from "express";
-import {ResponseUserType, UsersQueryInputType} from "../types/users-types";
+import {ResponseUserType, UserInputModel, UsersQueryInputType, UserViewModel} from "../types/users-types";
 import {usersQueriesDto} from "../helpers/users_paginations_values";
 import {usersQwRepository} from "./usersQwRepository";
+import {APIErrorResultType} from "../types/errors-types";
+import {usersService} from "./users-service";
 
 
 export const userController = {
@@ -14,12 +16,18 @@ export const userController = {
         const usersQuery = usersQueriesDto(query)
         let users = await usersQwRepository.getUsers(usersQuery)
 
-        res.status(201).json(users)
+        res.status(200).json(users)
 
 
     },
 
-    async createUser () {
+    async createUser (
+        req: Request<{} , {} , UserInputModel>,
+        res:Response<UserViewModel | APIErrorResultType>
+    ) {
+        const body:UserInputModel = req.body
+        const userId = await usersService.createUser(body)
+
 
     },
 

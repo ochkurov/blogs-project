@@ -4,6 +4,6 @@ import {userController} from "./usersController";
 export const usersRouter = Router();
 
 
-usersRouter.get('/users' , userController.getUsers)
-usersRouter.post('/users' , userController.createUser)
-usersRouter.delete('/users/:id' , userController.deleteUser)
+usersRouter.get('/' , userController.getUsers)
+usersRouter.post('/' , userController.createUser)
+usersRouter.delete('/:id' , userController.deleteUser)
