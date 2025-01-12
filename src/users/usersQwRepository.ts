@@ -1,9 +1,9 @@
-import {ResponseUserType, UsersQueryInputType} from "../types/users-types";
+import {ResponseUserType, UsersQueryInputType, UsersQueryPaginationType} from "../types/users-types";
 import {usersCollection} from "../db/mongoDb";
 
 export const usersQwRepository = {
 
-    async getUsers(query: UsersQueryInputType): Promise<ResponseUserType> {
+    async getUsers(query: UsersQueryPaginationType): Promise<ResponseUserType> {
 
         const {sortBy, sortDirection, pageNumber, pageSize, searchLoginTerm, searchEmailTerm} = query
 

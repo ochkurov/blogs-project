@@ -1,5 +1,10 @@
 import {Request, Response} from "express";
-import {ResponseUserType, UserInputModel, UserSecureType, UsersQueryInputType} from "../types/users-types";
+import {
+    ResponseUserType,
+    UserInputModel,
+    UserSecureType,
+    UsersQueryInputType
+} from "../types/users-types";
 import {usersQueriesDto} from "../helpers/users_paginations_values";
 import {usersQwRepository} from "./usersQwRepository";
 import {APIErrorResultType} from "../types/errors-types";
@@ -29,17 +34,28 @@ export const userController = {
 
         const result = await usersService.createUser(body)
 
-        if ( result.errors && result.errors.length > 0) {
+        if (result.errors && result.errors.length > 0) {
             res.status(400).send({errorsMessages: result.errors})
+            return
         }
 
-        const user: UserSecureType = await usersService.findUserById(result.userId)
+        const user: UserSecureType = await usersService.getUserById(result.userId!)
         res.status(201).json(user)
 
     },
 
-    async deleteUser() {
-
+    async deleteUser(
+        req: Request<{ id: string }>,
+        res: Response
+    ) {
+        const userId = req.params.id
+        const deletedUser = await usersService.deleteUser(userId)
+        if (!deletedUser) {
+            res.sendStatus(404)
+            return
+        }
+        res.sendStatus(204)
+        return
     }
 
 }

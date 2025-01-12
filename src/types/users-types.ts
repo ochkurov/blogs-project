@@ -37,11 +37,20 @@ export type ResponseUserType = {
     items: UserSchemaType[]
 }
 
-export type UsersQueryInputType = {
+export type UsersQueryPaginationType = {
     sortBy: string | 'createdAt',
     sortDirection: "asc" | "desc",
     pageNumber: number,
     pageSize: number,
     searchLoginTerm: string | null,
     searchEmailTerm: string | null,
+}
+
+export type UsersQueryInputType = {
+    sortBy?: string ,
+    sortDirection?: string,
+    pageNumber?: string,
+    pageSize?: string,
+    searchLoginTerm?: string ,
+    searchEmailTerm?: string ,
 }

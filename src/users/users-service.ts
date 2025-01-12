@@ -2,6 +2,7 @@ import {UserInputModel} from "../types/users-types";
 import {usersRepository} from "./usersRepository";
 import {ErrorType} from "../types/errors-types";
 import bcrypt from 'bcrypt'
+import {usersCollection} from "../db/mongoDb";
 
  type UserServiceType = {
     userId: string | null;
@@ -36,5 +37,13 @@ export const usersService = {
         }
         const userId =  await usersRepository.createUser(newUser)
         return {userId, errors: null }
-    }
+    },
+
+    async getUserById (id: string) {
+        return await usersCollection.getUserById(id)
+    },
+
+async deleteUser (id: string) {
+        return await usersRepository.deleteUser(id)
+}
 }
