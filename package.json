@@ -10,7 +10,9 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
+    "@types/bcrypt": "^5.0.2",
     "bcrypt": "^5.1.1",
+    "bcrypt-ts": "^5.0.3",
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "express-validator": "^7.2.0",

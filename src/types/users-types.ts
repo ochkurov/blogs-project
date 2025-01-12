@@ -1,9 +1,20 @@
-export type UserViewModel = {
-    id:string
-    login:string
-    email:string
-    createdAt:string
+import {ObjectId} from "mongodb";
+
+export type UserSchemaType = {
+    _id: ObjectId
+    login: string,
+    email: string,
+    createdAt: string,
+    password: string
 }
+
+export type UserSecureType = {
+    _id: ObjectId
+    login: string,
+    email: string,
+    createdAt: string,
+}
+
 
 export type UserInputModel = {
     login:string,
@@ -11,12 +22,19 @@ export type UserInputModel = {
     email:string,
 }
 
+export type UserCreateType = {
+    login: string,
+    email: string,
+    createdAt: string,
+    password: string
+}
+
 export type ResponseUserType = {
     pagesCount: number,
     page: number ,
     pageSize: number,
     totalCount: number,
-    items: UserViewModel[]
+    items: UserSchemaType[]
 }
 
 export type UsersQueryInputType = {

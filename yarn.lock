@@ -869,6 +869,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/bcrypt@npm:^5.0.2":
+  version: 5.0.2
+  resolution: "@types/bcrypt@npm:5.0.2"
+  dependencies:
+    "@types/node": "*"
+  checksum: b1f97532ffe6079cb57a464f28b5b37a30bc9620f43469e1f27ab9c979c8a114be5b667e7b115a5556fd5be463b65968da9bb32573c6faf74fecf6e565d8974b
+  languageName: node
+  linkType: hard
+
 "@types/body-parser@npm:*":
   version: 1.19.5
   resolution: "@types/body-parser@npm:1.19.5"
@@ -1359,6 +1368,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bcrypt-ts@npm:^5.0.3":
+  version: 5.0.3
+  resolution: "bcrypt-ts@npm:5.0.3"
+  checksum: 7814ae3d48f17bf2a90b3da9183acfee2402eb8b9381bc8f780c02d9ff317d50a2fa162e458c3d3b270f6d406dfe50119c3733e1b94aecb1313519bea429414e
+  languageName: node
+  linkType: hard
+
 "bcrypt@npm:^5.1.1":
   version: 5.1.1
   resolution: "bcrypt@npm:5.1.1"
@@ -1380,12 +1396,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "blogs-project@workspace:."
   dependencies:
+    "@types/bcrypt": ^5.0.2
     "@types/cors": ^2.8.17
     "@types/express": ^5.0.0
     "@types/jest": ^29.5.14
     "@types/node": ^22.10.2
     "@types/supertest": ^6.0.2
     bcrypt: ^5.1.1
+    bcrypt-ts: ^5.0.3
     cors: ^2.8.5
     dotenv: ^16.4.7
     express: ^4.21.2
