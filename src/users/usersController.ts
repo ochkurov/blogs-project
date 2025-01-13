@@ -15,13 +15,22 @@ export const userController = {
 
     async getUsers(
         req: Request<{}, {}, {}, UsersQueryInputType>,
-        res: Response<ResponseUserType>) {
+        res: Response) {
 
         const query = req.query
         const usersQuery = usersQueriesDto(query)
         let users = await usersQwRepository.getUsers(usersQuery)
+        const usersForResponse = users.items.map( (m) => {
+            return {
+                id: m._id,
+                login: m.login,
+                email: m.email,
+                createdAt: m.createdAt
+            }
+        }
+        )
 
-        res.status(200).json(users)
+        res.status(200).json(usersForResponse)
 
 
     },

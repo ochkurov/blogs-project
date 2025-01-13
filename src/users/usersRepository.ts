@@ -5,7 +5,9 @@ import {ObjectId} from "mongodb";
 export const usersRepository = {
 
     async findUserByLoginOrEmail(login: string, email: string): Promise<UserSchemaType | null> {
-        let findUser = await usersCollection.findOne({$or: [{login}, {email}]})
+        let findUser = await usersCollection.findOne({
+            $or: [{login}, {email}]
+        })
 
         if (!findUser) {
             return null
@@ -30,4 +32,12 @@ export const usersRepository = {
         const deletedRes = await usersCollection.deleteOne({_id: new ObjectId(id)})
         return deletedRes.deletedCount === 1
     },
+    async checkUserByLoginOrEmail (loginOrEmail:string) {
+        let findUser = await usersCollection.findOne({$or: [{login:loginOrEmail}, {email:loginOrEmail}]})
+
+        if (!findUser) {
+            return null
+        }
+        return findUser
+    }
 }

@@ -43,6 +43,24 @@ export const usersService = {
     async getUserById (id: string) {
         return await usersRepository.getUserById(id)
     },
+    async checkCredentials (loginOrEmail: string, password: string) {
+        let findUser = await usersRepository.checkUserByLoginOrEmail(loginOrEmail)
+        if (!findUser) {
+            return {
+                status: 401
+            }
+        }
+        let comparePassword = await bcrypt.compare(password, findUser.password)
+
+        if (comparePassword) {
+            return { status: 204}
+        }
+        return {
+            status: 401
+        }
+
+
+    },
 
 async deleteUser (id: string) {
         return await usersRepository.deleteUser(id)
