@@ -14,9 +14,10 @@ export const usersService = {
         const errors: ErrorType[] = []
 
         let findUser = await usersRepository.findUserByLoginOrEmail(body.login, body.email)
+
         if (findUser) {
             if (findUser.login === body.login) {
-                errors.push({message: 'the login is already in use', field: 'email'})
+                errors.push({message: 'the login is already in use', field: 'login'})
             }
             if (findUser.email === body.email) {
                 errors.push({message: 'the email is already in use', field: 'email'})
@@ -29,7 +30,7 @@ export const usersService = {
         const hushedPass = await bcrypt.hash(body.password, salt)
 
 
-        const newUser = {
+        let newUser = {
             login: body.login,
             email: body.email,
             password: hushedPass,
@@ -40,7 +41,7 @@ export const usersService = {
     },
 
     async getUserById (id: string) {
-        return await usersCollection.getUserById(id)
+        return await usersRepository.getUserById(id)
     },
 
 async deleteUser (id: string) {

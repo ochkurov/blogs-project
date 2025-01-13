@@ -13,7 +13,7 @@ export const usersRepository = {
         return findUser
 
     },
-    async getUserById(id: string): Promise<UserSecureType | null> {
+    async getUserById(id: string){
         const user = await usersCollection.findOne({_id: new ObjectId(id)}, {projection: {password: 0}})
         if (!user) {
             return null
@@ -23,7 +23,7 @@ export const usersRepository = {
 
     async createUser(user: UserCreateType): Promise<string> {
         let res = await usersCollection.insertOne(user)
-        return res.insertId.toString()
+        return res.insertedId.toString()
     },
 
     async deleteUser(id: string): Promise<boolean> {

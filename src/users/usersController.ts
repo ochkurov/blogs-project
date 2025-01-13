@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
 import {
-    ResponseUserType,
+    ResponseUserType, UserForResponseType,
     UserInputModel,
     UserSecureType,
     UsersQueryInputType
@@ -28,7 +28,7 @@ export const userController = {
 
     async createUser(
         req: Request<{}, {}, UserInputModel>,
-        res: Response<UserSecureType | APIErrorResultType>
+        res: Response<UserForResponseType | APIErrorResultType>
     ) {
         const body: UserInputModel = req.body
 
@@ -40,7 +40,13 @@ export const userController = {
         }
 
         const user: UserSecureType = await usersService.getUserById(result.userId!)
-        res.status(201).json(user)
+        const userForResponse:UserForResponseType = {
+            id: user._id.toString(),
+            login: user.login,
+            email: user.email,
+            createdAt: user.createdAt,
+        }
+        res.status(201).json(userForResponse)
 
     },
 
@@ -49,13 +55,17 @@ export const userController = {
         res: Response
     ) {
         const userId = req.params.id
+        if (!userId) {
+            res.sendStatus(404)
+            return
+        }
         const deletedUser = await usersService.deleteUser(userId)
+
         if (!deletedUser) {
             res.sendStatus(404)
             return
         }
         res.sendStatus(204)
-        return
     }
 
 }

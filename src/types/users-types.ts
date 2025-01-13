@@ -15,6 +15,12 @@ export type UserSecureType = {
     createdAt: string,
 }
 
+export type UserForResponseType = {
+    id: string,
+    login: string,
+    email: string,
+    createdAt: string,
+}
 
 export type UserInputModel = {
     login:string,
@@ -25,8 +31,8 @@ export type UserInputModel = {
 export type UserCreateType = {
     login: string,
     email: string,
-    createdAt: string,
     password: string
+    createdAt: string,
 }
 
 export type ResponseUserType = {

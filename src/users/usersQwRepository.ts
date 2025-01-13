@@ -17,7 +17,7 @@ export const usersQwRepository = {
         }
 
         const users = await usersCollection
-            .find(filter, {projection:{_id:0}})
+            .find(filter, {projection:{password: 0}})
             .sort({[sortBy]: sortDirection})
             .skip((pageNumber - 1) * pageSize)
             .limit(pageSize)
