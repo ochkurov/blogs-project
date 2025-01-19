@@ -15,6 +15,7 @@ export const authController = {
         const check:ChekType = await usersService.checkCredentials(req.body.loginOrEmail , req.body.password)
         if (check.status === 401) {
             res.sendStatus(401)
+            return
         }
         res.sendStatus(204)
     }
