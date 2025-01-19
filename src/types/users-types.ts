@@ -40,7 +40,7 @@ export type ResponseUserType = {
     page: number ,
     pageSize: number,
     totalCount: number,
-    items: UserSchemaType[]
+    items: UserForResponseType[]
 }
 
 export type UsersQueryPaginationType = {

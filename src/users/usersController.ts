@@ -9,28 +9,20 @@ import {usersQueriesDto} from "../helpers/users_paginations_values";
 import {usersQwRepository} from "./usersQwRepository";
 import {APIErrorResultType} from "../types/errors-types";
 import {usersService} from "./users-service";
+import {ObjectId} from "mongodb";
 
 
 export const userController = {
 
     async getUsers(
         req: Request<{}, {}, {}, UsersQueryInputType>,
-        res: Response) {
+        res: Response<ResponseUserType>) {
 
         const query = req.query
         const usersQuery = usersQueriesDto(query)
         let users = await usersQwRepository.getUsers(usersQuery)
-        const usersForResponse = users.items.map( (m) => {
-            return {
-                id: m._id,
-                login: m.login,
-                email: m.email,
-                createdAt: m.createdAt
-            }
-        }
-        )
 
-        res.status(200).json(usersForResponse)
+        res.status(200).json(users)
 
 
     },
@@ -64,7 +56,9 @@ export const userController = {
         res: Response
     ) {
         const userId = req.params.id
-        if (!userId) {
+
+        if (!userId || !ObjectId.isValid(userId)) {
+            console.log('error')
             res.sendStatus(404)
             return
         }
