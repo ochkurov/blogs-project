@@ -6,3 +6,4 @@ import {errorsResultMiddleware} from "../middlewares/errorsResultMiddleware";
 export const authRouter = Router()
 
 authRouter.post('/login' , authValidate , errorsResultMiddleware ,  authController.Login)
+authRouter.get('/me' , )

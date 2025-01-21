@@ -5,14 +5,14 @@ type authType = {
     loginOrEmail: string,
     password: string
 }
-type ChekType = {
+type CheckType = {
     status:number
 }
 
 export const authController = {
     async Login (req: Request<{} , {} , authType>, res: Response) {
 
-        const check:ChekType = await usersService.checkCredentials(req.body.loginOrEmail , req.body.password)
+        const check:CheckType = await usersService.checkCredentials(req.body.loginOrEmail , req.body.password)
         if (check.status === 401) {
             res.sendStatus(401)
             return
