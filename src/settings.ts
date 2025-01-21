@@ -21,11 +21,13 @@ export const SETTINGS = {
         USERS: '/users',
         AUTH: '/auth',
         TESTING: '/testing',
+        COMMENTS: '/comments',
     },
     DB_COLLECTION_NAME: {
         BLOGS: 'blogs',
         POSTS: 'posts',
-        USERS: 'users'
+        USERS: 'users',
+        COMMENTS: 'comments',
     },
 
     MONGO_URL: process.env.MONGO_URL || 'mongodb://0.0.0.0:27017',

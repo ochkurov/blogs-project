@@ -6,6 +6,7 @@ import {postsRouter} from "./posts/post-router";
 import {testingRouter} from "./testing/testing-router";
 import {usersRouter} from "./users/users-router";
 import {authRouter} from "./auth/auth-router";
+import {commentsRouter} from "./comments/comments-router";
 
 export const initApp = ()=>{
 
@@ -19,6 +20,7 @@ export const initApp = ()=>{
     app.use(SETTINGS.PATH.USERS , usersRouter)
     app.use(SETTINGS.PATH.AUTH , authRouter)
     app.use(SETTINGS.PATH.TESTING, testingRouter)
+    app.use(SETTINGS.PATH.COMMENTS , commentsRouter)
 
 
     return app
