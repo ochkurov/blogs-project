@@ -3,25 +3,27 @@ import {CommentResponseType} from "../types/comment-types";
 import {commentsService} from "./comments-service";
 
 export const commentsController = {
-    async getCommentsById (req: Request<{ id: string }>, res: Response<CommentResponseType>) {
-        const id = req.params.id;
+    async getCommentsById (req: Request<{ commentId: string }>, res: Response<CommentResponseType>) {
+        const commentId = req.params.commentId;
 
-        if (!id) {
+        if (!commentId) {
             res.sendStatus(404)
             return;
         }
 
     },
-    async updateComment ( req: Request<{ id: string } , {} , { content:string }>, res: Response ) {
-        const id = req.params.id;
+    async updateComment ( req: Request<{ commentId: string } , {} , { content:string }>, res: Response ) {
+
+        const userId = req.user!._id || '' // ???? у нас же айди уникальный идентификатор
+        const commentId = req.params.commentId;
         const content = req.body.content;
 
-        if (!id) {
+        if (!commentId) {
             res.sendStatus(404)
             return;
         }
 
-        const updateComment = await commentsService.updateComment(id, content)
+        const updateComment = await commentsService.updateComment(commentId, content)
 
         if (!updateComment) {
             res.sendStatus(404)
@@ -29,8 +31,8 @@ export const commentsController = {
         } else res.sendStatus(204)
 
     },
-    async deleteComment ( req: Request<{ id: string }>, res: Response ) {
-        const id = req.params.id;
+    async deleteComment ( req: Request<{ commentId: string }>, res: Response ) {
+        const commentId = req.params.commentId;
     }
 
 }

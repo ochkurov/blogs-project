@@ -7,10 +7,8 @@ export const createPostFromBlogIdController = async (
     req: Request<
         { blogId: string }, {}, PostInputModel>,
     res: Response<PostViewModel>) => {
+
     const blogId = req.params.blogId;
-
-    console.log(blogId)
-
     let body = {...req.body, blogId: blogId};
 
     let postId = await postsService.createPost(body);

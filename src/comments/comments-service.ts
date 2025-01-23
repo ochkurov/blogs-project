@@ -1,5 +1,5 @@
 import {commentsRepository} from "./commentsRepository";
-import {commentsCollection} from "../db/mongoDb";
+import {ObjectId} from "mongodb";
 
 export const commentsService = {
     async getCommentsById ( id: string ) {
@@ -9,5 +9,8 @@ export const commentsService = {
         return await commentsRepository.updateComment( id, content );
     },
     async deleteCommentById ( id: string ) {
+    },
+    async createComment (userId: string , postId: string, content: string ) {
+        const post = await
     }
 }
