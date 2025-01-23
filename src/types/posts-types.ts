@@ -24,10 +24,11 @@ export type ResponsePostsType = {
     items: PostViewModel[]
 }
 
-export type PostQueryInputType = {
+export type QueryInputType = {
     sortBy: string | 'createdAt',
     sortDirection: "asc" | "desc",
     pageNumber: number,
     pageSize: number,
 
 }
+

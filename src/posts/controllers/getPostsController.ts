@@ -1,11 +1,11 @@
 import {Request, Response} from "express";
-import {PostQueryInputType, ResponsePostsType} from "../../types/posts-types";
+import { QueryInputType, ResponsePostsType} from "../../types/posts-types";
 import {postsService} from "../posts-service";
 import {sortType} from "../../types/sort-types";
 import {postQueryPagingDef} from "../../helpers/post_paginations_values";
 
 export const getPostsController = async (
-    req:Request<{},{},{},PostQueryInputType>,
+    req:Request<{},{},{},QueryInputType>,
     res:Response<ResponsePostsType>) => {
     const { pageNumber , pageSize , sortBy , sortDirection } = postQueryPagingDef(req.query)
 

@@ -1,10 +1,10 @@
 import {Request, Response} from "express";
 import {postsService} from "../../posts/posts-service";
 import {postQueryPagingDef} from "../../helpers/post_paginations_values";
-import {PostQueryInputType} from "../../types/posts-types";
+import { QueryInputType} from "../../types/posts-types";
 
 export const getPostsFromBlogIdController = async(
-    req: Request<{ blogId: string }, {}, {} , PostQueryInputType>,
+    req: Request<{ blogId: string }, {}, {} , QueryInputType>,
     res: Response) => {
 
 

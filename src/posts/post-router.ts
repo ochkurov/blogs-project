@@ -12,8 +12,8 @@ export const postsRouter = Router();
 
 postsRouter.get('/', getPostsController)
 postsRouter.get('/:id', getPostByIdController)
-postsRouter.get('/:id/comments')
+postsRouter.get('/:id/comments' , )
 postsRouter.post('/', authorizationMidleware, postBodyValidation , errorsResultMiddleware , createPostController)
-postsRouter.post('/:id/comments')
+postsRouter.post('/:id/comments' , )
 postsRouter.put('/:id', authorizationMidleware,postBodyValidation , errorsResultMiddleware, updatePostController)
 postsRouter.delete('/:id', authorizationMidleware, postBodyValidation , deletePostController)

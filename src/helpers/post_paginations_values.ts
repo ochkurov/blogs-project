@@ -1,7 +1,7 @@
-import {PostQueryInputType} from "../types/posts-types";
+import {QueryInputType} from "../types/posts-types";
 
 
-export const postQueryPagingDef = (query: PostQueryInputType): PostQueryInputType => {
+export const postQueryPagingDef = (query: QueryInputType): QueryInputType => {
     let page = query?.pageNumber ? +query.pageNumber : 1;
     // let pageSize =
     return {

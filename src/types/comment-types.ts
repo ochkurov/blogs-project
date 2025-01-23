@@ -1,4 +1,4 @@
-export type CommentResponseType = {
+export type CommentsViewModel = {
     id: string
     content: string
     commentatorInfo: CommentatorInfo
@@ -8,4 +8,12 @@ export type CommentResponseType = {
 export type CommentatorInfo = {
     userId: string,
     userLogin: string
+}
+
+export type CommentResponseType = {
+    pagesCount: number,
+    page: number ,
+    pageSize: number,
+    totalCount: number,
+    items: CommentResponseType[]
 }
