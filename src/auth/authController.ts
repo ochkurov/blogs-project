@@ -1,5 +1,6 @@
 import {Request, Response} from "express";
 import {usersService} from "../users/users-service";
+import {jwtService} from "./application/jwt-service";
 
 type authType = {
     loginOrEmail: string,
@@ -18,6 +19,11 @@ export const authController = {
             res.sendStatus(401)
             return
         }
-        res.sendStatus(204)
+
+        const findUser = await usersService.getUserByLoginOrEmail(req.body.loginOrEmail)
+
+        const token = await jwtService.createJWT(findUser!)
+
+        res.status(200).json(token)
     }
 }

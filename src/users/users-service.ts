@@ -43,6 +43,9 @@ export const usersService = {
     async getUserById (id: string) {
         return await usersRepository.getUserById(id)
     },
+    async getUserByLoginOrEmail(loginOrEmail:string) {
+        return await usersRepository.getUserByLoginOrEmail(loginOrEmail)
+    },
     async checkCredentials (loginOrEmail: string, password: string) {
         let findUser = await usersRepository.checkUserByLoginOrEmail(loginOrEmail)
         if (!findUser) {
