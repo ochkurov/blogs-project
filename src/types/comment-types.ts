@@ -17,3 +17,10 @@ export type CommentResponseType = {
     totalCount: number,
     items: CommentResponseType[]
 }
+
+export type DbCommentType = {
+    content: string
+    commentatorInfo: CommentatorInfo
+    createdAt: string
+    postId: string
+}
