@@ -1,12 +1,13 @@
 import {QueryInputType} from "../types/posts-types";
 import {commentsCollection} from "../db/mongoDb";
+import {ObjectId} from "mongodb";
 
 export const commentsQwRepository = {
     async getComments() {
 
     },
     async getCommentById(id: string) {
-
+            return await commentsCollection.findOne({_id: new ObjectId(id)})
     },
     async getCommentsByPostId(postId: string, commentQuery: QueryInputType) {
         const {sortBy, sortDirection, pageSize, pageNumber} = commentQuery

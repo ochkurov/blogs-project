@@ -2,6 +2,7 @@ import {Request, Response} from "express";
 import {CommentResponseType} from "../types/comment-types";
 import {commentsService} from "./comments-service";
 import {commentsRepository} from "./commentsRepository";
+import {commentsQwRepository} from "./commentsQwRepository";
 
 export const commentsController = {
     async getCommentsById(req: Request<{ commentId: string }>, res: Response<CommentResponseType>) {
@@ -11,6 +12,12 @@ export const commentsController = {
             res.sendStatus(404)
             return;
         }
+        const comment = await commentsQwRepository.getCommentById(commentId);
+        if (!comment) {
+            res.sendStatus(404)
+            return
+        }
+        res.status(200).json(comment);
 
     },
     async updateComment(req: Request<{ commentId: string }, {}, { content: string }>, res: Response) {
