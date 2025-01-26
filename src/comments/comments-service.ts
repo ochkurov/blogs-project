@@ -4,7 +4,7 @@ import {DbCommentType} from "../types/comment-types";
 
 export const commentsService = {
 
-    async updateComment(id: string, content: string) {
+    async updateComment(id: string,content: string) {
         return await commentsRepository.updateComment(id, content);
     },
     async createComment(userId: string, postId: string, content: string) {

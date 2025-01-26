@@ -7,7 +7,7 @@ export const commentsQwRepository = {
     async getComments() {
 
     },
-    async getCommentById(id: string) {
+    async getCommentById(id: string):Promise<DbResponseCommentType> {
             return await commentsCollection.findOne({_id: new ObjectId(id)})
     },
     async getCommentsByPostId(postId: string, commentQuery: QueryInputType) {
@@ -22,7 +22,7 @@ export const commentsQwRepository = {
             .skip((pageNumber - 1) * pageSize)
             .limit(pageSize)
             .toArray()
-        if (comments.length < 1) return null
+
         const commentsCount = await commentsCollection.countDocuments({postId})
         return {
             pagesCount: Math.ceil(commentsCount / pageSize),
@@ -38,10 +38,7 @@ export const commentsQwRepository = {
                 },
                 createdAt: c.createdAt
             }
-
-
             })
-
         }
 
     }

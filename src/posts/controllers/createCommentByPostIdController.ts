@@ -2,6 +2,7 @@ import {Request, Response} from "express";
 import {CommentsViewModel} from "../../types/comment-types";
 import {commentsService} from "../../comments/comments-service";
 import {commentsQwRepository} from "../../comments/commentsQwRepository";
+import {ObjectId} from "mongodb";
 
 
 export const createCommentByPostIdController = async (
@@ -13,7 +14,7 @@ export const createCommentByPostIdController = async (
     const postId = req.params.id
     const content = req.body.content
 
-    if (!postId) {
+    if (!postId || !ObjectId.isValid(postId)) {
         res.sendStatus(404)
         return;
     }

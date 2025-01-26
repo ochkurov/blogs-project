@@ -10,12 +10,13 @@ import {deletePostController} from "./controllers/deletePostController";
 import {authBearerMiddleware} from "../auth/middlewares/authBearerMiddleware";
 import {commentCredentialsValidate} from "../comments/middlewares/CommentCredentionalsValidate";
 import {createCommentByPostIdController} from "./controllers/createCommentByPostIdController";
+import {getCommentsByPostIdController} from "./controllers/getCommentsByPostIdController";
 
 export const postsRouter = Router();
 
 postsRouter.get('/', getPostsController)
 postsRouter.get('/:id', getPostByIdController)
-postsRouter.get('/:id/comments' , )
+postsRouter.get('/:id/comments' , getCommentsByPostIdController )
 
 // basic auth
 postsRouter.post('/', authorizationMidleware, postBodyValidation , errorsResultMiddleware , createPostController)
