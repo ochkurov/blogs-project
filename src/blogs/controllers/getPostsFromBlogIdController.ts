@@ -11,12 +11,12 @@ export const getPostsFromBlogIdController = async(
 
     const blogId = req.params.blogId;
 
-    const currentPost = await postsService.getPostsFromBlogId(blogId , postQueryPagingDef(req.query))
+    const currentPosts = await postsService.getPostsFromBlogId(blogId , postQueryPagingDef(req.query))
 
-    if (!currentPost) {
+    if (!currentPosts) {
         res.sendStatus(404)
         return
     }
 
-    res.status(200).json(currentPost)
+    res.status(200).json(currentPosts)
 }

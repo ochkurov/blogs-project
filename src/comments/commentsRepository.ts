@@ -18,5 +18,8 @@ export const commentsRepository = {
         let res = await commentsCollection.insertOne(comment)
         return res.insertedId.toString()
     },
-
+async deleteComment (id: string): Promise<boolean> {
+    const deletedRes = await commentsCollection.deleteOne({_id: new ObjectId(id)})
+    return deletedRes.deletedCount === 1
+}
 }

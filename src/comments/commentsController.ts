@@ -1,9 +1,10 @@
 import {Request, Response} from "express";
 import {CommentResponseType} from "../types/comment-types";
 import {commentsService} from "./comments-service";
+import {commentsRepository} from "./commentsRepository";
 
 export const commentsController = {
-    async getCommentsById (req: Request<{ commentId: string }>, res: Response<CommentResponseType>) {
+    async getCommentsById(req: Request<{ commentId: string }>, res: Response<CommentResponseType>) {
         const commentId = req.params.commentId;
 
         if (!commentId) {
@@ -12,7 +13,7 @@ export const commentsController = {
         }
 
     },
-    async updateComment ( req: Request<{ commentId: string } , {} , { content:string }>, res: Response ) {
+    async updateComment(req: Request<{ commentId: string }, {}, { content: string }>, res: Response) {
 
         const userId = req.user!._id || '' // ???? у нас же айди уникальный идентификатор
         const commentId = req.params.commentId;
@@ -31,8 +32,18 @@ export const commentsController = {
         } else res.sendStatus(204)
 
     },
-    async deleteComment ( req: Request<{ commentId: string }>, res: Response ) {
+    async deleteComment(req: Request<{ commentId: string }>, res: Response) {
         const commentId = req.params.commentId;
+        if (!commentId) {
+            res.sendStatus(404)
+            return
+        }
+        const deleteComment = await commentsRepository.deleteComment(commentId)
+        if (!deleteComment) {
+            res.sendStatus(404)
+            return
+        }
+        res.sendStatus(204)
     }
 
 }
