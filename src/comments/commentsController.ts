@@ -5,8 +5,8 @@ import {commentsRepository} from "./commentsRepository";
 import {commentsQwRepository} from "./commentsQwRepository";
 
 export const commentsController = {
-    async getCommentsById(req: Request<{ commentId: string }>, res: Response<CommentResponseType>) {
-        const commentId = req.params.commentId;
+    async getCommentsById(req: Request<{ id: string }>, res: Response<CommentResponseType>) {
+        const commentId = req.params.id;
 
         if (!commentId) {
             res.sendStatus(404)
@@ -20,6 +20,7 @@ export const commentsController = {
         res.status(200).json(comment);
 
     },
+
     async updateComment(req: Request<{ commentId: string }, {}, { content: string }>, res: Response) {
 
         const userId = req.user!._id || '' // ???? у нас же айди уникальный идентификатор

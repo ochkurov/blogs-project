@@ -1,7 +1,6 @@
 import {Request, Response} from "express";
 import {usersService} from "../users/users-service";
 import {jwtService} from "./application/jwt-service";
-import {usersRepository} from "../users/usersRepository";
 import {usersQwRepository} from "../users/usersQwRepository";
 import {UserForAuthMe} from "../types/users-types";
 
@@ -25,9 +24,9 @@ export const authController = {
 
         const findUser = await usersService.getUserByLoginOrEmail(req.body.loginOrEmail)
 
-        const token = await jwtService.createJWT(findUser!)
+        const token = await jwtService.createJWT(findUser?._id.toString()!)
 
-        res.status(200).json(token)
+        res.status(200).json({accessToken:token.toString()})
     },
     async Me (req: Request, res: Response) {
         const userId = req.user?._id

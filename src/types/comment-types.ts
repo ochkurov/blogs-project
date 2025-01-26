@@ -1,8 +1,18 @@
+import {ObjectId} from "mongodb";
+
 export type CommentsViewModel = {
     id: string
     content: string
     commentatorInfo: CommentatorInfo
     createdAt: string
+}
+export type DbResponseCommentType = {
+    _id: ObjectId
+    content: string
+    commentatorInfo: CommentatorInfo
+    createdAt: string
+    postId: string
+
 }
 
 export type CommentatorInfo = {

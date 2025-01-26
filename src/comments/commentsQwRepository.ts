@@ -1,6 +1,7 @@
 import {QueryInputType} from "../types/posts-types";
 import {commentsCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
+import {CommentsViewModel, DbResponseCommentType} from "../types/comment-types";
 
 export const commentsQwRepository = {
     async getComments() {
@@ -28,7 +29,18 @@ export const commentsQwRepository = {
             page: pageNumber,
             pageSize,
             totalCount: commentsCount,
-            items: comments
+            items: comments.map((c:DbResponseCommentType):CommentsViewModel=> { return {
+                id: c._id.toString(),
+                content: c.content,
+                commentatorInfo: {
+                    userId:c.commentatorInfo.userId,
+                    userLogin:c.commentatorInfo.userLogin
+                },
+                createdAt: c.createdAt
+            }
+
+
+            })
 
         }
 

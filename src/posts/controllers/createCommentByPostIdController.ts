@@ -1,6 +1,7 @@
 import {Request, Response} from "express";
 import {CommentsViewModel} from "../../types/comment-types";
 import {commentsService} from "../../comments/comments-service";
+import {commentsQwRepository} from "../../comments/commentsQwRepository";
 
 
 export const createCommentByPostIdController = async (
@@ -24,7 +25,7 @@ export const createCommentByPostIdController = async (
         return
     }
 
-    const comment = await commentsService.getCommentsById(commentId)
+    const comment = await commentsQwRepository.getCommentById(commentId)
 
     if (!comment) {
         res.sendStatus(404)
@@ -35,8 +36,8 @@ export const createCommentByPostIdController = async (
         id: comment._id.toString(),
         content: comment.content,
         commentatorInfo: {
-            userId: comment.userId,
-            userLogin: comment.userLogin
+            userId: comment.commentatorInfo.userId,
+            userLogin: comment.commentatorInfo.userLogin
         },
         createdAt: comment.createdAt
 
