@@ -1,5 +1,12 @@
-import {ResponseUserType, UserSecureType, UsersQueryInputType, UsersQueryPaginationType} from "../types/users-types";
+import {
+    ResponseUserType,
+    UserForResponseType,
+    UserSecureType,
+    UsersQueryInputType,
+    UsersQueryPaginationType
+} from "../types/users-types";
 import {usersCollection} from "../db/mongoDb";
+import {ObjectId} from "mongodb";
 
 export const usersQwRepository = {
 
@@ -39,5 +46,12 @@ export const usersQwRepository = {
             }})
         }
 
+    },
+    async getUserForAuthMe(id:ObjectId):Promise< UserSecureType | null > {
+        let user = await usersCollection.findOne({_id:id})
+        if(!user) {
+            return null
+        }
+        return user
     }
 }

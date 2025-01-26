@@ -14,6 +14,11 @@ export type UserSecureType = {
     email: string,
     createdAt: string,
 }
+export type UserForAuthMe = {
+    email: string,
+    login: string,
+    userId: string
+}
 
 export type UserForResponseType = {
     id: string,
