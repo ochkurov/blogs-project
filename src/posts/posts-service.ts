@@ -1,9 +1,10 @@
 import {postsRepository} from "./postsRepository";
-import {PostInputModel, PostViewModel, ResponsePostsType} from "../types/posts-types";
+import {CreatePostType, PostInputModel, PostViewModel, ResponsePostsType} from "../types/posts-types";
 import {ObjectId} from "mongodb";
 import {BlogViewModel} from "../types/blog-types";
 import {blogsRepository} from "../blogs/blogsRepository";
 import {sortType} from "../types/sort-types";
+import {getPostViewModel} from "./output/getPostViewModel";
 
 export const postsService = {
 
@@ -14,13 +15,14 @@ export const postsService = {
         const posts = await postsRepository.getAllPosts(sortData)
 
         const postsCount = await postsRepository.getPostsCount()
+        const mappedPosts = posts.map(getPostViewModel)
 
         return {
             pagesCount: Math.ceil( postsCount / pageSize),
             page: pageNumber,
             pageSize,
             totalCount: postsCount,
-            items : posts
+            items : mappedPosts
         }
     },
     async getPostsFromBlogId ( blogId: string, sortData: sortType ) {
@@ -31,21 +33,24 @@ export const postsService = {
         if (posts.length < 1) return null
 
         const postsCount = await postsRepository.getPostsCountById(blogId)
+        const mappedPosts = posts.map(getPostViewModel)
 
         return {
             pagesCount: Math.ceil( postsCount / pageSize),
             page: pageNumber,
             pageSize,
             totalCount: postsCount,
-            items : posts
+            items : mappedPosts
         }
 
     },
     async getPostById (id: string) {
-        return await postsRepository.getPostById(id)
+        return postsRepository.getPostById(id)
+            .then(getPostViewModel)
     },
     async getPostByMongoID (_id: ObjectId) {
-        return await postsRepository.getPostByUUID(_id)
+        return postsRepository.getPostByUUID(_id)
+            .then(getPostViewModel)
     },
 
     async createPost (body: PostInputModel) : Promise<ObjectId | null> {
@@ -58,8 +63,7 @@ export const postsService = {
         }
 
 
-        let newPost: PostViewModel = {
-            id: Date.now().toString(),
+        let newPost: CreatePostType = {
             title: body.title,
             shortDescription: body.shortDescription,
             content: body.content,

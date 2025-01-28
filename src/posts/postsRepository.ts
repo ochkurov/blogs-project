@@ -1,7 +1,7 @@
-import {blogsCollection, postsCollection} from "../db/mongoDb";
+import {postsCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
-import {PostInputModel} from "../types/posts-types";
 import {sortType} from "../types/sort-types";
+import {PostInputModel, ResponsePostType} from "../types/posts-types";
 
 export const postsRepository = {
 
@@ -30,7 +30,7 @@ export const postsRepository = {
             filteredPosts.blogId = blogId;
         }
         return await postsCollection
-            .find(filteredPosts , {projection:{_id:0}})
+            .find(filteredPosts )
             .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1})
             .skip((pageNumber - 1) * pageSize)
             .limit(pageSize)
@@ -43,18 +43,18 @@ export const postsRepository = {
         return await postsCollection.countDocuments({})
     },
     async getPostsCountById(blogId: string) {
-        return await postsCollection.countDocuments({blogId} , {projection:{_id:0}})
+        return await postsCollection.countDocuments({blogId})
     },
 
     async getPostById(id: string) {
 
-        return await postsCollection.findOne({id: id}, {projection: {_id: 0}})
+        return await postsCollection.findOne({id: id})
 
     },
 
     async getPostByUUID(_id: ObjectId) {
 
-        return await postsCollection.findOne({_id: _id}, {projection: {_id: 0}})
+        return await postsCollection.findOne({_id: _id})
 
     },
 
