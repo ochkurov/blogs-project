@@ -1,7 +1,6 @@
 import {postsRepository} from "./postsRepository";
 import {CreatePostType, PostInputModel, PostViewModel, ResponsePostsType} from "../types/posts-types";
 import {ObjectId} from "mongodb";
-import {BlogViewModel} from "../types/blog-types";
 import {blogsRepository} from "../blogs/blogsRepository";
 import {sortType} from "../types/sort-types";
 import {getPostViewModel} from "./output/getPostViewModel";
@@ -44,18 +43,18 @@ export const postsService = {
         }
 
     },
-    async getPostById (id: string) {
-        return postsRepository.getPostById(id)
+    async getPostById ( id: string ):Promise<PostViewModel> {
+        return postsRepository.getPostById( new ObjectId( id ) )
             .then(getPostViewModel)
     },
     async getPostByMongoID (_id: ObjectId) {
-        return postsRepository.getPostByUUID(_id)
+        return postsRepository.getPostById(_id)
             .then(getPostViewModel)
     },
 
     async createPost (body: PostInputModel) : Promise<ObjectId | null> {
 
-        let blog = await blogsRepository.getBlogById(body.blogId)
+        let blog = await blogsRepository.getBlogById( new ObjectId(body.blogId) )
 
 
         if (!blog) {
@@ -77,10 +76,10 @@ export const postsService = {
     },
     async updatePost (id: string, body: PostInputModel ) {
 
-        return await postsRepository.updatePost( id, body )
+        return await postsRepository.updatePost( new ObjectId(id), body )
     },
     async deletePost (id: string) {
-        return await postsRepository.deletePost(id)
+        return await postsRepository.deletePost( new ObjectId(id) )
     }
 
 }

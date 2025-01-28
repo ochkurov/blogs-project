@@ -1,7 +1,7 @@
 import {postsCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
 import {sortType} from "../types/sort-types";
-import {PostInputModel, ResponsePostType} from "../types/posts-types";
+import {PostInputModel} from "../types/posts-types";
 
 export const postsRepository = {
 
@@ -12,7 +12,7 @@ export const postsRepository = {
         const filter: any = {}
 
         return await postsCollection
-            .find(filter , {projection:{_id:0}})
+            .find(filter)
             .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1})
             .skip((pageNumber - 1) * pageSize)
             .limit(pageSize)
@@ -46,13 +46,7 @@ export const postsRepository = {
         return await postsCollection.countDocuments({blogId})
     },
 
-    async getPostById(id: string) {
-
-        return await postsCollection.findOne({id: id})
-
-    },
-
-    async getPostByUUID(_id: ObjectId) {
+    async getPostById(_id: ObjectId) {
 
         return await postsCollection.findOne({_id: _id})
 
@@ -65,18 +59,18 @@ export const postsRepository = {
         return res.insertedId
 
     },
-    async updatePost(id: string, body: PostInputModel): Promise<boolean> {
+    async updatePost(_id: ObjectId, body: PostInputModel): Promise<boolean> {
 
         const res = await postsCollection.updateOne(
-            {id},
+            {_id},
             {$set: {...body}}
         )
         return res.matchedCount === 1
 
     },
-    async deletePost(id: string) {
+    async deletePost(_id: ObjectId) {
 
-        const post = await postsCollection.findOne({id})
+        const post = await postsCollection.findOne({_id})
         if (post) {
             const res = await postsCollection.deleteOne({_id: post._id})
             if (res.deletedCount > 0) return true

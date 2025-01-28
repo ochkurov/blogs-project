@@ -1,6 +1,6 @@
 import {blogsCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
-import {BlogInputModel, BlogViewModel} from "../types/blog-types";
+import {BlogDbType, BlogInputModel, BlogResponseType} from "../types/blog-types";
 
 export const blogsRepository = {
 
@@ -17,7 +17,7 @@ export const blogsRepository = {
         }
 
         return await blogsCollection
-            .find(filter, {projection:{_id:0}})
+            .find(filter)
             .sort({[sortBy]: sortDirection})
             .skip((pageNumber - 1) * pageSize)
             .limit(pageSize)
@@ -34,36 +34,36 @@ export const blogsRepository = {
         return await blogsCollection.countDocuments(filter)
     },
 
-    async getBlogById(id: string): Promise<BlogViewModel | null>  {
+    async getBlogById(_id: ObjectId): Promise<BlogResponseType | null>  {
 
-        return await blogsCollection.findOne({id: id} , {projection:{_id:0}});
+        return await blogsCollection.findOne({_id} );
 
     },
 
     async getVideoByUUID(_id: ObjectId) {
 
-        return await blogsCollection.findOne({_id} , {projection:{_id:0}})
+        return await blogsCollection.findOne({_id} )
     },
 
-    async createBlog(newBlog: BlogViewModel): Promise<ObjectId> {
+    async createBlog(newBlog: BlogDbType): Promise<ObjectId> {
 
         const res = await blogsCollection.insertOne(newBlog)
         return res.insertedId
 
     },
 
-    async updateBlog(id: string, body: BlogInputModel): Promise<boolean> {
+    async updateBlog(_id: ObjectId, body: BlogInputModel): Promise<boolean> {
         const res = await blogsCollection.updateOne(
-            {id},
+            {_id},
             {$set: {...body}},
         )
         return res.matchedCount === 1
 
     },
 
-    async deleteBlog(id: string) {
+    async deleteBlog(_id: ObjectId) {
 
-        const blog = await blogsCollection.findOne({ id })
+        const blog = await blogsCollection.findOne({ _id })
 
         if (blog) {
             const res = await blogsCollection.deleteOne({_id: blog._id})

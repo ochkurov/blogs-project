@@ -16,11 +16,11 @@ export const getCommentsByPostIdController = async (req: Request<{ id: string },
         return;
     }*/
     if(!postId) {
-        res.sendStatus(405)
+        res.sendStatus(404)
         return
     }
     if(!ObjectId.isValid(postId)) {
-         res.sendStatus(406)
+         res.sendStatus(404)
         return
     }
     const sortiredComments = await commentsQwRepository.getCommentsByPostId(postId, commentQuery);

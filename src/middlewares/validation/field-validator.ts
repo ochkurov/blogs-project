@@ -1,5 +1,6 @@
 import {body} from "express-validator";
 import {blogsRepository} from "../../blogs/blogsRepository";
+import {ObjectId} from "mongodb";
 
 export const blogsBodyValidation = [
     body('name').isString().trim().notEmpty().isLength({min: 1, max: 15}),
@@ -17,7 +18,7 @@ export const postBodyValidation = [
     body('blogId').isString().withMessage('not string')
         .trim().custom(async blogId => {
 
-        const blog = await blogsRepository.getBlogById(blogId)
+        const blog = await blogsRepository.getBlogById(new ObjectId(blogId))
         if(!blog) {
             throw new Error("Blog not found")
         }

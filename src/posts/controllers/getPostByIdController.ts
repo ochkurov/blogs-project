@@ -1,10 +1,10 @@
 import {Request, Response} from "express";
-import {ResponsePostsType} from "../../types/posts-types";
+import {PostViewModel} from "../../types/posts-types";
 import {postsService} from "../posts-service";
 
 export const getPostByIdController = async (
     req: Request<{ id: string }, {}, {}>,
-    res: Response<ResponsePostsType>) => {
+    res: Response<PostViewModel>) => {
 
 
     const id = req.params.id;
