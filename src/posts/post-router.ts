@@ -21,7 +21,7 @@ postsRouter.get('/:id/comments' , getCommentsByPostIdController )
 // basic auth
 postsRouter.post('/', authorizationMidleware, postBodyValidation , errorsResultMiddleware , createPostController)
 postsRouter.put('/:id', authorizationMidleware,postBodyValidation , errorsResultMiddleware, updatePostController)
-postsRouter.delete('/:id', authorizationMidleware, postBodyValidation , deletePostController)
+postsRouter.delete('/:id', authorizationMidleware , deletePostController)
 
 // bearer auth
 postsRouter.post('/:id/comments' , authBearerMiddleware, ...commentCredentialsValidate , errorsResultMiddleware , createCommentByPostIdController)

@@ -43,13 +43,13 @@ export const postsService = {
         }
 
     },
-    async getPostById ( id: string ):Promise<PostViewModel> {
+    async getPostById ( id: string ):Promise<PostViewModel | null> {
         return postsRepository.getPostById( new ObjectId( id ) )
-            .then(getPostViewModel)
+            .then(post => post ?  getPostViewModel(post): null)
     },
     async getPostByMongoID (_id: ObjectId) {
         return postsRepository.getPostById(_id)
-            .then(getPostViewModel)
+            .then(post => post ? getPostViewModel(post) : null)
     },
 
     async createPost (body: PostInputModel) : Promise<ObjectId | null> {

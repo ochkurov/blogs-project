@@ -3,6 +3,7 @@ import {CommentsViewModel} from "../../types/comment-types";
 import {commentsService} from "../../comments/comments-service";
 import {commentsQwRepository} from "../../comments/commentsQwRepository";
 import {ObjectId} from "mongodb";
+import {postsRepository} from "../postsRepository";
 
 
 export const createCommentByPostIdController = async (
@@ -17,6 +18,13 @@ export const createCommentByPostIdController = async (
     if (!postId || !ObjectId.isValid(postId)) {
         res.sendStatus(404)
         return;
+    }
+
+    const foundPost = await postsRepository.getPostById(new ObjectId(postId));
+
+    if (!foundPost) {
+        res.sendStatus(404)
+        return
     }
 
     const commentId = await commentsService.createComment(userId, postId, content)

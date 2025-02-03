@@ -42,11 +42,14 @@ export const commentsController = {
         }
         const foundComment = await commentsRepository.getCommentById(commentId)
 
-        if(foundComment.commentatorInfo.userId.toString() !== userId.toString()) {
+        if(foundComment && foundComment.commentatorInfo.userId.toString() !== userId.toString()) {
              res.sendStatus(403)
             return
         }
-
+        if(!foundComment) {
+            res.sendStatus(404)
+            return
+        }
         const updateComment = await commentsService.updateComment(commentId,  content)
 
         if (!updateComment) {
@@ -65,8 +68,12 @@ export const commentsController = {
         }
         const foundComment = await commentsRepository.getCommentById(commentId)
 
-        if (foundComment.commentatorInfo.userId.toString() !== userId.toString()) {
+        if (foundComment && foundComment.commentatorInfo.userId.toString() !== userId.toString()) {
              res.sendStatus(403)
+            return
+        }
+        if(!foundComment) {
+            res.sendStatus(404)
             return
         }
         const deletedComment = await commentsRepository.deleteComment(commentId)

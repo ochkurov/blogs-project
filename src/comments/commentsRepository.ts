@@ -4,7 +4,7 @@ import {ObjectId} from "mongodb";
 
 export const commentsRepository = {
 
-    async getCommentById(id: string): Promise<DbResponseCommentType> {
+    async getCommentById(id: string): Promise<DbResponseCommentType | null> {
         return await commentsCollection.findOne({_id: new ObjectId(id)});
     },
     async updateComment(id: string, content: string): Promise<boolean> {

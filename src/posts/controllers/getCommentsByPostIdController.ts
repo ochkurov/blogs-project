@@ -4,6 +4,8 @@ import {CommentResponseType} from "../../types/comment-types";
 import {postQueryPagingDef} from "../../helpers/post_paginations_values";
 import {commentsQwRepository} from "../../comments/commentsQwRepository";
 import {ObjectId} from "mongodb";
+import {postsService} from "../posts-service";
+import {postsRepository} from "../postsRepository";
 
 export const getCommentsByPostIdController = async (req: Request<{ id: string }, {}, {}, QueryInputType>,
                                                     res: Response<CommentResponseType>) => {
@@ -23,6 +25,14 @@ export const getCommentsByPostIdController = async (req: Request<{ id: string },
          res.sendStatus(404)
         return
     }
+
+    const foundPost = await postsRepository.getPostById(new ObjectId(postId));
+
+    if (!foundPost) {
+        res.sendStatus(404)
+        return
+    }
+
     const sortiredComments = await commentsQwRepository.getCommentsByPostId(postId, commentQuery);
 
     if (!sortiredComments) {

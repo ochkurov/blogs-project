@@ -16,6 +16,10 @@ export const createPostController = async (
     }
 
     const newPost = await postsService.getPostByMongoID(postId)
+    if (!newPost) {
+        res.sendStatus(404)
+        return
+    }
 
 
     res.status(201).json(newPost)
