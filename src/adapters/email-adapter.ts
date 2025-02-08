@@ -21,6 +21,6 @@ export const emailSender = {
                 "     <a href='https://somesite.com/confirm-email?code=your_confirmation_code'>complete registration</a>\n" +
                 " </p>",
         });
-        return info;в
+        return info;
     }
 }
