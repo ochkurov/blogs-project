@@ -33,7 +33,7 @@ export const userController = {
     ) {
         const body: UserInputModel = req.body
 
-        const result = await usersService.createUser(body)
+        const result = await usersService.createUser(body , true)
 
         if (result.errors && result.errors.length > 0) {
             res.status(400).send({errorsMessages: result.errors})

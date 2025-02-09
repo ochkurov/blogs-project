@@ -3,14 +3,18 @@ import {usersRepository} from "./usersRepository";
 import {ErrorType} from "../types/errors-types";
 import bcrypt from 'bcrypt'
 import {usersCollection} from "../db/mongoDb";
+import {authService} from "../auth/auth-service";
+import {userCreator} from "./dto/userCreator";
 
- type UserServiceType = {
-    userId: string | null;
-     errors: ErrorType[] | null;
+type UserServiceType = {
+    errors: ErrorType[] | null,
+    data: { userId: string , confirmationCode:string } | null,
+    status: number
+
 }
 
 export const usersService = {
-    async createUser(body: UserInputModel): Promise<UserServiceType> {
+    async createUser(body: UserInputModel, isConfirmed: boolean): Promise<UserServiceType> {
         const errors: ErrorType[] = []
 
         let findUser = await usersRepository.findUserByLoginOrEmail(body.login, body.email)
@@ -22,7 +26,11 @@ export const usersService = {
             if (findUser.email === body.email) {
                 errors.push({message: 'the email is already in use', field: 'email'})
             }
-            return {userId:null , errors: errors}
+            return {
+                errors: errors ,
+                data: null,
+                status: 400
+            }
 
         }
 
@@ -30,23 +38,28 @@ export const usersService = {
         const hushedPass = await bcrypt.hash(body.password, salt)
 
 
-        let newUser = {
-            login: body.login,
-            email: body.email,
-            password: hushedPass,
-            createdAt: new Date().toISOString()
+        let newUser = userCreator(
+            body.login,
+            body.email,
+            hushedPass,
+            isConfirmed)
+
+
+        const userId = await usersRepository.createUser(newUser)
+        return {
+            errors: null ,
+            data: { userId, confirmationCode: newUser.emailConfirmation.confirmationCode } ,
+            status: 201
         }
-        const userId =  await usersRepository.createUser(newUser)
-        return {userId, errors: null }
     },
 
-    async getUserById (id: string) {
+    async getUserById(id: string) {
         return await usersRepository.getUserById(id)
     },
-    async getUserByLoginOrEmail(loginOrEmail:string) {
+    async getUserByLoginOrEmail(loginOrEmail: string) {
         return await usersRepository.getUserByLoginOrEmail(loginOrEmail)
     },
-    async checkCredentials (loginOrEmail: string, password: string) {
+    async checkCredentials(loginOrEmail: string, password: string) {
         let findUser = await usersRepository.checkUserByLoginOrEmail(loginOrEmail)
         if (!findUser) {
             return {
@@ -56,7 +69,7 @@ export const usersService = {
         let comparePassword = await bcrypt.compare(password, findUser.password)
 
         if (comparePassword) {
-            return { status: 204}
+            return {status: 204}
         }
         return {
             status: 401
@@ -65,7 +78,7 @@ export const usersService = {
 
     },
 
-async deleteUser (id: string) {
+    async deleteUser(id: string) {
         return await usersRepository.deleteUser(id)
-}
+    }
 }
