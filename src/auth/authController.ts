@@ -46,6 +46,15 @@ export const authController = {
             userId: user._id.toString()
         }
         res.status(200).json(userForResponse)
+    } ,
+    async ConfirmationByCode (req: Request, res: Response) {
+
+    },
+    async Registration (req: Request, res: Response) {
+
+    },
+    async RegistrationCodeResending (req: Request, res: Response) {
+
     }
 
 }

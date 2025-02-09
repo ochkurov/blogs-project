@@ -6,4 +6,8 @@ import {errorsResultMiddleware} from "../middlewares/errorsResultMiddleware";
 export const authRouter = Router()
 
 authRouter.post('/login' , authValidate , errorsResultMiddleware ,  authController.Login)
-authRouter.get('/me' , )
+authRouter.get('/me' , authController.Me)
+
+authRouter.post('/registration-confirmation' , authController.ConfirmationByCode)
+authRouter.post('/registration' , authController.Registration)
+authRouter.post('/registration-email-resending' , authController.RegistrationCodeResending)
