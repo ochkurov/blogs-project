@@ -2,7 +2,7 @@ import {Request, Response} from "express";
 import {usersService} from "../users/users-service";
 import {jwtService} from "./application/jwt-service";
 import {usersQwRepository} from "../users/usersQwRepository";
-import {UserForAuthMe} from "../types/users-types";
+import {UserForAuthMe, UserInputModel} from "../types/users-types";
 
 type authType = {
     loginOrEmail: string,
@@ -47,12 +47,14 @@ export const authController = {
         }
         res.status(200).json(userForResponse)
     } ,
+    async Registration (req: Request<{}, {}, UserInputModel> , res: Response) {
+const userData = req.body
+        const result = await 
+    },
     async ConfirmationByCode (req: Request, res: Response) {
 
     },
-    async Registration (req: Request, res: Response) {
 
-    },
     async RegistrationCodeResending (req: Request, res: Response) {
 
     }

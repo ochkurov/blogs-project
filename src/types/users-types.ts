@@ -65,3 +65,24 @@ export type UsersQueryInputType = {
     searchLoginTerm?: string ,
     searchEmailTerm?: string ,
 }
+
+export type UserFullViewModel = {
+    id: string,
+    login: string,
+    email: string,
+    password: string,
+    createdAt: string,
+    emailConfirmation: EmailConfirmationViewType
+}
+export type EmailConfirmationViewType = {
+    confirmationCode: string;
+    expirationDate: Date;
+    isConfirmed: boolean;
+}
+export type UserCreateTypeModel = {
+    login: string,
+    email: string,
+    password: string,
+    createdAt: string,
+    emailConfirmation: EmailConfirmationViewType
+}

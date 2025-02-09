@@ -9,3 +9,8 @@ const passwordValidate = body('password')
 .trim().notEmpty().withMessage('Write password')
 
 export const authValidate = [ loginOrEmailValidate , passwordValidate ]
+
+const confirmationCodeValidate = body('code')
+    .isString().withMessage("filed to be string")
+    .trim().notEmpty().withMessage("field is empty")
+    .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i)
