@@ -62,7 +62,7 @@ export const authController = {
     },
     async ConfirmationByCode(req: Request<{}, {}, { code: string }>, res: Response) {
         const code = req.body.code
-const confirmUser = await authService.authByConfirmationCode(code)
+        const confirmUser = await authService.authByConfirmationCode(code)
         if (confirmUser.errors.length || !confirmUser.data.isConfirmed) {
             res.sendStatus(confirmUser.status).json({errorsMesages: confirmUser.errors})
             return
@@ -70,8 +70,8 @@ const confirmUser = await authService.authByConfirmationCode(code)
         res.sendStatus(confirmUser.status)
     },
 
-    async RegistrationCodeResending(req: Request, res: Response) {
+    async RegistrationCodeResending(req: Request<{}, {}, { email: string }>, res: Response) {
+        const email = req.body.email
 
     }
-
 }

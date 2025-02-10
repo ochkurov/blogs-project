@@ -17,3 +17,7 @@ const passwordValidate = body('password')
     .isLength({min: 6, max: 20}).withMessage('Password must be more than 6 symbols and less than 20')
 
 export const userCredentialsValidate = [loginValidate, emailValidate, passwordValidate]
+export const confirmationCodeValidate = body('code')
+.isString().withMessage('Confirm Code Must be string')
+    .trim().notEmpty().withMessage('Confirm Code is required')
+    .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i)
