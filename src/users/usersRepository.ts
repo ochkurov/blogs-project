@@ -1,6 +1,14 @@
-import {UserCreateType, UserSchemaType, UserSecureType} from "../types/users-types";
+import {
+    UserCreateType,
+    UserForResponseType,
+    UserFullDBModel, UserFullViewModel,
+    UserSchemaType,
+    UserSecureType
+} from "../types/users-types";
 import {usersCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
+import {userMapper} from "./dto/userMapper";
+import {id} from "date-fns/locale";
 
 export const usersRepository = {
 
@@ -45,5 +53,19 @@ export const usersRepository = {
             return null
         }
         return findUser
+    },
+    async findUserByConfirmationCode ( code: string ):Promise<UserFullViewModel | null> {
+        const findUser = await usersCollection.findOne({"emailConfirmation.confirmationCode": code});
+        return findUser ? userMapper(findUser) : null
+    },
+    async confirmationUserByCode (isConfirmed: boolean  , userId: string) {
+        let result = await usersCollection.updateOne({
+            _id: new ObjectId(userId),
+            },
+            {
+                $set: {['emailConfirmation.confirmationCode']:isConfirmed},
+            }
+        )
+        return result.matchedCount > 1;
     }
 }

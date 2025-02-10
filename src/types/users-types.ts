@@ -86,3 +86,11 @@ export type UserCreateTypeModel = {
     createdAt: string,
     emailConfirmation: EmailConfirmationViewType
 }
+export type UserFullDBModel  = {
+    _id: ObjectId
+    login: string,
+    email: string,
+    password: string,
+    createdAt: string,
+    emailConfirmation: EmailConfirmationViewType
+}

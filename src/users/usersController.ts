@@ -40,13 +40,15 @@ export const userController = {
             return
         }
 
-        const user: UserSecureType = await usersService.getUserById(result.userId!)
+        const user: UserSecureType = await usersService.getUserById(result.data!.userId)
+
         const userForResponse:UserForResponseType = {
             id: user._id.toString(),
             login: user.login,
             email: user.email,
             createdAt: user.createdAt,
         }
+
         res.status(201).json(userForResponse)
 
     },

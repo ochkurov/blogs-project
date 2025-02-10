@@ -55,9 +55,13 @@ export const authController = {
             res.sendStatus(result.status).json({
                 errorsMessages: result.errors,
             })
+            return
         }
+        res.sendStatus(204)
+        return
     },
-    async ConfirmationByCode(req: Request, res: Response) {
+    async ConfirmationByCode(req: Request<{}, {}, { code: string }>, res: Response) {
+        const code = req.body.code
 
     },
 
