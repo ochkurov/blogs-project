@@ -72,6 +72,7 @@ export const authController = {
 
     async RegistrationCodeResending(req: Request<{}, {}, { email: string }>, res: Response) {
         const email = req.body.email
+        const result = await authService.resendingConfirmationCode(email)
 
     }
 }

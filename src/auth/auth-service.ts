@@ -61,4 +61,29 @@ export const authService = {
             errors: []
         }
     },
+    async resendingConfirmationCode ( email: string ) {
+        const findUser = await usersRepository.getUserByLoginOrEmail(email)
+        if (findUser && !findUser.emailConfirmation.isConfirmed) {
+            try {
+                await emailSender.confirmRegistration(email , findUser.emailConfirmation.confirmationCode)
+            } catch (err:any) {
+                console.log(err)
+                await usersRepository.deleteUser(findUser._id.toString())
+                return {
+                    status: 400,
+                    errors: [{message: 'Email nor confirmed , make registration aganin', field: 'confirmationCode'}]
+                }
+            }
+
+            return {
+                status: 201,
+                errors: []
+            }
+        }
+        return {
+            status: 400,
+            data: [],
+            errors: [{field: "email" , message: 'User not found'}]
+        }
+     }
 }

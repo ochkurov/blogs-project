@@ -30,7 +30,7 @@ export const usersRepository = {
         }
         return user
     },
-    async getUserByLoginOrEmail (loginOrEmail: string) : Promise<UserSecureType | null>{
+    async getUserByLoginOrEmail (loginOrEmail: string) : Promise<UserFullDBModel | null>{
         const user = await usersCollection.findOne({$or: [{login:loginOrEmail}, {email:loginOrEmail}]},{projection: {password: 0}})
         if (!user) {
             return null
