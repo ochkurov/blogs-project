@@ -71,12 +71,12 @@ export const authService = {
                 await usersRepository.deleteUser(findUser._id.toString())
                 return {
                     status: 400,
-                    errors: [{message: 'Email nor confirmed , make registration aganin', field: 'confirmationCode'}]
+                    errors: [{message: 'Email nor confirmed , make registration again', field: 'confirmationCode'}]
                 }
             }
 
             return {
-                status: 201,
+                status: 204,
                 errors: []
             }
         }
