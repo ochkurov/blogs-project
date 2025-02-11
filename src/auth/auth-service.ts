@@ -14,7 +14,17 @@ export const authService = {
         }
         const email = user.email
         const confiramtionCode = result.data.confirmationCode
-        const confirmRegistration = emailSender.confirmRegistration(email , confiramtionCode)
+        try {
+            await emailSender.confirmRegistration(email , confiramtionCode)
+        } catch (err:any) {
+            console.log(err)
+            await usersRepository.deleteUser(result.data.userId)
+            return {
+                status: 400,
+                errors: [{message: 'Email nor confirmed , make registration aganin', field: 'confirmationCode'}]
+            }
+        }
+
         return {
             status: 201,
             errors: []
