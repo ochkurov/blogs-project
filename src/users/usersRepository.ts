@@ -58,11 +58,14 @@ export const usersRepository = {
         let findUser = await usersCollection.findOne({"emailConfirmation.confirmationCode": code});
         return findUser ? userMapper(findUser) : null
     },
+
     async confirmationUserByCode (isConfirmed: boolean  , userId: string) {
         let result = await usersCollection.updateOne(
-            { _id: new ObjectId(userId),},
-            { $set: {'emailConfirmation.isConfirmed':isConfirmed},}
+            { _id: new ObjectId(userId)},
+            {
+                $set: {"emailConfirmation.isConfirmed": isConfirmed}
+            }
         )
-        return result.matchedCount > 1;
+        return result.matchedCount === 1;
     }
 }
