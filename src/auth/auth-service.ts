@@ -3,6 +3,7 @@ import {usersService} from "../users/users-service";
 import {emailSender} from "../adapters/email-adapter";
 import {usersRepository} from "../users/usersRepository";
 import {log} from "node:util";
+import {randomUUID} from "node:crypto";
 
 export const authService = {
     async registration (user: UserInputModel) {
@@ -35,19 +36,19 @@ export const authService = {
     async authByConfirmationCode (code: string ) {
 
         const user = await usersRepository.findUserByConfirmationCode(code)
-        console.log(user)
+
         if (!user) {
             return {
                 status: 400,
                 data: { isConfirmed: false },
-                errors: [{field: "code" , message: '1Confirmation code is incorrect'}]
+                errors: [{field: "code" , message: 'Confirmation code is incorrect'}]
             }
         }
         if (new Date () > user.emailConfirmation.expirationDate || user.emailConfirmation.isConfirmed) {
             return {
                 status: 400,
                 data: { isConfirmed: false },
-                errors: [{field: "code" , message: '2Confirmation code is incorrect'}]
+                errors: [{field: "code" , message: 'Confirmation code is incorrect'}]
             }
         }
         const confirmUser = await usersRepository.confirmationUserByCode(true , user.id )
@@ -56,11 +57,11 @@ export const authService = {
             return {
                 status: 400,
                 data: { isConfirmed: false },
-                errors: [{field: "code" , message: '3Confirmation code is incorrect'}]
+                errors: [{field: "code" , message: 'Confirmation code is incorrect'}]
             }
         }
         return {
-            status: 201,
+            status: 204,
             data: { isConfirmed: true },
             errors: []
         }
@@ -68,8 +69,10 @@ export const authService = {
     async resendingConfirmationCode ( email: string ) {
         const findUser = await usersRepository.getUserByLoginOrEmail(email)
         if (findUser && !findUser.emailConfirmation.isConfirmed) {
+            const confirmationCode =  randomUUID()
+            await usersRepository.updateConfirmationCode(email , confirmationCode)
             try {
-                await emailSender.confirmRegistration(email , findUser.emailConfirmation.confirmationCode)
+                await emailSender.confirmRegistration(email , confirmationCode)
             } catch (err:any) {
                 console.log(err)
                 await usersRepository.deleteUser(findUser._id.toString())

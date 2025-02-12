@@ -67,5 +67,14 @@ export const usersRepository = {
             }
         )
         return result.matchedCount === 1;
+    },
+    async updateConfirmationCode (email:string , confirmationCode:string) {
+        let result = await usersCollection.updateOne(
+            { email:  email},
+            {
+                $set: {"emailConfirmation.confirmationCode": confirmationCode}
+            }
+        )
+        return result.matchedCount === 1;
     }
 }

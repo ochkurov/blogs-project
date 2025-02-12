@@ -64,7 +64,7 @@ export const authController = {
         const code = req.body.code
         const confirmUser = await authService.authByConfirmationCode(code)
         if (confirmUser.errors.length || !confirmUser.data.isConfirmed) {
-            res.status(confirmUser.status).json({errorsMesages: confirmUser.errors})
+            res.status(confirmUser.status).json({ errorsMessages: confirmUser.errors})
             return
         }
         res.sendStatus(confirmUser.status)
