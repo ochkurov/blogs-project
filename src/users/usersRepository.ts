@@ -55,7 +55,7 @@ export const usersRepository = {
         return findUser
     },
     async findUserByConfirmationCode ( code: string ):Promise<UserFullViewModel | null> {
-        const findUser = await usersCollection.findOne({"emailConfirmation.confirmationCode": code});
+        let findUser = await usersCollection.findOne({"emailConfirmation.confirmationCode": code});
         return findUser ? userMapper(findUser) : null
     },
     async confirmationUserByCode (isConfirmed: boolean  , userId: string) {

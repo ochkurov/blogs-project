@@ -2,6 +2,7 @@ import {UserInputModel} from "../types/users-types";
 import {usersService} from "../users/users-service";
 import {emailSender} from "../adapters/email-adapter";
 import {usersRepository} from "../users/usersRepository";
+import {log} from "node:util";
 
 export const authService = {
     async registration (user: UserInputModel) {
@@ -21,7 +22,7 @@ export const authService = {
             await usersRepository.deleteUser(result.data.userId)
             return {
                 status: 400,
-                errors: [{message: 'Email nor confirmed , make registration aganin', field: 'confirmationCode'}]
+                errors: [{message: 'Email nor confirmed , make registration aganin', field: 'code'}]
             }
         }
 
@@ -32,27 +33,30 @@ export const authService = {
 
     },
     async authByConfirmationCode (code: string ) {
+
         const user = await usersRepository.findUserByConfirmationCode(code)
+        console.log(user)
         if (!user) {
             return {
                 status: 400,
                 data: { isConfirmed: false },
-                errors: [{field: "confirmationCode" , message: 'Confirmation code is incorrect'}]
+                errors: [{field: "code" , message: '1Confirmation code is incorrect'}]
             }
         }
         if (new Date () > user.emailConfirmation.expirationDate || user.emailConfirmation.isConfirmed) {
             return {
                 status: 400,
                 data: { isConfirmed: false },
-                errors: [{field: "confirmationCode" , message: 'Confirmation code is incorrect'}]
+                errors: [{field: "code" , message: '2Confirmation code is incorrect'}]
             }
         }
-        const confirmUser = await usersRepository.confirmationUserByCode(true , user.id)
+        const confirmUser = await usersRepository.confirmationUserByCode(true , user.id )
+
         if (!confirmUser) {
             return {
                 status: 400,
                 data: { isConfirmed: false },
-                errors: [{field: "confirmationCode" , message: 'Confirmation code is incorrect'}]
+                errors: [{field: "code" , message: '3Confirmation code is incorrect'}]
             }
         }
         return {
@@ -71,7 +75,7 @@ export const authService = {
                 await usersRepository.deleteUser(findUser._id.toString())
                 return {
                     status: 400,
-                    errors: [{message: 'Email nor confirmed , make registration again', field: 'confirmationCode'}]
+                    errors: [{message: 'Email nor confirmed , make registration again', field: 'code'}]
                 }
             }
 

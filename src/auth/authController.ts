@@ -52,7 +52,7 @@ export const authController = {
         const userData = req.body
         const result = await authService.registration(userData)
         if (result.errors && result.errors.length > 0) {
-            res.sendStatus(result.status).json({
+            res.status(result.status).json({
                 errorsMessages: result.errors,
             })
             return
@@ -64,7 +64,7 @@ export const authController = {
         const code = req.body.code
         const confirmUser = await authService.authByConfirmationCode(code)
         if (confirmUser.errors.length || !confirmUser.data.isConfirmed) {
-            res.sendStatus(confirmUser.status).json({errorsMesages: confirmUser.errors})
+            res.status(confirmUser.status).json({errorsMesages: confirmUser.errors})
             return
         }
         res.sendStatus(confirmUser.status)
@@ -74,7 +74,7 @@ export const authController = {
         const email = req.body.email
         const result = await authService.resendingConfirmationCode(email)
         if (result.errors && result.errors.length > 0) {
-            res.sendStatus(result.status).json({
+            res.status(result.status).json({
                 errorsMessages: result.errors,
             })
             return

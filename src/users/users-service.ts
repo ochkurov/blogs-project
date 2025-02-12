@@ -2,8 +2,6 @@ import {UserInputModel} from "../types/users-types";
 import {usersRepository} from "./usersRepository";
 import {ErrorType} from "../types/errors-types";
 import bcrypt from 'bcrypt'
-import {usersCollection} from "../db/mongoDb";
-import {authService} from "../auth/auth-service";
 import {userCreator} from "./dto/userCreator";
 
 type UserServiceType = {
