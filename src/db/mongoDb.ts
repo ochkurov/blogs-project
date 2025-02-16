@@ -1,11 +1,13 @@
 import {SETTINGS} from "../settings";
 import {MongoClient} from "mongodb";
+import type {Collection} from 'mongodb'
 
 
-export let postsCollection: any
-export let blogsCollection: any
-export let usersCollection: any
-export let commentsCollection: any
+export let postsCollection: Collection<any>
+export let blogsCollection: Collection<any>
+export let usersCollection: Collection<any>
+export let commentsCollection: Collection<any>
+export let tokenCollection: Collection<any>
 
 export async function runDb(url: string): Promise<boolean> {
     let client = new MongoClient(url)
@@ -15,6 +17,7 @@ export async function runDb(url: string): Promise<boolean> {
     blogsCollection = db.collection<any>(SETTINGS.DB_COLLECTION_NAME.BLOGS)
     usersCollection = db.collection<any>(SETTINGS.DB_COLLECTION_NAME.USERS)
     commentsCollection = db.collection<any>(SETTINGS.DB_COLLECTION_NAME.COMMENTS)
+    tokenCollection = db.collection<any>(SETTINGS.DB_COLLECTION_NAME.TOKEN)
 
     try {
         await client.connect();

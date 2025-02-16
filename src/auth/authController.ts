@@ -2,8 +2,9 @@ import {Request, Response} from "express";
 import {usersService} from "../users/users-service";
 import {jwtService} from "./application/jwt-service";
 import {usersQwRepository} from "../users/usersQwRepository";
-import {UserForAuthMe, UserInputModel} from "../types/users-types";
+import {UserForAuthMe, UserInputModel, UserSecureType} from "../types/users-types";
 import {authService} from "./auth-service";
+import {tokenCollection} from "../db/mongoDb";
 
 type authType = {
     loginOrEmail: string,
@@ -25,12 +26,44 @@ export const authController = {
 
         const findUser = await usersService.getUserByLoginOrEmail(req.body.loginOrEmail)
 
-        const token = await jwtService.createJWT(findUser?._id.toString()!)
+        const tokenId: string = crypto.randomUUID()
 
-        res.status(200).json({accessToken: token.toString()})
+        const accessToken = await jwtService.createJWT(findUser?._id.toString()!)
+        const refreshToken = await jwtService.createRefresh(findUser?._id.toString()!, tokenId)
+
+        await tokenCollection.insertOne({userId: findUser?._id.toString(), tokenId})
+
+        res.cookie('refreshToken', refreshToken.toString(), {httpOnly: true, secure: true,})
+        res.status(200).json({accessToken: accessToken.toString()})
     },
+    async Refresh_Token (req: Request, res: Response) {
+
+        const user = req.user as UserSecureType | null
+
+        if(!user) {
+            res.sendStatus(401)
+            return
+        }
+        const tokenId = crypto.randomUUID()
+        const tokenUpdateResponse = await tokenCollection.updateOne({userId: user._id.toString()}, {$set: {tokenId}})
+
+        if(tokenUpdateResponse.modifiedCount === 0) {
+            res.sendStatus(500)
+            return
+        }
+
+
+        const accessToken = await jwtService.createJWT(user?._id.toString()!)
+        const refreshToken = await jwtService.createRefresh(user?._id.toString()!, tokenId)
+
+
+        res.cookie('refreshToken', refreshToken.toString(), {httpOnly: true, secure: true,})
+        res.status(200).json({accessToken: accessToken.toString()})
+},
     async Me(req: Request, res: Response) {
+
         const userId = req.user?._id
+
         if (!userId) {
             res.sendStatus(401)
             return
@@ -49,7 +82,9 @@ export const authController = {
         res.status(200).json(userForResponse)
     },
     async Registration(req: Request<{}, {}, UserInputModel>, res: Response) {
+
         const userData = req.body
+
         const result = await authService.registration(userData)
         if (result.errors && result.errors.length > 0) {
             res.status(result.status).json({
@@ -81,5 +116,8 @@ export const authController = {
         }
         res.sendStatus(result.status)
         return
+    },
+    async logout (req: Request, res: Response) {
+
     }
 }

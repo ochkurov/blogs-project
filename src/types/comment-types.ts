@@ -25,7 +25,7 @@ export type CommentResponseType = {
     page: number ,
     pageSize: number,
     totalCount: number,
-    items: CommentResponseType[]
+    items: CommentsViewModel[]
 }
 
 export type DbCommentType = {
