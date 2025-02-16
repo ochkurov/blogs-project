@@ -3,9 +3,12 @@ import {SETTINGS} from "../../settings";
 
 
 export const jwtService = {
-    async createJWT (userId:string) {
+    async createJWT (userId:string):Promise<string> {
         return jwt.sign({userId}, SETTINGS.JWT_SECRET, {expiresIn: '24h'});
 
+    },
+    async createRefresh ( userId:string    ):Promise<string> {
+return jwt.sign({userId},)
     },
     async getUserIdByToken (token:string) {
         try {
