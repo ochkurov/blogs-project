@@ -36,18 +36,18 @@ export const authController = {
         res.cookie('refreshToken', refreshToken.toString(), {httpOnly: true, secure: true,})
         res.status(200).json({accessToken: accessToken.toString()})
     },
-    async Refresh_Token (req: Request, res: Response) {
+    async Refresh_Token(req: Request, res: Response) {
 
         const user = req.user as UserSecureType | null
 
-        if(!user) {
+        if (!user) {
             res.sendStatus(401)
             return
         }
         const tokenId = crypto.randomUUID()
         const tokenUpdateResponse = await tokenCollection.updateOne({userId: user._id.toString()}, {$set: {tokenId}})
 
-        if(tokenUpdateResponse.modifiedCount === 0) {
+        if (tokenUpdateResponse.modifiedCount === 0) {
             res.sendStatus(500)
             return
         }
@@ -59,7 +59,7 @@ export const authController = {
 
         res.cookie('refreshToken', refreshToken.toString(), {httpOnly: true, secure: true,})
         res.status(200).json({accessToken: accessToken.toString()})
-},
+    },
     async Me(req: Request, res: Response) {
 
         const userId = req.user?._id
@@ -99,7 +99,7 @@ export const authController = {
         const code = req.body.code
         const confirmUser = await authService.authByConfirmationCode(code)
         if (confirmUser.errors.length || !confirmUser.data.isConfirmed) {
-            res.status(confirmUser.status).json({ errorsMessages: confirmUser.errors})
+            res.status(confirmUser.status).json({errorsMessages: confirmUser.errors})
             return
         }
         res.sendStatus(confirmUser.status)
@@ -117,7 +117,11 @@ export const authController = {
         res.sendStatus(result.status)
         return
     },
-    async logout (req: Request, res: Response) {
-
+    async logout(req: Request, res: Response) {
+        const userId = req.user?._id.toString()
+        await tokenCollection.deleteMany({userId: userId})
+        res.clearCookie('refreshToken');
+        res.sendStatus(204)
+        return
     }
 }

@@ -17,7 +17,9 @@ export const refreshTokenMiddleware = async (req: Request, res: Response, next: 
         return
     }
     const {userId, tokenId} = tokenPayload
+
     const userTokenEntry = await tokenCollection.findOne({userId, tokenId})
+
     if(!userTokenEntry) {
         res.sendStatus(401)
         return
