@@ -39,13 +39,14 @@ export const authController = {
     async Refresh_Token(req: Request, res: Response) {
 
         const user = req.user as UserSecureType | null
-
+        const oldTokenId = req.tokenId
         if (!user) {
             res.sendStatus(401)
             return
         }
         const tokenId = crypto.randomUUID()
-        const tokenUpdateResponse = await tokenCollection.updateOne({userId: user._id.toString()}, {$set: {tokenId}})
+
+        const tokenUpdateResponse = await tokenCollection.updateOne({ tokenId: oldTokenId }, {$set: {tokenId}})
 
         if (tokenUpdateResponse.modifiedCount === 0) {
             res.sendStatus(500)
@@ -119,7 +120,20 @@ export const authController = {
     },
     async logout(req: Request, res: Response) {
         const userId = req.user?._id.toString()
-        await tokenCollection.deleteMany({userId: userId})
+        const oldTokenId = req.tokenId
+
+        if (!userId) {
+            res.sendStatus(401)
+            return
+        }
+
+        const result = await tokenCollection.deleteOne({tokenId: oldTokenId})
+
+        if (result.deletedCount === 0) {
+            res.sendStatus(500)
+            return
+        }
+
         res.clearCookie('refreshToken');
         res.sendStatus(204)
         return
