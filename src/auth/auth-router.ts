@@ -16,3 +16,4 @@ authRouter.post('/registration' , ...userCredentialsValidate , errorsResultMiddl
 authRouter.post('/registration-email-resending' , userCredentialsValidate[1], errorsResultMiddleware  ,authController.RegistrationCodeResending)
 authRouter.post('/refresh-token' ,refreshTokenMiddleware ,authController.Refresh_Token)
 authRouter.post('/logout' , refreshTokenMiddleware , authController.logout)
+ь
