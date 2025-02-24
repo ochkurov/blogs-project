@@ -8,6 +8,7 @@ const app = initApp()
 const basicAdminCreds = Buffer.from('admin:qwerty').toString('base64');
 const basicAdminHeader: [string, string] = ['Authorization', `Basic ${basicAdminCreds}`]
 const bearerUserHeader = (accessToken: string): [string, string] => ['Authorization', `Bearer ${accessToken}`]
+
 describe('create user', () => {
     beforeEach(async () => {
         await runDb(SETTINGS.MONGO_URL)
@@ -27,7 +28,7 @@ describe('create user', () => {
         const allUsersBeforeCreate = await request(app)
             .get('/users')
             .set(...basicAdminHeader)
-            .expect(200)
+            .expect(200)k
 
         expect(allUsersBeforeCreate.body.items.length).toBe(0)
 
@@ -83,6 +84,7 @@ describe('create user', () => {
         const userAccessToken = loginResponse.body.accessToken
         expect(userAccessToken).not.toBeUndefined()
         expect(userAccessToken).toEqual(expect.stringContaining('.'))
+
         const userRefreshToken = loginResponse.headers['set-cookie'][0]
         console.log(userRefreshToken)
         expect(userRefreshToken).not.toBeUndefined()
