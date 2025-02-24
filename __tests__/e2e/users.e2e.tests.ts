@@ -28,7 +28,7 @@ describe('create user', () => {
         const allUsersBeforeCreate = await request(app)
             .get('/users')
             .set(...basicAdminHeader)
-            .expect(200)k
+            .expect(200)
 
         expect(allUsersBeforeCreate.body.items.length).toBe(0)
 
