@@ -85,7 +85,7 @@ describe('create user', () => {
         expect(userAccessToken).not.toBeUndefined()
         expect(userAccessToken).toEqual(expect.stringContaining('.'))
 
-        const userRefreshToken = loginResponse.headers['set-cookie'][0]
+       d const userRefreshToken = loginResponse.headers['set-cookie'][0]
         console.log(userRefreshToken)
         expect(userRefreshToken).not.toBeUndefined()
         expect(userRefreshToken).toEqual(expect.stringContaining('.'))
