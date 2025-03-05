@@ -28,7 +28,8 @@ export const SETTINGS = {
         POSTS: 'posts',
         USERS: 'users',
         COMMENTS: 'comments',
-        TOKEN: 'token'
+        TOKEN: 'token',
+        RATE: 'rate',
     },
 
     MONGO_URL: process.env.MONGO_URL || 'mongodb://0.0.0.0:27017',

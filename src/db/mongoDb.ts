@@ -8,6 +8,7 @@ export let blogsCollection: Collection<any>
 export let usersCollection: Collection<any>
 export let commentsCollection: Collection<any>
 export let tokenCollection: Collection<any>
+export let countRequests: Collection<any>
 
 export async function runDb(url: string): Promise<boolean> {
     let client = new MongoClient(url)
@@ -18,6 +19,8 @@ export async function runDb(url: string): Promise<boolean> {
     usersCollection = db.collection<any>(SETTINGS.DB_COLLECTION_NAME.USERS)
     commentsCollection = db.collection<any>(SETTINGS.DB_COLLECTION_NAME.COMMENTS)
     tokenCollection = db.collection<any>(SETTINGS.DB_COLLECTION_NAME.TOKEN)
+    countRequests = db.collection<any>(SETTINGS.DB_COLLECTION_NAME.RATE)
+
 
     try {
         await client.connect();

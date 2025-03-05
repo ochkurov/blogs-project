@@ -36,6 +36,7 @@ export const authController = {
         res.cookie('refreshToken', refreshToken.toString(), {httpOnly: true, secure: true,})
         res.status(200).json({accessToken: accessToken.toString()})
     },
+
     async Refresh_Token(req: Request, res: Response) {
 
         const user = req.user as UserSecureType | null
@@ -118,6 +119,7 @@ export const authController = {
         res.sendStatus(result.status)
         return
     },
+
     async logout(req: Request, res: Response) {
         const userId = req.user?._id.toString()
         const oldTokenId = req.tokenId

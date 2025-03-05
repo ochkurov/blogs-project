@@ -2,7 +2,6 @@ import {UserInputModel} from "../types/users-types";
 import {usersService} from "../users/users-service";
 import {emailSender} from "../adapters/email-adapter";
 import {usersRepository} from "../users/usersRepository";
-import {log} from "node:util";
 import {randomUUID} from "node:crypto";
 
 export const authService = {
