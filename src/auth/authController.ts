@@ -4,50 +4,49 @@ import {jwtService} from "./application/jwt-service";
 import {usersQwRepository} from "../users/usersQwRepository";
 import {UserForAuthMe, UserInputModel, UserSecureType} from "../types/users-types";
 import {authService} from "./auth-service";
-import {tokenCollection} from "../db/mongoDb";
+import {deviceCollection} from "../db/mongoDb";
 
 type authType = {
     loginOrEmail: string,
     password: string
 }
-type CheckType = {
-    status: number
-}
+
 
 export const authController = {
     async Login(req: Request<{}, {}, authType>, res: Response) {
 
-        const check: CheckType = await usersService.checkCredentials(req.body.loginOrEmail, req.body.password)
+        const {loginOrEmail, password} = req.body
 
-        if (check.status === 401) {
-            res.sendStatus(401)
+        const {status, errors, data} = await authService.login({
+            loginOrEmail,
+            password,
+            ip: req.ip ?? 'default',
+            userAgent: req.headers['user-agent'] ?? ''
+        });
+
+        if ( status === 401 ) {
+            res.sendStatus(status)
             return
         }
 
-        const findUser = await usersService.getUserByLoginOrEmail(req.body.loginOrEmail)
-
-        const tokenId: string = crypto.randomUUID()
-
-        const accessToken = await jwtService.createJWT(findUser?._id.toString()!)
-        const refreshToken = await jwtService.createRefresh(findUser?._id.toString()!, tokenId)
-
-        await tokenCollection.insertOne({userId: findUser?._id.toString(), tokenId})
-
+        const {refreshToken, accessToken} = data!
         res.cookie('refreshToken', refreshToken.toString(), {httpOnly: true, secure: true,})
-        res.status(200).json({accessToken: accessToken.toString()})
+        res.status(status).json({accessToken: accessToken.toString()})
     },
 
     async Refresh_Token(req: Request, res: Response) {
 
         const user = req.user as UserSecureType | null
-        const oldTokenId = req.tokenId
+
+        const deviceId = req.deviceId
+
         if (!user) {
             res.sendStatus(401)
             return
         }
-        const tokenId = crypto.randomUUID()
 
-        const tokenUpdateResponse = await tokenCollection.updateOne({ tokenId: oldTokenId }, {$set: {tokenId}})
+
+        const tokenUpdateResponse = await deviceCollection.updateOne({ tokenId: oldTokenId }, {$set: {deviceId}})
 
         if (tokenUpdateResponse.modifiedCount === 0) {
             res.sendStatus(500)

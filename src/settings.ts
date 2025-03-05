@@ -22,6 +22,7 @@ export const SETTINGS = {
         AUTH: '/auth',
         TESTING: '/testing',
         COMMENTS: '/comments',
+        SESSIONS: '/security',
     },
     DB_COLLECTION_NAME: {
         BLOGS: 'blogs',

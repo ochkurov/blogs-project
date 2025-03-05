@@ -4,7 +4,7 @@ declare global {
     declare namespace Express {
         export interface Request {
             user: UserSecureType | null;
-            tokenId: string | null;
+            deviceId: string | null;
         }
     }
 }

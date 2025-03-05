@@ -3,15 +3,16 @@ import {SETTINGS} from "../../settings";
 
 export interface RefreshJWTPayload extends JwtPayload{
     userId: string;
-    tokenId: string;
+    deviceId: string;
+    token: string
 }
 export const jwtService = {
     async createJWT(userId: string): Promise<string> {
         return jwt.sign({userId}, SETTINGS.JWT_SECRET, {expiresIn: '10s'});
 
     },
-    async createRefresh(userId: string, tokenId: string): Promise<string> {
-        return jwt.sign({userId, tokenId}, SETTINGS.REFRESH_SECRET, {expiresIn: '20s'});
+    async createRefresh(userId: string, deviceId: string): Promise<string> {
+        return jwt.sign({userId, deviceId}, SETTINGS.REFRESH_SECRET, {expiresIn: '20s'});
     },
     async getUserIdByToken(token: string) {
         try {
@@ -29,5 +30,8 @@ export const jwtService = {
         } catch (error) {
             return null
         }
+    },
+    jwtDecodeToken(token:string) {
+        return jwt.decode(token) as JwtPayload
     }
 }

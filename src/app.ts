@@ -8,6 +8,7 @@ import {usersRouter} from "./users/users-router";
 import {authRouter} from "./auth/auth-router";
 import {commentsRouter} from "./comments/comments-router";
 import cookieParser from "cookie-parser";
+import {sessionRouter} from "./sessions/sessions-router";
 
 export const initApp = ()=>{
 
@@ -24,6 +25,7 @@ export const initApp = ()=>{
     app.use(SETTINGS.PATH.AUTH , authRouter)
     app.use(SETTINGS.PATH.TESTING, testingRouter)
     app.use(SETTINGS.PATH.COMMENTS , commentsRouter)
+    app.use(SETTINGS.PATH.SESSIONS , sessionRouter)
 
 
     return app
