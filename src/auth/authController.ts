@@ -123,15 +123,16 @@ export const authController = {
     },
 
     async logout(req: Request, res: Response) {
+
         const userId = req.user?._id.toString()
-        const oldTokenId = req.tokenId
+        const deviceId = req.deviceId
 
         if (!userId) {
             res.sendStatus(401)
             return
         }
 
-        const result = await tokenCollection.deleteOne({tokenId: oldTokenId})
+        const result = await deviceCollection.deleteOne({ _id: new ObjectId(deviceId!) })
 
         if (result.deletedCount === 0) {
             res.sendStatus(500)
