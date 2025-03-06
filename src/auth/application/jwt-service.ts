@@ -4,7 +4,8 @@ import {SETTINGS} from "../../settings";
 export interface RefreshJWTPayload extends JwtPayload{
     userId: string;
     deviceId: string;
-    token: string
+    iat: number,
+    exp:number
 }
 export const jwtService = {
     async createJWT(userId: string): Promise<string> {

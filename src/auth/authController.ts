@@ -39,6 +39,7 @@ export const authController = {
         const user = req.user as UserSecureType | null
 
         const deviceId = req.deviceId
+        
 
         if (!user) {
             res.sendStatus(401)
