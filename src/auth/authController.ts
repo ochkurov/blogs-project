@@ -16,12 +16,19 @@ type authType = {
 export const authController = {
     async Login(req: Request<{}, {}, authType>, res: Response) {
 
+        const ip = req.ip
+
+        if (!ip) {
+            res.sendStatus(500)
+            return
+        }
+
         const {loginOrEmail, password} = req.body
 
         const {status, errors, data} = await authService.login({
-            loginOrEmail,
-            password,
-            ip: req.ip ?? 'default',
+            loginOrEmail ,
+            password ,
+            ip ,
             userAgent: req.headers['user-agent'] ?? ''
         });
 

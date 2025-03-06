@@ -1,8 +1,9 @@
 import jwt, {JwtPayload} from 'jsonwebtoken'
 import {SETTINGS} from "../../settings";
+import {ObjectId} from "mongodb";
 
 export interface RefreshJWTPayload extends JwtPayload{
-    userId: string;
+    userId: ObjectId;
     deviceId: string;
     iat: number,
     exp:number

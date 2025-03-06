@@ -39,7 +39,7 @@ export const authService = {
 
         const newSession = {
             _id: deviceId,
-            userId: findUser?._id.toString(),
+            userId: findUser?._id,
             title: userAgent,
             ip: ip,
             iat: iat,
