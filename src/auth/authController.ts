@@ -5,6 +5,7 @@ import {usersQwRepository} from "../users/usersQwRepository";
 import {UserForAuthMe, UserInputModel, UserSecureType} from "../types/users-types";
 import {authService} from "./auth-service";
 import {deviceCollection} from "../db/mongoDb";
+import {ObjectId} from "mongodb";
 
 type authType = {
     loginOrEmail: string,
@@ -39,24 +40,25 @@ export const authController = {
         const user = req.user as UserSecureType | null
 
         const deviceId = req.deviceId
-        
+
 
         if (!user) {
             res.sendStatus(401)
             return
         }
 
+        const accessToken = await jwtService.createJWT(user?._id.toString()!)
+        const refreshToken = await jwtService.createRefresh(user?._id.toString()!, deviceId!)
+        const { iat , exp } = jwtService.jwtDecodeToken(refreshToken)
 
-        const tokenUpdateResponse = await deviceCollection.updateOne({ tokenId: oldTokenId }, {$set: {deviceId}})
+        const sessionUpdateResult = await deviceCollection.updateOne({ _id: new ObjectId(deviceId!) }, {$set: {iat , exp}})
 
-        if (tokenUpdateResponse.modifiedCount === 0) {
+        if (sessionUpdateResult.modifiedCount === 0) {
             res.sendStatus(500)
             return
         }
 
 
-        const accessToken = await jwtService.createJWT(user?._id.toString()!)
-        const refreshToken = await jwtService.createRefresh(user?._id.toString()!, tokenId)
 
 
         res.cookie('refreshToken', refreshToken.toString(), {httpOnly: true, secure: true,})
