@@ -37,7 +37,7 @@ export const sessionController = {
     terminateSessionByDeviceId: async (req: Request, res: Response) => {
         const userId = req.user?._id
         const deviceId = req.deviceId
-        д
+
 
         if (!userId) {
             res.sendStatus(404)
