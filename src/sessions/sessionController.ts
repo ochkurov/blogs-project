@@ -47,15 +47,17 @@ export const sessionController = {
             return
         }
         const session = await sessionQwRepository.findSessionByDeviceId(new ObjectId(deviceId))
+
         if (!session) {
             res.sendStatus(404)
             return
         }
 
-        if (session.userId.toString() !== userId?.toString()) {
+        if (session.userId !== userId) {
             res.sendStatus(403)
             return
         }
+
 
 
         if (!userId) {
@@ -65,6 +67,7 @@ export const sessionController = {
 
 
         const result = await sessionRepository.deleteSessionByDeviceId(userId!, deviceId!)
+
         if (!result) {
             res.sendStatus(403)
             return

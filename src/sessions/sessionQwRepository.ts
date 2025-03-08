@@ -12,7 +12,7 @@ export const sessionQwRepository = {
         return sessions.map(sessionMapper)
     },
     async findSessionByDeviceId (deviceId:ObjectId): Promise<SessionType | null> {
-        const session = deviceCollection.findOne({deviceId})
+        const session = await deviceCollection.findOne({_id:deviceId})
         if (!session) {
             return null
         }
