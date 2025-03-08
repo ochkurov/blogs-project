@@ -1,13 +1,11 @@
 import {Request, Response} from "express";
-import {deviceCollection} from "../db/mongoDb";
 import {sessionQwRepository} from "./sessionQwRepository";
-import {sessionMapper} from "./dto/sessionMapper";
 import {sessionRepository} from "./sessionRepository";
 import {ObjectId} from "mongodb";
 
 export const sessionController = {
     getAllDeviceSessions: async (req: Request, res: Response) => {
-        const deviceId = req.deviceId
+
         const userId = req.user?._id
 
         const sessions = await sessionQwRepository.getAllSessions(userId!)
@@ -66,10 +64,10 @@ export const sessionController = {
         }
 
 
-        const result = await sessionRepository.deleteSessionByDeviceId(userId!, deviceId!)
+        const result = await sessionRepository.deleteSessionByDeviceId(new ObjectId(deviceId)!)
 
         if (!result) {
-            res.sendStatus(403)
+            res.sendStatus(404)
             return
         }
         res.sendStatus(204)

@@ -1,6 +1,5 @@
 import {ObjectId} from "mongodb";
 import {deviceCollection} from "../db/mongoDb";
-import {usersRepository} from "../users/usersRepository";
 
 export const sessionRepository = {
     async deleteAllUserSessions (userId: ObjectId , deviceId: ObjectId) {
@@ -11,8 +10,8 @@ export const sessionRepository = {
         return !!res
 
     },
-    async deleteSessionByDeviceId (userId: ObjectId, deviceId: string) {
-       const result = await deviceCollection.deleteOne({ userId , deviceId })
+    async deleteSessionByDeviceId (deviceId: ObjectId) {
+       const result = await deviceCollection.deleteOne({ _id: deviceId })
         return !!result
     }
 }
