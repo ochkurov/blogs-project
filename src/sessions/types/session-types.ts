@@ -3,7 +3,7 @@ import {ObjectId} from "mongodb";
 export type SessionType = {
     _id: ObjectId,
     userId: ObjectId,
-    userAgent: string,
+    title: string,
     ip: string,
     iat: number,
     exp: number,

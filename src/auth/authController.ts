@@ -14,6 +14,7 @@ type authType = {
 
 
 export const authController = {
+
     async Login(req: Request<{}, {}, authType>, res: Response) {
 
         const ip = req.ip

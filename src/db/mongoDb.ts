@@ -1,13 +1,14 @@
 import {SETTINGS} from "../settings";
 import {MongoClient} from "mongodb";
 import type {Collection} from 'mongodb'
+import {SessionType} from "../sessions/types/session-types";
 
 
 export let postsCollection: Collection<any>
 export let blogsCollection: Collection<any>
 export let usersCollection: Collection<any>
 export let commentsCollection: Collection<any>
-export let deviceCollection: Collection<any>
+export let deviceCollection: Collection<SessionType>
 export let countRequestsCollection: Collection<any>
 
 export async function runDb(url: string): Promise<boolean> {
@@ -18,7 +19,7 @@ export async function runDb(url: string): Promise<boolean> {
     blogsCollection = db.collection<any>(SETTINGS.DB_COLLECTION_NAME.BLOGS)
     usersCollection = db.collection<any>(SETTINGS.DB_COLLECTION_NAME.USERS)
     commentsCollection = db.collection<any>(SETTINGS.DB_COLLECTION_NAME.COMMENTS)
-    deviceCollection = db.collection<any>(SETTINGS.DB_COLLECTION_NAME.TOKEN)
+    deviceCollection = db.collection<SessionType>(SETTINGS.DB_COLLECTION_NAME.TOKEN)
     countRequestsCollection = db.collection<any>(SETTINGS.DB_COLLECTION_NAME.RATE)
 
 

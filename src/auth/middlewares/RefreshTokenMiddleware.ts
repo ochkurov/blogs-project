@@ -2,6 +2,7 @@ import {NextFunction, Request, Response} from "express";
 import {jwtService} from "../application/jwt-service";
 import {usersService} from "../../users/users-service";
 import {deviceCollection} from "../../db/mongoDb";
+import {ObjectId} from "mongodb";
 
 
 
@@ -21,13 +22,15 @@ export const refreshTokenMiddleware = async (req: Request, res: Response, next: 
     }
     const { userId, deviceId , iat , exp} = tokenPayload
 
-    const userSession= await deviceCollection.findOne({userId, deviceId})
+    const userSession= await deviceCollection.findOne({_id: new ObjectId(deviceId)})
 
-    if(userSession.iat === iat  && userSession.exp === exp) {
+    if (!userSession) {
         res.sendStatus(401)
         return
     }
-    if (!userSession ) {
+
+
+    if(userSession.iat !== iat  || userSession.exp !== exp) {
         res.sendStatus(401)
         return
     }
