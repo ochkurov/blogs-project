@@ -38,7 +38,13 @@ export const sessionController = {
     terminateSessionByDeviceId: async (req: Request, res: Response) => {
 
         const userId = req.user?._id
-        const deviceId = req.deviceId
+        const deviceId = req.params.deviceId
+
+        if (!userId) {
+            res.sendStatus(404)
+            return
+        }
+
 
         if (!deviceId) {
             res.sendStatus(404)
@@ -51,17 +57,13 @@ export const sessionController = {
             return
         }
 
-        if (session.userId !== userId) {
+        console.log(session.userId , 's1111' , userId)
+
+        if (session.userId.toString() !== userId.toString()) {
             res.sendStatus(403)
             return
         }
 
-
-
-        if (!userId) {
-            res.sendStatus(404)
-            return
-        }
 
 
         const result = await sessionRepository.deleteSessionByDeviceId(new ObjectId(deviceId)!)
