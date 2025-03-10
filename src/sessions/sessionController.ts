@@ -67,7 +67,7 @@ export const sessionController = {
 
 
         const result = await sessionRepository.deleteSessionByDeviceId(new ObjectId(deviceId)!)
-ddd
+
         if (!result) {
             res.sendStatus(404)
             return
