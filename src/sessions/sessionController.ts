@@ -3,8 +3,8 @@ import {sessionQwRepository} from "./sessionQwRepository";
 import {sessionRepository} from "./sessionRepository";
 import {ObjectId} from "mongodb";
 
-export const sessionController = {
-    getAllDeviceSessions: async (req: Request, res: Response) => {
+class SessionController {
+    async getAllDeviceSessions(req: Request, res: Response) {
 
         const userId = req.user?._id
 
@@ -19,8 +19,9 @@ export const sessionController = {
         res.status(200).json(sessions)
 
 
-    },
-    terminateAllOtherSessions: async (req: Request, res: Response) => {
+    }
+
+    async terminateAllOtherSessions(req: Request, res: Response) {
 
         const userId = req.user?._id
         const deviceId = req.deviceId
@@ -34,8 +35,9 @@ export const sessionController = {
 
         res.sendStatus(204)
 
-    },
-    terminateSessionByDeviceId: async (req: Request, res: Response) => {
+    }
+
+    async terminateSessionByDeviceId(req: Request, res: Response) {
 
         const userId = req.user?._id
         const deviceId = req.params.deviceId
@@ -57,13 +59,12 @@ export const sessionController = {
             return
         }
 
-        console.log(session.userId , 's1111' , userId)
+        console.log(session.userId, 's1111', userId)
 
         if (session.userId.toString() !== userId.toString()) {
             res.sendStatus(403)
             return
         }
-
 
 
         const result = await sessionRepository.deleteSessionByDeviceId(new ObjectId(deviceId)!)
@@ -77,3 +78,5 @@ export const sessionController = {
     }
 
 }
+
+export const sessionController = new SessionController()

@@ -7,6 +7,7 @@ import {CheckType, ResultObject} from "../types/result-object";
 import {jwtService} from "./application/jwt-service";
 import {deviceCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
+import {CreateSession} from "./dtos/createSession";
 
 export type LoginDTO = {
     loginOrEmail: string ,
@@ -14,19 +15,17 @@ export type LoginDTO = {
     ip: string,
     userAgent: string
 }
-
-export const authService = {
-
+class AuthService {
     async login ({loginOrEmail , ip , userAgent , password}: LoginDTO): Promise<ResultObject<{ accessToken: string, refreshToken: string }>> {
 
         const check: CheckType = await usersService.checkCredentials(loginOrEmail, password)
 
         if (check.status === 401) {
-           return {
-               status: 401,
-               errors: [],
-               data: null
-           }
+            return {
+                status: 401,
+                errors: [],
+                data: null
+            }
         }
 
         const findUser = await usersService.getUserByLoginOrEmail(loginOrEmail)
@@ -38,14 +37,7 @@ export const authService = {
 
         const { iat , exp } = jwtService.jwtDecodeToken(refreshToken)
 
-        const newSession = {
-            _id: deviceId,
-            userId: findUser?._id!,
-            title: userAgent,
-            ip: ip,
-            iat: iat!,
-            exp: exp!,
-        }
+        const newSession = new CreateSession(deviceId , findUser?._id! , userAgent , ip , iat! , exp!)
 
 
         await deviceCollection.insertOne(newSession)
@@ -57,7 +49,7 @@ export const authService = {
                 refreshToken: refreshToken
             }
         }
-    },
+    }
     async registration (user: UserInputModel) {
         let result = await usersService.createUser(user , false);
         if (result.errors?.length || !result.data) {
@@ -84,7 +76,7 @@ export const authService = {
             errors: []
         }
 
-    },
+    }
     async authByConfirmationCode (code: string ) {
 
         const user = await usersRepository.findUserByConfirmationCode(code)
@@ -117,7 +109,7 @@ export const authService = {
             data: { isConfirmed: true },
             errors: []
         }
-    },
+    }
     async resendingConfirmationCode ( email: string ) {
         const findUser = await usersRepository.getUserByLoginOrEmail(email)
         if (findUser && !findUser.emailConfirmation.isConfirmed) {
@@ -144,5 +136,7 @@ export const authService = {
             data: [],
             errors: [{field: "email" , message: 'User not found'}]
         }
-     }
+    }
 }
+
+export const authService = new AuthService()

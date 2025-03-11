@@ -9,8 +9,7 @@ const transporter = nodemailer.createTransport({
         pass: SETTINGS.EMAIL_PASSWORD,
     }
 })
-
-export const emailSender = {
+class EmailSender  {
     async confirmRegistration ( email: string , confiramtionCode:string ) {
         transporter.sendMail({
             from: 'Blogger Platform',
@@ -25,3 +24,4 @@ export const emailSender = {
         })
     }
 }
+export const emailSender = new EmailSender()
