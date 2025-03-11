@@ -1,5 +1,4 @@
 import {Request, Response} from "express";
-import {usersService} from "../users/users-service";
 import {jwtService} from "./application/jwt-service";
 import {usersQwRepository} from "../users/usersQwRepository";
 import {UserForAuthMe, UserInputModel, UserSecureType} from "../types/users-types";
@@ -12,9 +11,7 @@ type authType = {
     password: string
 }
 
-
-export const authController = {
-
+class AuthController {
     async Login(req: Request<{}, {}, authType>, res: Response) {
 
         const ip = req.ip
@@ -41,7 +38,7 @@ export const authController = {
         const {refreshToken, accessToken} = data!
         res.cookie('refreshToken', refreshToken.toString(), {httpOnly: true, secure: true,})
         res.status(status).json({accessToken: accessToken.toString()})
-    },
+    }
 
     async Refresh_Token(req: Request, res: Response) {
 
@@ -71,7 +68,7 @@ export const authController = {
 
         res.cookie('refreshToken', refreshToken.toString(), {httpOnly: true, secure: true,})
         res.status(200).json({accessToken: accessToken.toString()})
-    },
+    }
     async Me(req: Request, res: Response) {
 
         const userId = req.user?._id
@@ -92,7 +89,7 @@ export const authController = {
             userId: user._id.toString()
         }
         res.status(200).json(userForResponse)
-    },
+    }
     async Registration(req: Request<{}, {}, UserInputModel>, res: Response) {
 
         const userData = req.body
@@ -106,7 +103,8 @@ export const authController = {
         }
         res.sendStatus(204)
         return
-    },
+    }
+
     async ConfirmationByCode(req: Request<{}, {}, { code: string }>, res: Response) {
         const code = req.body.code
         const confirmUser = await authService.authByConfirmationCode(code)
@@ -115,7 +113,7 @@ export const authController = {
             return
         }
         res.sendStatus(confirmUser.status)
-    },
+    }
 
     async RegistrationCodeResending(req: Request<{}, {}, { email: string }>, res: Response) {
         const email = req.body.email
@@ -128,7 +126,7 @@ export const authController = {
         }
         res.sendStatus(result.status)
         return
-    },
+    }
 
     async logout(req: Request, res: Response) {
 
@@ -152,3 +150,4 @@ export const authController = {
         return
     }
 }
+export const authController = new AuthController()

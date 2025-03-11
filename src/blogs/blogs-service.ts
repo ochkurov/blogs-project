@@ -2,8 +2,9 @@ import {blogsRepository} from "./blogsRepository";
 import {BlogDbType, BlogInputModel, BlogQueryInputType, BlogViewModel, ResponseBlogType} from "../types/blog-types";
 import {ObjectId} from "mongodb";
 import {getBlogViewModel} from "./output/getBlogViewModel";
+import {CreateBlog} from "./dtos/createBlog";
 
-export const blogsService = {
+class BlogsService {
     async getBlogs(
         query: BlogQueryInputType
     ): Promise<ResponseBlogType> {
@@ -29,7 +30,7 @@ export const blogsService = {
             items: mappedBlogs
         }
 
-    },
+    }
     async getBlogById(id: string) {
         return blogsRepository.getBlogById( new ObjectId( id ) )
             .then( foundBlog => {
@@ -38,29 +39,25 @@ export const blogsService = {
                 }
                 return null
             })
-    },
+    }
 
     async getBlogByUUID(id: ObjectId): Promise<BlogViewModel> {
         return  blogsRepository.getVideoByUUID(id)
             .then(getBlogViewModel)
-    },
+    }
 
     async createBlog(body: BlogInputModel): Promise<ObjectId> {
-        const newBlog: BlogDbType = {
-            name: body.name,
-            description: body.description,
-            websiteUrl: body.websiteUrl,
-            createdAt: new Date().toISOString(),
-            isMembership: false
-        }
+        const newBlog: BlogDbType = new CreateBlog(body.name , body.description , body.websiteUrl)
 
         return await blogsRepository.createBlog(newBlog) // данный запрос возвращается нам айдишку блога в виде insertedId
 
-    },
+    }
     async updateBlog(id: string, body: BlogInputModel) {
         return await blogsRepository.updateBlog(new ObjectId( id ), body)
-    },
+    }
     async deleteBlog(id: string) {
         return await blogsRepository.deleteBlog(new ObjectId( id ))
     }
 }
+
+export const blogsService = new BlogsService()
