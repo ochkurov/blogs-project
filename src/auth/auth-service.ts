@@ -8,6 +8,7 @@ import {jwtService} from "./application/jwt-service";
 import {deviceCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
 import {CreateSession} from "./dtos/createSession";
+import {add} from "date-fns";
 
 export type LoginDTO = {
     loginOrEmail: string ,
@@ -67,7 +68,7 @@ class AuthService {
             await usersRepository.deleteUser(result.data.userId)
             return {
                 status: 400,
-                errors: [{message: 'Email nor confirmed , make registration aganin', field: 'code'}]
+                errors: [{message: 'Email nor confirmed , make registration again', field: 'code'}]
             }
         }
 
@@ -136,6 +137,31 @@ class AuthService {
             data: [],
             errors: [{field: "email" , message: 'User not found'}]
         }
+    }
+    async passwordRecovery (email:string) {
+const user = await await usersRepository.getUserByLoginOrEmail(email)
+        if (!user) {
+            return {
+                status: 204,
+                data: [],
+                errors: []
+            }
+        }
+        const recoveryCode =  randomUUID()
+        const updateUserRecoveryCode = await usersRepository.updateUserRecoveryCode(email , {
+            recoveryCode,
+            expirationDate: add(
+                new Date(), {
+                    hours: 0,
+                    minutes: 5
+                }
+            ),
+            isConfirmed: false
+        })
+
+    }
+    async changePassword (email:string , password:string) {
+
     }
 }
 

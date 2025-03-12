@@ -24,13 +24,13 @@ class AuthController {
         const {loginOrEmail, password} = req.body
 
         const {status, errors, data} = await authService.login({
-            loginOrEmail ,
-            password ,
-            ip ,
+            loginOrEmail,
+            password,
+            ip,
             userAgent: req.headers['user-agent'] ?? ''
         });
 
-        if ( status === 401 ) {
+        if (status === 401) {
             res.sendStatus(status)
             return
         }
@@ -54,9 +54,9 @@ class AuthController {
 
         const accessToken = await jwtService.createJWT(user?._id.toString()!)
         const refreshToken = await jwtService.createRefresh(user?._id.toString()!, deviceId!)
-        const { iat , exp } = jwtService.jwtDecodeToken(refreshToken)
+        const {iat, exp} = jwtService.jwtDecodeToken(refreshToken)
 
-        const sessionUpdateResult = await deviceCollection.updateOne({ _id: new ObjectId(deviceId!) }, {$set: {iat , exp}})
+        const sessionUpdateResult = await deviceCollection.updateOne({_id: new ObjectId(deviceId!)}, {$set: {iat, exp}})
 
         if (sessionUpdateResult.modifiedCount === 0) {
             res.sendStatus(500)
@@ -64,11 +64,10 @@ class AuthController {
         }
 
 
-
-
         res.cookie('refreshToken', refreshToken.toString(), {httpOnly: true, secure: true,})
         res.status(200).json({accessToken: accessToken.toString()})
     }
+
     async Me(req: Request, res: Response) {
 
         const userId = req.user?._id
@@ -90,6 +89,7 @@ class AuthController {
         }
         res.status(200).json(userForResponse)
     }
+
     async Registration(req: Request<{}, {}, UserInputModel>, res: Response) {
 
         const userData = req.body
@@ -138,7 +138,7 @@ class AuthController {
             return
         }
 
-        const result = await deviceCollection.deleteOne({ _id: new ObjectId(deviceId!) })
+        const result = await deviceCollection.deleteOne({_id: new ObjectId(deviceId!)})
 
         if (result.deletedCount === 0) {
             res.sendStatus(500)
@@ -149,16 +149,17 @@ class AuthController {
         res.sendStatus(204)
         return
     }
-    async passwordRecovery (req: Request, res: Response) {
-const email = req.body.email
-        if (!email) {
 
-        }
+    async passwordRecovery(req: Request, res: Response) {
+        const email = req.body.email
+
     }
-    async newPassword (req: Request, res: Response) {
+
+    async newPassword(req: Request, res: Response) {
         const newPassword = req.body.newPassword
         const recoveryCode = req.body.recoveryCode
 
     }
 }
+
 export const authController = new AuthController()

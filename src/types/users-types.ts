@@ -28,9 +28,9 @@ export type UserForResponseType = {
 }
 
 export type UserInputModel = {
-    login:string,
-    password:string,
-    email:string,
+    login: string,
+    password: string,
+    email: string,
 }
 
 export type UserCreateType = {
@@ -42,7 +42,7 @@ export type UserCreateType = {
 
 export type ResponseUserType = {
     pagesCount: number,
-    page: number ,
+    page: number,
     pageSize: number,
     totalCount: number,
     items: UserForResponseType[]
@@ -58,12 +58,12 @@ export type UsersQueryPaginationType = {
 }
 
 export type UsersQueryInputType = {
-    sortBy?: string ,
+    sortBy?: string,
     sortDirection?: string,
     pageNumber?: string,
     pageSize?: string,
-    searchLoginTerm?: string ,
-    searchEmailTerm?: string ,
+    searchLoginTerm?: string,
+    searchEmailTerm?: string,
 }
 
 export type UserFullViewModel = {
@@ -79,18 +79,26 @@ export type EmailConfirmationViewType = {
     expirationDate: Date;
     isConfirmed: boolean;
 }
+export type PasswordRecoveryViewType = {
+    recoveryCode: string | null,
+    expirationDate: Date | null,
+    isConfirmed: boolean
+}
 export type UserCreateTypeModel = {
     login: string,
     email: string,
     password: string,
     createdAt: string,
     emailConfirmation: EmailConfirmationViewType
+    passwordRecovery: PasswordRecoveryViewType
 }
-export type UserFullDBModel  = {
+
+export type UserFullDBModel = {
     _id: ObjectId
     login: string,
     email: string,
     password: string,
     createdAt: string,
     emailConfirmation: EmailConfirmationViewType
+    passwordRecovery: PasswordRecoveryViewType
 }

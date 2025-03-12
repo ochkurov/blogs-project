@@ -1,4 +1,5 @@
 import {
+    PasswordRecoveryViewType,
     UserCreateType,
     UserForResponseType,
     UserFullDBModel, UserFullViewModel,
@@ -76,6 +77,14 @@ export const usersRepository = {
             }
         )
         return result.matchedCount === 1;
+    },
+    async updateUserRecoveryCode (email:string, passwordRecovery: PasswordRecoveryViewType) {
+        const result = await usersCollection.findOneAndUpdate(
+            { email:  email},
+            {
+                $set: {"passwordRecovery": passwordRecovery}
+            }
+        )
     }
 }
 

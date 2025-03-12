@@ -40,7 +40,8 @@ export const usersService = {
             body.login,
             body.email,
             hushedPass,
-            isConfirmed)
+            isConfirmed
+        )
 
 
         const userId = await usersRepository.createUser(newUser)
