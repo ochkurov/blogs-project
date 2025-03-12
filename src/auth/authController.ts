@@ -149,5 +149,11 @@ class AuthController {
         res.sendStatus(204)
         return
     }
+    async passwordRecovery (req: Request, res: Response) {
+
+    }
+    async newPassword (req: Request, res: Response) {
+
+    }
 }
 export const authController = new AuthController()

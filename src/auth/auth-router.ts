@@ -17,3 +17,5 @@ authRouter.post('/registration' , rateLimitMiddleware , ...userCredentialsValida
 authRouter.post('/registration-email-resending' , rateLimitMiddleware , userCredentialsValidate[1], errorsResultMiddleware  ,authController.RegistrationCodeResending)
 authRouter.post('/refresh-token' ,refreshTokenMiddleware ,authController.Refresh_Token)
 authRouter.post('/logout' , refreshTokenMiddleware , authController.logout)
+authRouter.post('password-recovery' , authController.passwordRecovery)
+authRouter.post('new-password' , authController.newPassword)
