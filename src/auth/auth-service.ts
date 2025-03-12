@@ -1,4 +1,4 @@
-import {UserInputModel} from "../types/users-types";
+import {UserFullDBModel, UserInputModel} from "../types/users-types";
 import {usersService} from "../users/users-service";
 import {emailSender} from "../adapters/email-adapter";
 import {usersRepository} from "../users/usersRepository";
@@ -9,15 +9,20 @@ import {deviceCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
 import {CreateSession} from "./dtos/createSession";
 import {add} from "date-fns";
+import bcrypt from "bcrypt";
 
 export type LoginDTO = {
-    loginOrEmail: string ,
+    loginOrEmail: string,
     password: string,
     ip: string,
     userAgent: string
 }
+
 class AuthService {
-    async login ({loginOrEmail , ip , userAgent , password}: LoginDTO): Promise<ResultObject<{ accessToken: string, refreshToken: string }>> {
+    async login({loginOrEmail, ip, userAgent, password}: LoginDTO): Promise<ResultObject<{
+        accessToken: string,
+        refreshToken: string
+    }>> {
 
         const check: CheckType = await usersService.checkCredentials(loginOrEmail, password)
 
@@ -36,9 +41,9 @@ class AuthService {
         const accessToken = await jwtService.createJWT(findUser?._id.toString()!)
         const refreshToken = await jwtService.createRefresh(findUser?._id.toString()!, deviceId.toString())
 
-        const { iat , exp } = jwtService.jwtDecodeToken(refreshToken)
+        const {iat, exp} = jwtService.jwtDecodeToken(refreshToken)
 
-        const newSession = new CreateSession(deviceId , findUser?._id! , userAgent , ip , iat! , exp!)
+        const newSession = new CreateSession(deviceId, findUser?._id!, userAgent, ip, iat!, exp!)
 
 
         await deviceCollection.insertOne(newSession)
@@ -51,8 +56,9 @@ class AuthService {
             }
         }
     }
-    async registration (user: UserInputModel) {
-        let result = await usersService.createUser(user , false);
+
+    async registration(user: UserInputModel) {
+        let result = await usersService.createUser(user, false);
         if (result.errors?.length || !result.data) {
             return {
                 status: 400,
@@ -62,8 +68,8 @@ class AuthService {
         const email = user.email
         const confiramtionCode = result.data.confirmationCode
         try {
-            await emailSender.confirmRegistration(email , confiramtionCode)
-        } catch (err:any) {
+            await emailSender.confirmRegistration(email, confiramtionCode)
+        } catch (err: any) {
             console.log(err)
             await usersRepository.deleteUser(result.data.userId)
             return {
@@ -78,47 +84,49 @@ class AuthService {
         }
 
     }
-    async authByConfirmationCode (code: string ) {
+
+    async authByConfirmationCode(code: string) {
 
         const user = await usersRepository.findUserByConfirmationCode(code)
 
         if (!user) {
             return {
                 status: 400,
-                data: { isConfirmed: false },
-                errors: [{field: "code" , message: 'Confirmation code is incorrect'}]
+                data: {isConfirmed: false},
+                errors: [{field: "code", message: 'Confirmation code is incorrect'}]
             }
         }
-        if (new Date () > user.emailConfirmation.expirationDate || user.emailConfirmation.isConfirmed) {
+        if (new Date() > user.emailConfirmation.expirationDate || user.emailConfirmation.isConfirmed) {
             return {
                 status: 400,
-                data: { isConfirmed: false },
-                errors: [{field: "code" , message: 'Confirmation code is incorrect'}]
+                data: {isConfirmed: false},
+                errors: [{field: "code", message: 'Confirmation code is incorrect'}]
             }
         }
-        const confirmUser = await usersRepository.confirmationUserByCode(true , user.id )
+        const confirmUser = await usersRepository.confirmationUserByCode(true, user.id)
 
         if (!confirmUser) {
             return {
                 status: 400,
-                data: { isConfirmed: false },
-                errors: [{field: "code" , message: 'Confirmation code is incorrect'}]
+                data: {isConfirmed: false},
+                errors: [{field: "code", message: 'Confirmation code is incorrect'}]
             }
         }
         return {
             status: 204,
-            data: { isConfirmed: true },
+            data: {isConfirmed: true},
             errors: []
         }
     }
-    async resendingConfirmationCode ( email: string ) {
+
+    async resendingConfirmationCode(email: string) {
         const findUser = await usersRepository.getUserByLoginOrEmail(email)
         if (findUser && !findUser.emailConfirmation.isConfirmed) {
-            const confirmationCode =  randomUUID()
-            await usersRepository.updateConfirmationCode(email , confirmationCode)
+            const confirmationCode = randomUUID()
+            await usersRepository.updateConfirmationCode(email, confirmationCode)
             try {
-                await emailSender.confirmRegistration(email , confirmationCode)
-            } catch (err:any) {
+                await emailSender.confirmRegistration(email, confirmationCode)
+            } catch (err: any) {
                 console.log(err)
                 await usersRepository.deleteUser(findUser._id.toString())
                 return {
@@ -135,11 +143,12 @@ class AuthService {
         return {
             status: 400,
             data: [],
-            errors: [{field: "email" , message: 'User not found'}]
+            errors: [{field: "email", message: 'User not found'}]
         }
     }
-    async passwordRecovery (email:string) {
-const user = await await usersRepository.getUserByLoginOrEmail(email)
+
+    async passwordRecovery(email: string) {
+        const user = await await usersRepository.getUserByLoginOrEmail(email)
         if (!user) {
             return {
                 status: 204,
@@ -147,8 +156,15 @@ const user = await await usersRepository.getUserByLoginOrEmail(email)
                 errors: []
             }
         }
-        const recoveryCode =  randomUUID()
-        const updateUserRecoveryCode = await usersRepository.updateUserRecoveryCode(email , {
+        if (!user.emailConfirmation.isConfirmed) {
+            return {
+                status: 204,
+                data: [],
+                errors: []
+            }
+        }
+        const recoveryCode = randomUUID()
+        await usersRepository.updateUserRecoveryCode(email, {
             recoveryCode,
             expirationDate: add(
                 new Date(), {
@@ -159,9 +175,42 @@ const user = await await usersRepository.getUserByLoginOrEmail(email)
             isConfirmed: false
         })
 
+        await emailSender.confirmRegistration(email, recoveryCode)
+        return {
+            status: 204,
+            data: [],
+            errors: []
+        }
     }
-    async changePassword (email:string , password:string) {
 
+    async changePassword(recoveryCode: string, password: string) {
+
+        const findUserByCode: UserFullDBModel | null = await usersRepository.findUserByRecoveryCode(recoveryCode)
+
+        if (!findUserByCode) {
+            return {
+                status: 400,
+                data: [],
+                errors: [{field: "passwordRecovery", message: 'User not found'}]
+            }
+        }
+        if (new Date() > findUserByCode.passwordRecovery.expirationDate!) {
+            return {
+                status: 400,
+                data: [],
+                errors: [{field: "passwordRecovery", message: ''}]
+            }
+        }
+        const salt = await bcrypt.genSalt(10);
+        const hushedPass = await bcrypt.hash(password, salt)
+
+        await usersRepository.updateUserPassword(findUserByCode._id , password)
+
+        return {
+            status:204,
+            data: [],
+            errors: []
+        }
     }
 }
 

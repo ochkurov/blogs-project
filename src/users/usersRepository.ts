@@ -85,6 +85,20 @@ export const usersRepository = {
                 $set: {"passwordRecovery": passwordRecovery}
             }
         )
+    },
+    async findUserByRecoveryCode ( recoveryCode: string ) : Promise<UserFullDBModel | null> {
+       const findUserByCode =  await usersCollection.findOne({"passwordRecovery.recoveryCode": recoveryCode})
+        if (!findUserByCode) {
+            return null
+        }
+        return findUserByCode
+    },
+    async updateUserPassword (_id:ObjectId , password : string) {
+        const res = await usersCollection.updateOne(
+            { _id },
+            { $set: { "password": password } }
+        )
+        return res.matchedCount === 1;
     }
 }
 
