@@ -18,6 +18,10 @@ export const userCreator = (login: string, email: string, passwordHash: string, 
             confirmationCode: randomUUID(),
             isConfirmed
         },
-        passwordRecovery: { recoveryCode: null, expirationDate: null, isConfirmed: false }
+        passwordRecovery: {
+            recoveryCode: null,
+            expirationDate: null,
+            isConfirmed: false
+        }
     }
 }

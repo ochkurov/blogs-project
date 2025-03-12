@@ -164,18 +164,19 @@ class AuthService {
             }
         }
         const recoveryCode = randomUUID()
+
         await usersRepository.updateUserRecoveryCode(email, {
             recoveryCode,
             expirationDate: add(
                 new Date(), {
                     hours: 0,
                     minutes: 5
-                }
-            ),
+                }),
             isConfirmed: false
         })
 
-        await emailSender.confirmRegistration(email, recoveryCode)
+        await emailSender.recoveryPassword(email, recoveryCode)
+
         return {
             status: 204,
             data: [],
@@ -183,9 +184,10 @@ class AuthService {
         }
     }
 
-    async changePassword(recoveryCode: string, password: string) {
-
-        const findUserByCode: UserFullDBModel | null = await usersRepository.findUserByRecoveryCode(recoveryCode)
+    async changePassword( password: string, recoveryCode : string) {
+        console.log(recoveryCode)
+        const findUserByCode = await usersRepository.findUserByRecoveryCode(recoveryCode)
+        console.log(findUserByCode)
 
         if (!findUserByCode) {
             return {
@@ -194,6 +196,7 @@ class AuthService {
                 errors: [{field: "passwordRecovery", message: 'User not found'}]
             }
         }
+
         if (new Date() > findUserByCode.passwordRecovery.expirationDate!) {
             return {
                 status: 400,
@@ -204,7 +207,7 @@ class AuthService {
         const salt = await bcrypt.genSalt(10);
         const hushedPass = await bcrypt.hash(password, salt)
 
-        await usersRepository.updateUserPassword(findUserByCode._id , password)
+        await usersRepository.updateUserPassword(findUserByCode.id , hushedPass)
 
         return {
             status:204,

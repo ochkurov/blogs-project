@@ -1,6 +1,6 @@
 import {
     PasswordRecoveryViewType,
-    UserCreateType,
+    UserCreateType, UserCreateTypeModel,
     UserForResponseType,
     UserFullDBModel, UserFullViewModel,
     UserSchemaType,
@@ -38,7 +38,7 @@ export const usersRepository = {
         }
         return user
     },
-    async createUser(user: UserCreateType): Promise<string> {
+    async createUser(user: UserCreateTypeModel): Promise<string> {
         let res = await usersCollection.insertOne(user)
         return res.insertedId.toString()
     },
@@ -78,25 +78,23 @@ export const usersRepository = {
         )
         return result.matchedCount === 1;
     },
-    async updateUserRecoveryCode (email:string, passwordRecovery: PasswordRecoveryViewType) {
+    async updateUserRecoveryCode (email:string, passwordRecoveryData: PasswordRecoveryViewType) {
         const result = await usersCollection.findOneAndUpdate(
-            { email:  email},
+            {email:  email},
             {
-                $set: {"passwordRecovery": passwordRecovery}
+                $set: { passwordRecovery: passwordRecoveryData}
             }
         )
     },
-    async findUserByRecoveryCode ( recoveryCode: string ) : Promise<UserFullDBModel | null> {
+    async findUserByRecoveryCode ( recoveryCode: string ) : Promise< UserFullViewModel | null> {
        const findUserByCode =  await usersCollection.findOne({"passwordRecovery.recoveryCode": recoveryCode})
-        if (!findUserByCode) {
-            return null
-        }
-        return findUserByCode
+        return findUserByCode ? userMapper(findUserByCode) : null
     },
-    async updateUserPassword (_id:ObjectId , password : string) {
+
+    async updateUserPassword (id:string , password : string) {
         const res = await usersCollection.updateOne(
-            { _id },
-            { $set: { "password": password } }
+            { _id: new ObjectId(id) },
+            { $set: { password : password , 'passwordRecovery.isConfirmed': true } }
         )
         return res.matchedCount === 1;
     }

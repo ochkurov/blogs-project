@@ -2,8 +2,7 @@ import {blogsCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
 import {BlogDbType, BlogInputModel, BlogResponseType} from "../types/blog-types";
 
-export const blogsRepository = {
-
+class BlogsRepository {
     async getAllBlogs(pageNumber:number,
                       pageSize:number,
                       sortBy:string,
@@ -24,7 +23,7 @@ export const blogsRepository = {
             .toArray()
 
 
-    },
+    }
     async getBlogCount (searchNameTerm: string | null):Promise<number> {
         let filter : any = {}
 
@@ -32,25 +31,25 @@ export const blogsRepository = {
             filter.name = {$regex: searchNameTerm , $options: "i" };
         }
         return await blogsCollection.countDocuments(filter)
-    },
+    }
 
     async getBlogById(_id: ObjectId): Promise<BlogResponseType | null>  {
 
         return await blogsCollection.findOne({_id} );
 
-    },
+    }
 
     async getVideoByUUID(_id: ObjectId) {
 
         return await blogsCollection.findOne({_id} )
-    },
+    }
 
     async createBlog(newBlog: BlogDbType): Promise<ObjectId> {
 
         const res = await blogsCollection.insertOne(newBlog)
         return res.insertedId
 
-    },
+    }
 
     async updateBlog(_id: ObjectId, body: BlogInputModel): Promise<boolean> {
         const res = await blogsCollection.updateOne(
@@ -59,7 +58,7 @@ export const blogsRepository = {
         )
         return res.matchedCount === 1
 
-    },
+    }
 
     async deleteBlog(_id: ObjectId) {
 
@@ -74,3 +73,5 @@ export const blogsRepository = {
     }
 
 }
+
+export const blogsRepository = new BlogsRepository();

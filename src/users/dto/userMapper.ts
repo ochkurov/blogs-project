@@ -7,6 +7,7 @@ export const userMapper = (user: UserFullDBModel): UserFullViewModel => {
         email: user.email,
         password: user.password,
         createdAt: user.createdAt,
-        emailConfirmation: user.emailConfirmation
+        emailConfirmation: user.emailConfirmation,
+        passwordRecovery: user.passwordRecovery
     }
 }

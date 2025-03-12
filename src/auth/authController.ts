@@ -159,8 +159,9 @@ class AuthController {
     async newPassword(req: Request, res: Response) {
         const newPassword = req.body.newPassword
         const recoveryCode = req.body.recoveryCode
-        const changePass = await authService.changePassword(newPassword , recoveryCode)
 
+        const changePass = await authService.changePassword(newPassword , recoveryCode)
+        res.sendStatus(changePass.status)
     }
 }
 
