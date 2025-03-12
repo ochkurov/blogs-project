@@ -150,9 +150,14 @@ class AuthController {
         return
     }
     async passwordRecovery (req: Request, res: Response) {
+const email = req.body.email
+        if (!email) {
 
+        }
     }
     async newPassword (req: Request, res: Response) {
+        const newPassword = req.body.newPassword
+        const recoveryCode = req.body.recoveryCode
 
     }
 }

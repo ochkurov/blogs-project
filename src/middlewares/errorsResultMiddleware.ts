@@ -8,9 +8,7 @@ export const errorsResultMiddleware = (
 )=> {
     const errors = validationResult(req)
     if(!errors.isEmpty()) {
-        res.status(400).json({errorsMessages: errors
-                .array({onlyFirstError: true})
-                .map((err) => {
+        res.status(400).json({errorsMessages: errors.array({onlyFirstError: true}).map((err) => {
                     return {message: err.msg, field: (err as any).path}
                 }),
         })

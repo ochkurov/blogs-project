@@ -10,7 +10,14 @@ const passwordValidate = body('password')
 
 export const authValidate = [ loginOrEmailValidate , passwordValidate ]
 
-const confirmationCodeValidate = body('code')
+export const recoveryCodeValidate = body('recoveryCode')
     .isString().withMessage("filed to be string")
     .trim().notEmpty().withMessage("field is empty")
     .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i)
+
+export const newPasswordValidate = body('newPassword')
+    .isString().withMessage("filed to be string")
+    .trim().notEmpty().withMessage("field is empty")
+    .isLength({min: 6, max: 20}).withMessage("field to be contain min 6 and max 20 symbols")
+
+
