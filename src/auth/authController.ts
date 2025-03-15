@@ -155,7 +155,7 @@ class AuthController {
         const result = await authService.passwordRecovery(email)
         res.sendStatus(result.status)
     }
-ы
+
     async newPassword(req: Request, res: Response) {
         const newPassword = req.body.newPassword
         const recoveryCode = req.body.recoveryCode
