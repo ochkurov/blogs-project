@@ -1,6 +1,6 @@
 import {blogsCollection, postsCollection, usersCollection} from "../db/mongoDb";
 
-export const testingRepository = {
+class TestingRepository {
     async deleteAllBlogs() {
         return await blogsCollection.deleteMany({}) ,
 
@@ -9,3 +9,5 @@ export const testingRepository = {
             usersCollection.deleteMany({})
     }
 }
+
+export const testingRepository = new TestingRepository()

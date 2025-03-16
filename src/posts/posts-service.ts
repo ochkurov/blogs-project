@@ -3,7 +3,7 @@ import {CreatePostType, PostInputModel, PostViewModel, ResponsePostsType} from "
 import {ObjectId} from "mongodb";
 import {blogsRepository} from "../blogs/blogsRepository";
 import {sortType} from "../types/sort-types";
-import {getPostViewModel} from "./output/getPostViewModel";
+
 
 class PostsService {
     async getAllPosts (sortData:sortType): Promise<ResponsePostsType>

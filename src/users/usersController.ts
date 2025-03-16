@@ -11,9 +11,7 @@ import {APIErrorResultType} from "../types/errors-types";
 import {usersService} from "./users-service";
 import {ObjectId} from "mongodb";
 
-
-export const userController = {
-
+class UsersController {
     async getUsers(
         req: Request<{}, {}, {}, UsersQueryInputType>,
         res: Response<ResponseUserType>) {
@@ -25,7 +23,7 @@ export const userController = {
         res.status(200).json(users)
 
 
-    },
+    }
 
     async createUser(
         req: Request<{}, {}, UserInputModel>,
@@ -51,7 +49,7 @@ export const userController = {
 
         res.status(201).json(userForResponse)
 
-    },
+    }
 
     async deleteUser(
         req: Request<{ id: string }>,
@@ -72,8 +70,8 @@ export const userController = {
         }
         res.sendStatus(204)
     }
-
 }
 
+export const userController = new UsersController();
 
 

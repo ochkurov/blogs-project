@@ -49,7 +49,7 @@ class PostsRepository {
 
         return await postsCollection.findOne({_id: _id})
 
-    },
+    }
 
     async createPost(newPost: PostInputModel): Promise<ObjectId | null> {
 

@@ -11,7 +11,7 @@ type UserServiceType = {
 
 }
 
-export const usersService = {
+class UserService {
     async createUser(body: UserInputModel, isConfirmed: boolean): Promise<UserServiceType> {
         const errors: ErrorType[] = []
 
@@ -50,14 +50,14 @@ export const usersService = {
             data: { userId, confirmationCode: newUser.emailConfirmation.confirmationCode } ,
             status: 201
         }
-    },
+    }
 
     async getUserById(id: string) {
         return await usersRepository.getUserById(id)
-    },
+    }
     async getUserByLoginOrEmail(loginOrEmail: string) {
         return await usersRepository.getUserByLoginOrEmail(loginOrEmail)
-    },
+    }
     async checkCredentials(loginOrEmail: string, password: string) {
         let findUser = await usersRepository.checkUserByLoginOrEmail(loginOrEmail)
         if (!findUser) {
@@ -75,9 +75,11 @@ export const usersService = {
         }
 
 
-    },
+    }
 
     async deleteUser(id: string) {
         return await usersRepository.deleteUser(id)
     }
 }
+
+export const usersService = new UserService()
