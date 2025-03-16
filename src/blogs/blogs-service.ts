@@ -1,8 +1,10 @@
 import {blogsRepository} from "./blogsRepository";
 import {BlogDbType, BlogInputModel, BlogQueryInputType, BlogViewModel, ResponseBlogType} from "../types/blog-types";
 import {ObjectId} from "mongodb";
-import {getBlogViewModel} from "./output/getBlogViewModel";
+import {GetBlogViewModel, getBlogViewModel} from "./output/getBlogViewModel";
 import {CreateBlog} from "./dtos/createBlog";
+
+const getBlogViewModel = new GetBlogViewModel()
 
 class BlogsService {
     async getBlogs(

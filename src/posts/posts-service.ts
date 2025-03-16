@@ -5,8 +5,7 @@ import {blogsRepository} from "../blogs/blogsRepository";
 import {sortType} from "../types/sort-types";
 import {getPostViewModel} from "./output/getPostViewModel";
 
-export const postsService = {
-
+class PostsService {
     async getAllPosts (sortData:sortType): Promise<ResponsePostsType>
     {
         const { pageNumber , pageSize , sortBy , sortDirection } = sortData
@@ -23,7 +22,7 @@ export const postsService = {
             totalCount: postsCount,
             items : mappedPosts
         }
-    },
+    }
     async getPostsFromBlogId ( blogId: string, sortData: sortType ) {
 
         const { pageNumber , pageSize , sortBy , sortDirection } = sortData
@@ -42,15 +41,15 @@ export const postsService = {
             items : mappedPosts
         }
 
-    },
+    }
     async getPostById ( id: string ):Promise<PostViewModel | null> {
         return postsRepository.getPostById( new ObjectId( id ) )
             .then(post => post ?  getPostViewModel(post): null)
-    },
+    }
     async getPostByMongoID (_id: ObjectId) {
         return postsRepository.getPostById(_id)
             .then(post => post ? getPostViewModel(post) : null)
-    },
+    }
 
     async createPost (body: PostInputModel) : Promise<ObjectId | null> {
 
@@ -73,13 +72,14 @@ export const postsService = {
 
         return await postsRepository.createPost(newPost)
 
-    },
+    }
     async updatePost (id: string, body: PostInputModel ) {
 
         return await postsRepository.updatePost( new ObjectId(id), body )
-    },
+    }
     async deletePost (id: string) {
         return await postsRepository.deletePost( new ObjectId(id) )
     }
-
 }
+
+export const postsService = new PostsService();

@@ -5,7 +5,7 @@ import {commentsRepository} from "./commentsRepository";
 import {commentsQwRepository} from "./commentsQwRepository";
 import {ObjectId} from "mongodb";
 
-export const commentsController = {
+class CommentsController {
     async getCommentsById(req: Request<{ id: string }>, res: Response<CommentsViewModel>) {
         const commentId = req.params.id;
 
@@ -28,7 +28,7 @@ export const commentsController = {
         }
         res.status(200).json(commentForResponse);
 
-    },
+    }
 
     async updateComment(req: Request<{ id: string }, {}, { content: string }>, res: Response) {
 
@@ -43,7 +43,7 @@ export const commentsController = {
         const foundComment = await commentsRepository.getCommentById(commentId)
 
         if(foundComment && foundComment.commentatorInfo.userId.toString() !== userId.toString()) {
-             res.sendStatus(403)
+            res.sendStatus(403)
             return
         }
         if(!foundComment) {
@@ -57,7 +57,7 @@ export const commentsController = {
             return;
         } else  res.sendStatus(204)
 
-    },
+    }
     async deleteComment(req: Request<{ id: string }>, res: Response): Promise<void> {
         const commentId = req.params.id;
         const userId = req.user?._id || ''
@@ -69,7 +69,7 @@ export const commentsController = {
         const foundComment = await commentsRepository.getCommentById(commentId)
 
         if (foundComment && foundComment.commentatorInfo.userId.toString() !== userId.toString()) {
-             res.sendStatus(403)
+            res.sendStatus(403)
             return
         }
         if(!foundComment) {
@@ -81,7 +81,8 @@ export const commentsController = {
             res.sendStatus(404)
             return
         }
-         res.sendStatus(204)
+        res.sendStatus(204)
     }
-
 }
+
+export const commentsController = new CommentsController();

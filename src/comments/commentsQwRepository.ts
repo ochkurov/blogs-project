@@ -3,13 +3,13 @@ import {commentsCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
 import {CommentsViewModel, DbResponseCommentType} from "../types/comment-types";
 
-export const commentsQwRepository = {
+class CommentsQwRepository {
     async getComments() {
 
-    },
+    }
     async getCommentById(id: string):Promise<DbResponseCommentType> {
-            return await commentsCollection.findOne({_id: new ObjectId(id)})
-    },
+        return await commentsCollection.findOne({_id: new ObjectId(id)})
+    }
     async getCommentsByPostId(postId: string, commentQuery: QueryInputType) {
         const {sortBy, sortDirection, pageSize, pageNumber} = commentQuery
         const filteredComments: any = {}
@@ -43,3 +43,5 @@ export const commentsQwRepository = {
 
     }
 }
+
+export const commentsQwRepository = new CommentsQwRepository();

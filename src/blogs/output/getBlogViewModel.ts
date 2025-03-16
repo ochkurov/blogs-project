@@ -1,7 +1,7 @@
 import {ObjectId} from "mongodb";
 import {BlogResponseType, BlogViewModel} from "../../types/blog-types";
 
-export const getBlogViewModel = (blog: BlogResponseType ): BlogViewModel => {
+/*export const getBlogViewModel = (blog: BlogResponseType ): BlogViewModel => {
     return {
         id: blog._id!.toString(),
         name: blog.name,
@@ -10,8 +10,7 @@ export const getBlogViewModel = (blog: BlogResponseType ): BlogViewModel => {
         createdAt: blog.createdAt,
         isMembership: blog.isMembership
     }
-}
-/*
+}*/
 export class GetBlogViewModel {
     id: string
     name: string
@@ -35,4 +34,3 @@ export class GetBlogViewModel {
         this.isMembership = isMembership
     }
 }
-*/

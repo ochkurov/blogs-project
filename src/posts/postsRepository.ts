@@ -3,7 +3,7 @@ import {ObjectId} from "mongodb";
 import {sortType} from "../types/sort-types";
 import {PostInputModel} from "../types/posts-types";
 
-export const postsRepository = {
+class PostsRepository {
 
     async getAllPosts(sortData: sortType) {
 
@@ -18,9 +18,7 @@ export const postsRepository = {
             .limit(pageSize)
             .toArray()
 
-        /*return await postsCollection.find({}, {projection: {_id: 0}}).toArray()*/
-
-    },
+    }
     async getPostsByBlogId(blogId: string, sortData: sortType) {
         const {sortBy, sortDirection, pageSize, pageNumber} = sortData;
 
@@ -36,15 +34,16 @@ export const postsRepository = {
             .limit(pageSize)
             .toArray()
 
-    },
+    }
 
     async getPostsCount() {
 
         return await postsCollection.countDocuments({})
-    },
+    }
+
     async getPostsCountById(blogId: string) {
         return await postsCollection.countDocuments({blogId})
-    },
+    }
 
     async getPostById(_id: ObjectId) {
 
@@ -58,7 +57,7 @@ export const postsRepository = {
         const res = await postsCollection.insertOne(newPost)
         return res.insertedId
 
-    },
+    }
     async updatePost(_id: ObjectId, body: PostInputModel): Promise<boolean> {
 
         const res = await postsCollection.updateOne(
@@ -67,7 +66,7 @@ export const postsRepository = {
         )
         return res.matchedCount === 1
 
-    },
+    }
     async deletePost(_id: ObjectId) {
 
         const post = await postsCollection.findOne({_id})
@@ -79,4 +78,6 @@ export const postsRepository = {
 
     }
 }
+
+export const postsRepository = new PostsRepository();
 
