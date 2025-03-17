@@ -11,7 +11,7 @@ type UserServiceType = {
 
 }
 
-class UserService {
+export class UserService {
     async createUser(body: UserInputModel, isConfirmed: boolean): Promise<UserServiceType> {
         const errors: ErrorType[] = []
 
@@ -82,4 +82,3 @@ class UserService {
     }
 }
 
-export const usersService = new UserService()

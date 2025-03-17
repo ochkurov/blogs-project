@@ -2,7 +2,6 @@ import {Request, Response} from "express";
 import {jwtService} from "./application/jwt-service";
 import {usersQwRepository} from "../users/usersQwRepository";
 import {UserForAuthMe, UserInputModel, UserSecureType} from "../types/users-types";
-import {authService} from "./auth-service";
 import {deviceCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
 
@@ -11,7 +10,7 @@ type authType = {
     password: string
 }
 
-class AuthController {
+export class AuthController {
     async Login(req: Request<{}, {}, authType>, res: Response) {
 
         const ip = req.ip

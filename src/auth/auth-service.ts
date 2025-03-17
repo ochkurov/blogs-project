@@ -1,7 +1,6 @@
 import {UserInputModel} from "../types/users-types";
-import {usersService} from "../users/users-service";
 import {emailSender} from "../adapters/email-adapter";
-import {UsersRepository, usersRepository} from "../users/usersRepository";
+import {UsersRepository} from "../users/usersRepository";
 import {randomUUID} from "node:crypto";
 import {CheckType, ResultObject} from "../types/result-object";
 import {jwtService} from "./application/jwt-service";
@@ -10,6 +9,7 @@ import {ObjectId} from "mongodb";
 import {CreateSession} from "./dtos/createSession";
 import {add} from "date-fns";
 import bcrypt from "bcrypt";
+import {UserService} from "../users/users-service";
 
 export type LoginDTO = {
     loginOrEmail: string,
@@ -20,8 +20,10 @@ export type LoginDTO = {
 
 class AuthService {
     usersRepository:UsersRepository
+    usersService:UserService
     constructor() {
         this.usersRepository = new UsersRepository();
+        this.usersService = new UserService()
     }
 
     async login({loginOrEmail, ip, userAgent, password}: LoginDTO): Promise<ResultObject<{
@@ -29,7 +31,7 @@ class AuthService {
         refreshToken: string
     }>> {
 
-        const check: CheckType = await usersService.checkCredentials(loginOrEmail, password)
+        const check: CheckType = await this.usersService.checkCredentials(loginOrEmail, password)
 
         if (check.status === 401) {
             return {
@@ -39,7 +41,7 @@ class AuthService {
             }
         }
 
-        const findUser = await usersService.getUserByLoginOrEmail(loginOrEmail)
+        const findUser = await this.usersService.getUserByLoginOrEmail(loginOrEmail)
 
         const deviceId = new ObjectId()
 
@@ -63,7 +65,7 @@ class AuthService {
     }
 
     async registration(user: UserInputModel) {
-        let result = await usersService.createUser(user, false);
+        let result = await this.usersService.createUser(user, false);
         if (result.errors?.length || !result.data) {
             return {
                 status: 400,
@@ -76,7 +78,7 @@ class AuthService {
             await emailSender.confirmRegistration(email, confiramtionCode)
         } catch (err: any) {
             console.log(err)
-            await usersRepository.deleteUser(result.data.userId)
+            await this.usersRepository.deleteUser(result.data.userId)
             return {
                 status: 400,
                 errors: [{message: 'Email nor confirmed , make registration again', field: 'code'}]
@@ -92,7 +94,7 @@ class AuthService {
 
     async authByConfirmationCode(code: string) {
 
-        const user = await usersRepository.findUserByConfirmationCode(code)
+        const user = await this.usersRepository.findUserByConfirmationCode(code)
 
         if (!user) {
             return {
@@ -108,7 +110,7 @@ class AuthService {
                 errors: [{field: "code", message: 'Confirmation code is incorrect'}]
             }
         }
-        const confirmUser = await usersRepository.confirmationUserByCode(true, user.id)
+        const confirmUser = await this.usersRepository.confirmationUserByCode(true, user.id)
 
         if (!confirmUser) {
             return {
@@ -125,15 +127,15 @@ class AuthService {
     }
 
     async resendingConfirmationCode(email: string) {
-        const findUser = await usersRepository.getUserByLoginOrEmail(email)
+        const findUser = await this.usersRepository.getUserByLoginOrEmail(email)
         if (findUser && !findUser.emailConfirmation.isConfirmed) {
             const confirmationCode = randomUUID()
-            await usersRepository.updateConfirmationCode(email, confirmationCode)
+            await this.usersRepository.updateConfirmationCode(email, confirmationCode)
             try {
                 await emailSender.confirmRegistration(email, confirmationCode)
             } catch (err: any) {
                 console.log(err)
-                await usersRepository.deleteUser(findUser._id.toString())
+                await this.usersRepository.deleteUser(findUser._id.toString())
                 return {
                     status: 400,
                     errors: [{message: 'Email nor confirmed , make registration again', field: 'code'}]
@@ -153,7 +155,7 @@ class AuthService {
     }
 
     async passwordRecovery(email: string) {
-        const user = await await usersRepository.getUserByLoginOrEmail(email)
+        const user = await await this.usersRepository.getUserByLoginOrEmail(email)
         if (!user) {
             return {
                 status: 204,
@@ -170,7 +172,7 @@ class AuthService {
         }
         const recoveryCode = randomUUID()
 
-        await usersRepository.updateUserRecoveryCode(email, {
+        await this.usersRepository.updateUserRecoveryCode(email, {
             recoveryCode,
             expirationDate: add(
                 new Date(), {
@@ -191,7 +193,7 @@ class AuthService {
 
     async changePassword( password: string, recoveryCode : string) {
         console.log(recoveryCode)
-        const findUserByCode = await usersRepository.findUserByRecoveryCode(recoveryCode)
+        const findUserByCode = await this.usersRepository.findUserByRecoveryCode(recoveryCode)
         console.log(findUserByCode)
 
         if (!findUserByCode) {
@@ -212,7 +214,7 @@ class AuthService {
         const salt = await bcrypt.genSalt(10);
         const hushedPass = await bcrypt.hash(password, salt)
 
-        await usersRepository.updateUserPassword(findUserByCode.id , hushedPass)
+        await this.usersRepository.updateUserPassword(findUserByCode.id , hushedPass)
 
         return {
             status:204,
@@ -222,4 +224,3 @@ class AuthService {
     }
 }
 
-export const authService = new AuthService()
