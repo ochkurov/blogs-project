@@ -9,7 +9,7 @@ import {usersCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
 import {userMapper} from "./dto/userMapper";
 
-class UsersRepository {
+export class UsersRepository {
     async findUserByLoginOrEmail(login: string, email: string): Promise<UserSchemaType | null> {
         let findUser = await usersCollection.findOne({
             $or: [{login}, {email}]

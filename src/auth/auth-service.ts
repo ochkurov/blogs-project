@@ -1,7 +1,7 @@
-import {UserFullDBModel, UserInputModel} from "../types/users-types";
+import {UserInputModel} from "../types/users-types";
 import {usersService} from "../users/users-service";
 import {emailSender} from "../adapters/email-adapter";
-import {usersRepository} from "../users/usersRepository";
+import {UsersRepository, usersRepository} from "../users/usersRepository";
 import {randomUUID} from "node:crypto";
 import {CheckType, ResultObject} from "../types/result-object";
 import {jwtService} from "./application/jwt-service";
@@ -19,6 +19,11 @@ export type LoginDTO = {
 }
 
 class AuthService {
+    usersRepository:UsersRepository
+    constructor() {
+        this.usersRepository = new UsersRepository();
+    }
+
     async login({loginOrEmail, ip, userAgent, password}: LoginDTO): Promise<ResultObject<{
         accessToken: string,
         refreshToken: string
