@@ -1,13 +1,19 @@
-import {commentsRepository} from "./commentsRepository";
-import {usersRepository} from "../users/usersRepository";
 import {DbCommentType} from "../types/comment-types";
+import {CommentsRepository} from "./commentsRepository";
+import {UsersRepository} from "../users/usersRepository";
 
- class CommentsService {
+ export class CommentsService {
+     commentsRepository: CommentsRepository
+     usersRepository:UsersRepository
+     constructor() {
+         this.commentsRepository = new CommentsRepository();
+         this.usersRepository = new UsersRepository();
+     }
      async updateComment(id: string,content: string) {
-         return await commentsRepository.updateComment(id, content);
+         return await this.commentsRepository.updateComment(id, content);
      }
      async createComment(userId: string, postId: string, content: string) {
-         const user = await usersRepository.getUserById(userId)
+         const user = await this.usersRepository.getUserById(userId)
          if (!user) {
              return null
          }
@@ -22,9 +28,8 @@ import {DbCommentType} from "../types/comment-types";
 
          }
 
-         return await commentsRepository.createComment(comment);
+         return await this.commentsRepository.createComment(comment);
 
      }
  }
 
-export const commentsService = new CommentsService();

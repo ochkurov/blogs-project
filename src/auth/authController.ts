@@ -4,6 +4,7 @@ import {usersQwRepository} from "../users/usersQwRepository";
 import {UserForAuthMe, UserInputModel, UserSecureType} from "../types/users-types";
 import {deviceCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
+import {AuthService} from "./auth-service";
 
 type authType = {
     loginOrEmail: string,
@@ -11,6 +12,10 @@ type authType = {
 }
 
 export class AuthController {
+    authService: AuthService
+    constructor() {
+        this.authService = new AuthService();
+    }
     async Login(req: Request<{}, {}, authType>, res: Response) {
 
         const ip = req.ip
@@ -22,7 +27,7 @@ export class AuthController {
 
         const {loginOrEmail, password} = req.body
 
-        const {status, errors, data} = await authService.login({
+        const {status, errors, data} = await this.authService.login({
             loginOrEmail,
             password,
             ip,
@@ -93,7 +98,7 @@ export class AuthController {
 
         const userData = req.body
 
-        const result = await authService.registration(userData)
+        const result = await this.authService.registration(userData)
         if (result.errors && result.errors.length > 0) {
             res.status(result.status).json({
                 errorsMessages: result.errors,
@@ -106,7 +111,7 @@ export class AuthController {
 
     async ConfirmationByCode(req: Request<{}, {}, { code: string }>, res: Response) {
         const code = req.body.code
-        const confirmUser = await authService.authByConfirmationCode(code)
+        const confirmUser = await this.authService.authByConfirmationCode(code)
         if (confirmUser.errors.length || !confirmUser.data.isConfirmed) {
             res.status(confirmUser.status).json({errorsMessages: confirmUser.errors})
             return
@@ -116,7 +121,7 @@ export class AuthController {
 
     async RegistrationCodeResending(req: Request<{}, {}, { email: string }>, res: Response) {
         const email = req.body.email
-        const result = await authService.resendingConfirmationCode(email)
+        const result = await this.authService.resendingConfirmationCode(email)
         if (result.errors && result.errors.length > 0) {
             res.status(result.status).json({
                 errorsMessages: result.errors,
@@ -151,7 +156,7 @@ export class AuthController {
 
     async passwordRecovery(req: Request, res: Response) {
         const email = req.body.email
-        const result = await authService.passwordRecovery(email)
+        const result = await this.authService.passwordRecovery(email)
         res.sendStatus(result.status)
     }
 
@@ -159,7 +164,7 @@ export class AuthController {
         const newPassword = req.body.newPassword
         const recoveryCode = req.body.recoveryCode
 
-        const changePass = await authService.changePassword(newPassword , recoveryCode)
+        const changePass = await this.authService.changePassword(newPassword , recoveryCode)
         res.sendStatus(changePass.status)
     }
 }

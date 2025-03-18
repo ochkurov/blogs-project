@@ -3,7 +3,7 @@ import {commentsCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
 import {CommentsViewModel, DbResponseCommentType} from "../types/comment-types";
 
-class CommentsQwRepository {
+export class CommentsQwRepository {
     async getComments() {
 
     }
@@ -44,4 +44,3 @@ class CommentsQwRepository {
     }
 }
 
-export const commentsQwRepository = new CommentsQwRepository();

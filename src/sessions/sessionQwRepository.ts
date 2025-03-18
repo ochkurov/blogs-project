@@ -3,7 +3,7 @@ import {SessionType, SessionTypeForResponse} from "./types/session-types";
 import {ObjectId} from "mongodb";
 import {sessionMapper} from "./dto/sessionMapper";
 
-class SessionQwRepository {
+export class SessionQwRepository {
     async getAllSessions (userId : ObjectId) : Promise<SessionTypeForResponse[] | null> {
         const sessions =  await deviceCollection.find({userId}).toArray()
         if (!sessions) {
@@ -20,4 +20,3 @@ class SessionQwRepository {
     }
 }
 
-export const sessionQwRepository = new SessionQwRepository()

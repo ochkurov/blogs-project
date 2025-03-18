@@ -2,7 +2,7 @@ import {commentsCollection} from "../db/mongoDb";
 import {DbCommentType, DbResponseCommentType} from "../types/comment-types";
 import {ObjectId} from "mongodb";
 
-class CommentsRepository {
+export class CommentsRepository {
     async getCommentById(id: string): Promise<DbResponseCommentType | null> {
         return await commentsCollection.findOne({_id: new ObjectId(id)});
     }
@@ -23,4 +23,3 @@ class CommentsRepository {
     }
 }
 
-export const commentsRepository = new CommentsRepository()

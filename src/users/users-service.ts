@@ -1,8 +1,8 @@
 import {UserInputModel} from "../types/users-types";
-import {usersRepository} from "./usersRepository";
 import {ErrorType} from "../types/errors-types";
 import bcrypt from 'bcrypt'
 import {userCreator} from "./dto/userCreator";
+import {UsersRepository} from "./usersRepository";
 
 type UserServiceType = {
     errors: ErrorType[] | null,
@@ -12,10 +12,14 @@ type UserServiceType = {
 }
 
 export class UserService {
+    usersRepository: UsersRepository
+    constructor() {
+        this.usersRepository = new UsersRepository();
+    }
     async createUser(body: UserInputModel, isConfirmed: boolean): Promise<UserServiceType> {
         const errors: ErrorType[] = []
 
-        let findUser = await usersRepository.findUserByLoginOrEmail(body.login, body.email)
+        let findUser = await this.usersRepository.findUserByLoginOrEmail(body.login, body.email)
 
         if (findUser) {
             if (findUser.login === body.login) {
@@ -44,7 +48,7 @@ export class UserService {
         )
 
 
-        const userId = await usersRepository.createUser(newUser)
+        const userId = await this.usersRepository.createUser(newUser)
         return {
             errors: null ,
             data: { userId, confirmationCode: newUser.emailConfirmation.confirmationCode } ,
@@ -53,13 +57,13 @@ export class UserService {
     }
 
     async getUserById(id: string) {
-        return await usersRepository.getUserById(id)
+        return await this.usersRepository.getUserById(id)
     }
     async getUserByLoginOrEmail(loginOrEmail: string) {
-        return await usersRepository.getUserByLoginOrEmail(loginOrEmail)
+        return await this.usersRepository.getUserByLoginOrEmail(loginOrEmail)
     }
     async checkCredentials(loginOrEmail: string, password: string) {
-        let findUser = await usersRepository.checkUserByLoginOrEmail(loginOrEmail)
+        let findUser = await this.usersRepository.checkUserByLoginOrEmail(loginOrEmail)
         if (!findUser) {
             return {
                 status: 401
@@ -78,7 +82,7 @@ export class UserService {
     }
 
     async deleteUser(id: string) {
-        return await usersRepository.deleteUser(id)
+        return await this.usersRepository.deleteUser(id)
     }
 }
 

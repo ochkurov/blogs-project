@@ -2,26 +2,21 @@ import {Router} from "express";
 import {authorizationMidleware} from "../middlewares/authorizationMidleware";
 import {postBodyValidation} from "../middlewares/validation/field-validator";
 import {errorsResultMiddleware} from "../middlewares/errorsResultMiddleware";
-import {getPostsController} from "./controllers/getPostsController";
-import {getPostByIdController} from "./controllers/getPostByIdController";
-import {createPostController} from "./controllers/createPostController";
-import {updatePostController} from "./controllers/updatePostController";
-import {deletePostController} from "./controllers/deletePostController";
 import {authBearerMiddleware} from "../auth/middlewares/authBearerMiddleware";
 import {commentCredentialsValidate} from "../comments/middlewares/CommentCredentionalsValidate";
-import {createCommentByPostIdController} from "./controllers/createCommentByPostIdController";
-import {getCommentsByPostIdController} from "./controllers/getCommentsByPostIdController";
-
+import {PostsController} from "./postsController";
 export const postsRouter = Router();
 
-postsRouter.get('/', getPostsController)
-postsRouter.get('/:id', getPostByIdController)
-postsRouter.get('/:id/comments' , getCommentsByPostIdController )
+const postsController = new PostsController()
+
+postsRouter.get('/', postsController.getPosts.bind(postsController))
+postsRouter.get('/:id', postsController.getPostById.bind(postsController))
+postsRouter.get('/:id/comments' , postsController.getCommentsByPostId.bind(postsController) )
 
 // basic auth
-postsRouter.post('/', authorizationMidleware, postBodyValidation , errorsResultMiddleware , createPostController)
-postsRouter.put('/:id', authorizationMidleware,postBodyValidation , errorsResultMiddleware, updatePostController)
-postsRouter.delete('/:id', authorizationMidleware , deletePostController)
+postsRouter.post('/', authorizationMidleware, postBodyValidation , errorsResultMiddleware , postsController.createPost.bind(postsController))
+postsRouter.put('/:id', authorizationMidleware,postBodyValidation , errorsResultMiddleware, postsController.updatePost.bind(postsController))
+postsRouter.delete('/:id', authorizationMidleware , postsController.deletePost.bind(postsController))
 
 // bearer auth
-postsRouter.post('/:id/comments' , authBearerMiddleware, ...commentCredentialsValidate , errorsResultMiddleware , createCommentByPostIdController)
+postsRouter.post('/:id/comments' , authBearerMiddleware, ...commentCredentialsValidate , errorsResultMiddleware , postsController.createCommentByPostId.bind(postsController))

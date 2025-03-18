@@ -1,7 +1,7 @@
 import {ObjectId} from "mongodb";
 import {deviceCollection} from "../db/mongoDb";
 
-class SessionRepository {
+export class SessionRepository {
     async deleteAllUserSessions (userId: ObjectId , deviceId: ObjectId) {
         const res = await deviceCollection.deleteMany({
             userId: userId,
@@ -16,4 +16,3 @@ class SessionRepository {
     }
 }
 
-export const sessionRepository = new SessionRepository();

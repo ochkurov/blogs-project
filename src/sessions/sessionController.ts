@@ -1,14 +1,20 @@
 import {Request, Response} from "express";
-import {sessionQwRepository} from "./sessionQwRepository";
-import {sessionRepository} from "./sessionRepository";
 import {ObjectId} from "mongodb";
+import {SessionQwRepository} from "./sessionQwRepository";
+import {SessionRepository} from "./sessionRepository";
 
 class SessionController {
+    sessionQwRepository: SessionQwRepository
+    sessionRepository: SessionRepository;
+    constructor() {
+        this.sessionQwRepository = new SessionQwRepository();
+        this.sessionRepository = new SessionRepository();
+    }
     async getAllDeviceSessions(req: Request, res: Response) {
 
         const userId = req.user?._id
 
-        const sessions = await sessionQwRepository.getAllSessions(userId!)
+        const sessions = await this.sessionQwRepository.getAllSessions(userId!)
 
         if (!sessions) {
 
@@ -26,7 +32,7 @@ class SessionController {
         const userId = req.user?._id
         const deviceId = req.deviceId
 
-        const result = await sessionRepository.deleteAllUserSessions(userId!, new ObjectId(deviceId!))
+        const result = await this.sessionRepository.deleteAllUserSessions(userId!, new ObjectId(deviceId!))
 
         if (!result) {
             res.sendStatus(401)
@@ -52,7 +58,7 @@ class SessionController {
             res.sendStatus(404)
             return
         }
-        const session = await sessionQwRepository.findSessionByDeviceId(new ObjectId(deviceId))
+        const session = await this.sessionQwRepository.findSessionByDeviceId(new ObjectId(deviceId))
 
         if (!session) {
             res.sendStatus(404)
@@ -67,7 +73,7 @@ class SessionController {
         }
 
 
-        const result = await sessionRepository.deleteSessionByDeviceId(new ObjectId(deviceId)!)
+        const result = await this.sessionRepository.deleteSessionByDeviceId(new ObjectId(deviceId)!)
 
         if (!result) {
             res.sendStatus(404)

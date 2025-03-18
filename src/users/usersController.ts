@@ -6,19 +6,25 @@ import {
     UsersQueryInputType
 } from "../types/users-types";
 import {usersQueriesDto} from "../helpers/users_paginations_values";
-import {usersQwRepository} from "./usersQwRepository";
 import {APIErrorResultType} from "../types/errors-types";
-import {usersService} from "./users-service";
 import {ObjectId} from "mongodb";
+import {UsersQwRepository} from "./usersQwRepository";
+import {UserService} from "./users-service";
 
 class UsersController {
+    usersQwRepository: UsersQwRepository
+    usersService: UserService
+    constructor() {
+        this.usersQwRepository = new UsersQwRepository();
+        this.usersService = new UserService();
+    }
     async getUsers(
         req: Request<{}, {}, {}, UsersQueryInputType>,
         res: Response<ResponseUserType>) {
 
         const query = req.query
         const usersQuery = usersQueriesDto(query)
-        let users = await usersQwRepository.getUsers(usersQuery)
+        let users = await this.usersQwRepository.getUsers(usersQuery)
 
         res.status(200).json(users)
 
@@ -31,14 +37,14 @@ class UsersController {
     ) {
         const body: UserInputModel = req.body
 
-        const result = await usersService.createUser(body , true)
+        const result = await this.usersService.createUser(body , true)
 
         if (result.errors && result.errors.length > 0) {
             res.status(400).send({errorsMessages: result.errors})
             return
         }
 
-        const user: UserSecureType = await usersService.getUserById(result.data!.userId)
+        const user: UserSecureType = await this.usersService.getUserById(result.data!.userId)
 
         const userForResponse:UserForResponseType = {
             id: user._id.toString(),
@@ -62,7 +68,7 @@ class UsersController {
             res.sendStatus(404)
             return
         }
-        const deletedUser = await usersService.deleteUser(userId)
+        const deletedUser = await this.usersService.deleteUser(userId)
 
         if (!deletedUser) {
             res.sendStatus(404)

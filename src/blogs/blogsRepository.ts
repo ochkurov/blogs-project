@@ -2,7 +2,7 @@ import {blogsCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
 import {BlogDbType, BlogInputModel, BlogResponseType} from "../types/blog-types";
 
-class BlogsRepository {
+export class BlogsRepository {
     async getAllBlogs(pageNumber:number,
                       pageSize:number,
                       sortBy:string,
@@ -73,5 +73,3 @@ class BlogsRepository {
     }
 
 }
-
-export const blogsRepository = new BlogsRepository();

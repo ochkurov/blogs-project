@@ -2,7 +2,7 @@ import {ResponseUserType, UserSecureType, UsersQueryPaginationType} from "../typ
 import {usersCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
 
-class UsersQwRepository {
+export class UsersQwRepository {
 
     async getUsers(query: UsersQueryPaginationType): Promise<ResponseUserType> {
 
@@ -49,4 +49,3 @@ class UsersQwRepository {
         return user
     }
 }
-export const usersQwRepository = new UsersQwRepository();

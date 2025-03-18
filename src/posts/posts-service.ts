@@ -1,18 +1,25 @@
-import {postsRepository} from "./postsRepository";
 import {CreatePostType, PostInputModel, PostViewModel, ResponsePostsType} from "../types/posts-types";
 import {ObjectId} from "mongodb";
-import {blogsRepository} from "../blogs/blogsRepository";
 import {sortType} from "../types/sort-types";
+import {PostsRepository} from "./postsRepository";
+import {BlogsRepository} from "../blogs/blogsRepository";
+import {getPostViewModel} from "./output/getPostViewModel";
 
 
-class PostsService {
+export class PostsService {
+    postsRepository: PostsRepository
+    blogsRepository: BlogsRepository
+    constructor() {
+        this.postsRepository = new PostsRepository();
+        this.blogsRepository = new BlogsRepository();
+    }
     async getAllPosts (sortData:sortType): Promise<ResponsePostsType>
     {
         const { pageNumber , pageSize , sortBy , sortDirection } = sortData
 
-        const posts = await postsRepository.getAllPosts(sortData)
+        const posts = await this.postsRepository.getAllPosts(sortData)
 
-        const postsCount = await postsRepository.getPostsCount()
+        const postsCount = await this.postsRepository.getPostsCount()
         const mappedPosts = posts.map(getPostViewModel)
 
         return {
@@ -27,10 +34,10 @@ class PostsService {
 
         const { pageNumber , pageSize , sortBy , sortDirection } = sortData
 
-        const posts = await postsRepository.getPostsByBlogId(blogId , sortData)
+        const posts = await this.postsRepository.getPostsByBlogId(blogId , sortData)
         if (posts.length < 1) return null
 
-        const postsCount = await postsRepository.getPostsCountById(blogId)
+        const postsCount = await this.postsRepository.getPostsCountById(blogId)
         const mappedPosts = posts.map(getPostViewModel)
 
         return {
@@ -43,17 +50,17 @@ class PostsService {
 
     }
     async getPostById ( id: string ):Promise<PostViewModel | null> {
-        return postsRepository.getPostById( new ObjectId( id ) )
+        return this.postsRepository.getPostById( new ObjectId( id ) )
             .then(post => post ?  getPostViewModel(post): null)
     }
     async getPostByMongoID (_id: ObjectId) {
-        return postsRepository.getPostById(_id)
+        return this.postsRepository.getPostById(_id)
             .then(post => post ? getPostViewModel(post) : null)
     }
 
     async createPost (body: PostInputModel) : Promise<ObjectId | null> {
 
-        let blog = await blogsRepository.getBlogById( new ObjectId(body.blogId) )
+        let blog = await this.blogsRepository.getBlogById( new ObjectId(body.blogId) )
 
 
         if (!blog) {
@@ -70,16 +77,14 @@ class PostsService {
             createdAt: new Date().toISOString(),
         }
 
-        return await postsRepository.createPost(newPost)
+        return await this.postsRepository.createPost(newPost)
 
     }
     async updatePost (id: string, body: PostInputModel ) {
 
-        return await postsRepository.updatePost( new ObjectId(id), body )
+        return await this.postsRepository.updatePost( new ObjectId(id), body )
     }
     async deletePost (id: string) {
-        return await postsRepository.deletePost( new ObjectId(id) )
+        return await this.postsRepository.deletePost( new ObjectId(id) )
     }
 }
-
-export const postsService = new PostsService();

@@ -18,7 +18,7 @@ export type LoginDTO = {
     userAgent: string
 }
 
-class AuthService {
+export class AuthService {
     usersRepository:UsersRepository
     usersService:UserService
     constructor() {

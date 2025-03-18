@@ -1,28 +1,32 @@
-import {blogsRepository} from "./blogsRepository";
 import {BlogDbType, BlogInputModel, BlogQueryInputType, BlogViewModel, ResponseBlogType} from "../types/blog-types";
 import {ObjectId} from "mongodb";
-import {GetBlogViewModel, getBlogViewModel} from "./output/getBlogViewModel";
+import {getBlogViewModel} from "./output/getBlogViewModel";
 import {CreateBlog} from "./dtos/createBlog";
+import {BlogsRepository} from "./blogsRepository";
 
-const getBlogViewModel = new GetBlogViewModel()
 
 class BlogsService {
+    blogsRepository: BlogsRepository
+    constructor() {
+        this.blogsRepository = new BlogsRepository();
+    }
+
     async getBlogs(
         query: BlogQueryInputType
     ): Promise<ResponseBlogType> {
 
         const { pageNumber, pageSize, sortBy, sortDirection, searchNameTerm } = query
 
-        const blogs = await blogsRepository.getAllBlogs(
+        const blogs = await this.blogsRepository.getAllBlogs(
             pageNumber,
             pageSize,
             sortBy,
             sortDirection,
             searchNameTerm,
         )
-        const mappedBlogs = blogs.map(getBlogViewModel)
+        const mappedBlogs  = blogs.map(getBlogViewModel)
 
-        const blogsCount = await blogsRepository.getBlogCount(searchNameTerm)
+        const blogsCount = await this.blogsRepository.getBlogCount(searchNameTerm)
 
         return {
             pagesCount: Math.ceil(blogsCount / pageSize),
@@ -34,7 +38,7 @@ class BlogsService {
 
     }
     async getBlogById(id: string) {
-        return blogsRepository.getBlogById( new ObjectId( id ) )
+        return this.blogsRepository.getBlogById( new ObjectId( id ) )
             .then( foundBlog => {
                 if( foundBlog ) {
                     return getBlogViewModel(foundBlog)
@@ -44,21 +48,21 @@ class BlogsService {
     }
 
     async getBlogByUUID(id: ObjectId): Promise<BlogViewModel> {
-        return  blogsRepository.getVideoByUUID(id)
+        return  this.blogsRepository.getVideoByUUID(id)
             .then(getBlogViewModel)
     }
 
     async createBlog(body: BlogInputModel): Promise<ObjectId> {
         const newBlog: BlogDbType = new CreateBlog(body.name , body.description , body.websiteUrl)
 
-        return await blogsRepository.createBlog(newBlog) // данный запрос возвращается нам айдишку блога в виде insertedId
+        return await this.blogsRepository.createBlog(newBlog) // данный запрос возвращается нам айдишку блога в виде insertedId
 
     }
     async updateBlog(id: string, body: BlogInputModel) {
-        return await blogsRepository.updateBlog(new ObjectId( id ), body)
+        return await this.blogsRepository.updateBlog(new ObjectId( id ), body)
     }
     async deleteBlog(id: string) {
-        return await blogsRepository.deleteBlog(new ObjectId( id ))
+        return await this.blogsRepository.deleteBlog(new ObjectId( id ))
     }
 }
 

@@ -3,7 +3,7 @@ import {ObjectId} from "mongodb";
 import {sortType} from "../types/sort-types";
 import {PostInputModel} from "../types/posts-types";
 
-class PostsRepository {
+export class PostsRepository {
 
     async getAllPosts(sortData: sortType) {
 
@@ -79,5 +79,4 @@ class PostsRepository {
     }
 }
 
-export const postsRepository = new PostsRepository();
 
