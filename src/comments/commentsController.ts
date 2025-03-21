@@ -1,11 +1,19 @@
 import {Request, Response} from "express";
-import {CommentResponseType, CommentsViewModel} from "../types/comment-types";
-import {commentsService} from "./comments-service";
-import {commentsRepository} from "./commentsRepository";
-import {commentsQwRepository} from "./commentsQwRepository";
+import { CommentsViewModel} from "../types/comment-types";
+import {CommentsService} from "./comments-service";
+import {CommentsRepository} from "./commentsRepository";
+import {CommentsQwRepository} from "./commentsQwRepository";
 import {ObjectId} from "mongodb";
 
 class CommentsController {
+    commentsService: CommentsService;
+    commentsRepository: CommentsRepository;
+    commentsQwRepository: CommentsQwRepository
+    constructor() {
+        this.commentsService = new CommentsService();
+        this.commentsRepository = new CommentsRepository();
+        this.commentsQwRepository = new CommentsQwRepository();
+    }
     async getCommentsById(req: Request<{ id: string }>, res: Response<CommentsViewModel>) {
         const commentId = req.params.id;
 
@@ -13,7 +21,7 @@ class CommentsController {
             res.sendStatus(404)
             return;
         }
-        const comment = await commentsQwRepository.getCommentById(commentId);
+        const comment = await this.commentsQwRepository.getCommentById(commentId);
         if (!comment) {
             res.sendStatus(404)
             return
@@ -40,7 +48,7 @@ class CommentsController {
             res.sendStatus(404)
             return;
         }
-        const foundComment = await commentsRepository.getCommentById(commentId)
+        const foundComment = await this.commentsRepository.getCommentById(commentId)
 
         if(foundComment && foundComment.commentatorInfo.userId.toString() !== userId.toString()) {
             res.sendStatus(403)
@@ -50,7 +58,7 @@ class CommentsController {
             res.sendStatus(404)
             return
         }
-        const updateComment = await commentsService.updateComment(commentId,  content)
+        const updateComment = await this.commentsService.updateComment(commentId,  content)
 
         if (!updateComment) {
             res.sendStatus(404)
@@ -66,7 +74,7 @@ class CommentsController {
             res.sendStatus(404)
             return
         }
-        const foundComment = await commentsRepository.getCommentById(commentId)
+        const foundComment = await this.commentsRepository.getCommentById(commentId)
 
         if (foundComment && foundComment.commentatorInfo.userId.toString() !== userId.toString()) {
             res.sendStatus(403)
@@ -76,7 +84,7 @@ class CommentsController {
             res.sendStatus(404)
             return
         }
-        const deletedComment = await commentsRepository.deleteComment(commentId)
+        const deletedComment = await this.commentsRepository.deleteComment(commentId)
         if (!deletedComment) {
             res.sendStatus(404)
             return

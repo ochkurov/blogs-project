@@ -19,11 +19,13 @@ export type LoginDTO = {
 }
 
 export class AuthService {
-    usersRepository:UsersRepository
-    usersService:UserService
-    constructor() {
-        this.usersRepository = new UsersRepository();
-        this.usersService = new UserService()
+
+    constructor(
+        private usersRepository:UsersRepository,
+        private usersService:UserService
+
+    ) {
+
     }
 
     async login({loginOrEmail, ip, userAgent, password}: LoginDTO): Promise<ResultObject<{

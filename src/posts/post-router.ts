@@ -2,9 +2,10 @@ import {Router} from "express";
 import {authorizationMidleware} from "../middlewares/authorizationMidleware";
 import {postBodyValidation} from "../middlewares/validation/field-validator";
 import {errorsResultMiddleware} from "../middlewares/errorsResultMiddleware";
-import {authBearerMiddleware} from "../auth/middlewares/authBearerMiddleware";
+
 import {commentCredentialsValidate} from "../comments/middlewares/CommentCredentionalsValidate";
 import {PostsController} from "./postsController";
+import {authBearerMiddleware} from "../compositionRoot";
 export const postsRouter = Router();
 
 const postsController = new PostsController()
@@ -19,4 +20,4 @@ postsRouter.put('/:id', authorizationMidleware,postBodyValidation , errorsResult
 postsRouter.delete('/:id', authorizationMidleware , postsController.deletePost.bind(postsController))
 
 // bearer auth
-postsRouter.post('/:id/comments' , authBearerMiddleware, ...commentCredentialsValidate , errorsResultMiddleware , postsController.createCommentByPostId.bind(postsController))
+postsRouter.post('/:id/comments' , authBearerMiddleware.execute, ...commentCredentialsValidate , errorsResultMiddleware , postsController.createCommentByPostId.bind(postsController))

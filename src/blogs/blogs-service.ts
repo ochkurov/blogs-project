@@ -5,7 +5,7 @@ import {CreateBlog} from "./dtos/createBlog";
 import {BlogsRepository} from "./blogsRepository";
 
 
-class BlogsService {
+export class BlogsService {
     blogsRepository: BlogsRepository
     constructor() {
         this.blogsRepository = new BlogsRepository();
@@ -66,4 +66,3 @@ class BlogsService {
     }
 }
 
-export const blogsService = new BlogsService()

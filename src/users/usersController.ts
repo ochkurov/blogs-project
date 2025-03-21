@@ -43,7 +43,7 @@ class UsersController {
             res.status(400).send({errorsMessages: result.errors})
             return
         }
-
+вв
         const user: UserSecureType = await this.usersService.getUserById(result.data!.userId)
 
         const userForResponse:UserForResponseType = {

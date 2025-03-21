@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
 import {jwtService} from "./application/jwt-service";
-import {usersQwRepository} from "../users/usersQwRepository";
+import {UsersQwRepository} from "../users/usersQwRepository";
 import {UserForAuthMe, UserInputModel, UserSecureType} from "../types/users-types";
 import {deviceCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
@@ -12,9 +12,14 @@ type authType = {
 }
 
 export class AuthController {
-    authService: AuthService
-    constructor() {
-        this.authService = new AuthService();
+    //authService: AuthService
+    // usersQwRepository: UsersQwRepository
+    constructor(
+        private authService: AuthService,
+        private usersQwRepository: UsersQwRepository
+    ) {
+        //this.authService = new AuthService();
+
     }
     async Login(req: Request<{}, {}, authType>, res: Response) {
 
@@ -80,7 +85,7 @@ export class AuthController {
             res.sendStatus(401)
             return
         }
-        let user = await usersQwRepository.getUserForAuthMe(userId)
+        let user = await this.usersQwRepository.getUserForAuthMe(userId)
 
         if (!user) {
             res.sendStatus(401);
@@ -169,4 +174,4 @@ export class AuthController {
     }
 }
 
-export const authController = new AuthController()
+

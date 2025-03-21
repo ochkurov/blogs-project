@@ -1,24 +1,20 @@
 import {Router} from "express";
-import {getBlogController} from "./controllers/getBlogController";
-import {getBlogByIdController} from "./controllers/getBlogByIdController";
-import {createBlogController} from "./controllers/createBlogController";
-import {updateBlogController} from "./controllers/updateBlogController";
-import {deleteBlogController} from "./controllers/deleteBlogController";
 import {authorizationMidleware} from "../middlewares/authorizationMidleware";
 import {
     blogsBodyValidation,
     postsBodyWhithoutIdValidation
 } from "../middlewares/validation/field-validator";
 import {errorsResultMiddleware} from "../middlewares/errorsResultMiddleware";
-import {createPostFromBlogIdController} from "./controllers/createPostFromBlogIdController";
-import {getPostsFromBlogIdController} from "./controllers/getPostsFromBlogIdController";
+import {BlogsController} from "./blogsController";
+
+const blogsController = new BlogsController()
 
 export const blogsRouter = Router()
 
-blogsRouter.get('/',  getBlogController)
-blogsRouter.get('/:id',  getBlogByIdController)
-blogsRouter.get('/:blogId/posts' , getPostsFromBlogIdController)
-blogsRouter.post('/:blogId/posts', authorizationMidleware, postsBodyWhithoutIdValidation ,errorsResultMiddleware,createPostFromBlogIdController)
-blogsRouter.post('/', authorizationMidleware, blogsBodyValidation ,  errorsResultMiddleware , createBlogController)
-blogsRouter.put('/:id', authorizationMidleware, blogsBodyValidation ,  errorsResultMiddleware , updateBlogController)
-blogsRouter.delete('/:id', authorizationMidleware ,deleteBlogController)
+blogsRouter.get('/',  blogsController.getBlogs.bind(blogsController))
+blogsRouter.get('/:id',  blogsController.getBlogById.bind(blogsController))
+blogsRouter.get('/:blogId/posts' , blogsController.getPostsFromBlogId.bind(blogsController))
+blogsRouter.post('/:blogId/posts', authorizationMidleware, postsBodyWhithoutIdValidation ,errorsResultMiddleware,blogsController.createPostFromBlogId.bind(blogsController))
+blogsRouter.post('/', authorizationMidleware, blogsBodyValidation ,  errorsResultMiddleware , blogsController.createBlog.bind(blogsController))
+blogsRouter.put('/:id', authorizationMidleware, blogsBodyValidation ,  errorsResultMiddleware , blogsController.updateBlog.bind(blogsController))
+blogsRouter.delete('/:id', authorizationMidleware ,blogsController.deleteBlog.bind(blogsController))

@@ -1,6 +1,7 @@
 import {body} from "express-validator";
-import {blogsRepository} from "../../blogs/blogsRepository";
+import {BlogsRepository} from "../../blogs/blogsRepository";
 import {ObjectId} from "mongodb";
+const blogsRepository = new BlogsRepository();
 
 export const blogsBodyValidation = [
     body('name').isString().trim().notEmpty().isLength({min: 1, max: 15}),
