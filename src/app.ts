@@ -11,7 +11,7 @@ import cookieParser from "cookie-parser";
 import {sessionRouter} from "./sessions/sessions-router";
 
 export const initApp = ()=>{
-ss
+
     const app = express() // создать приложение
 
     app.use(express.json()) // создание свойств-объектов body и query во всех реквестах
