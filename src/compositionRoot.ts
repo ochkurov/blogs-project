@@ -5,9 +5,12 @@ import {UserService} from "./users/users-service";
 import {UsersRepository} from "./users/usersRepository";
 import {AuthBearerGuard} from "./auth/middlewares/authBearerMiddleware";
 import {RefreshTokenGuard} from "./auth/middlewares/RefreshTokenMiddleware";
+import {BlogsRepository} from "./blogs/blogsRepository";
 
-const usersService = new UserService()
+
 const userRepository = new UsersRepository()
+const usersService = new UserService(userRepository)
+const blogsRepository = new BlogsRepository()
 
 const userQueryRepository = new UsersQwRepository()
 const authService = new AuthService(userRepository, usersService)

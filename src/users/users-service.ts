@@ -12,9 +12,9 @@ type UserServiceType = {
 }
 
 export class UserService {
-    usersRepository: UsersRepository
-    constructor() {
-        this.usersRepository = new UsersRepository();
+
+    constructor(private usersRepository: UsersRepository ) {
+
     }
     async createUser(body: UserInputModel, isConfirmed: boolean): Promise<UserServiceType> {
         const errors: ErrorType[] = []
