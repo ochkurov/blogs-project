@@ -14,6 +14,8 @@ const authService = new AuthService(userRepository, usersService)
 const authController = new AuthController(authService, userQueryRepository);
 const authBearerMiddleware = new AuthBearerGuard(usersService)
 const refreshTokenMiddleware = new RefreshTokenGuard(usersService)
+
+
 export {
     authController,
     authBearerMiddleware,

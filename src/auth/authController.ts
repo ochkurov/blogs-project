@@ -12,13 +12,10 @@ type authType = {
 }
 
 export class AuthController {
-    //authService: AuthService
-    // usersQwRepository: UsersQwRepository
     constructor(
         private authService: AuthService,
         private usersQwRepository: UsersQwRepository
     ) {
-        //this.authService = new AuthService();
 
     }
     async Login(req: Request<{}, {}, authType>, res: Response) {
