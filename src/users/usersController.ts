@@ -52,7 +52,7 @@ class UsersController {
             email: user.email,
             createdAt: user.createdAt,
         }
-ы
+
         res.status(201).json(userForResponse)
 
     }
