@@ -9,13 +9,14 @@ import {APIErrorResultType} from "../types/errors-types";
 
 
 export class BlogsController {
-    blogsService: BlogsService
-    postsService: PostsService
 
-    constructor() {
-        this.blogsService = new BlogsService();
-        this.postsService = new PostsService();
+
+    constructor(
+        private blogsService: BlogsService,
+    private postsService: PostsService) {
+
     }
+//чем отличаются поля private? и почему мы используем их
 
     async getBlogs(
         req: Request<{}, {}, {}, BlogQueryInputType>,

@@ -37,6 +37,7 @@ class UsersController {
     ) {
         const body: UserInputModel = req.body
 
+        console.log(this, ' hhh')
         const result = await this.usersService.createUser(body , true)
 
         if (result.errors && result.errors.length > 0) {

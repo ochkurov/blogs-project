@@ -6,9 +6,9 @@ import {BlogsRepository} from "./blogsRepository";
 
 
 export class BlogsService {
-    blogsRepository: BlogsRepository
-    constructor() {
-        this.blogsRepository = new BlogsRepository();
+
+    constructor(private blogsRepository: BlogsRepository) {
+
     }
 
     async getBlogs(

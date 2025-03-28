@@ -1,6 +1,5 @@
 {
   "name": "blogs-project",
-  "packageManager": "yarn@3.2.3",
   "scripts": {
     "watch": "tsc -w",
     "dev": "nodemon --inspect dist/index.js",
