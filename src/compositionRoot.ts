@@ -11,11 +11,14 @@ import {PostsService} from "./posts/posts-service";
 import {BlogsService} from "./blogs/blogs-service";
 import {CommentsController} from "./comments/commentsController";
 import {CommentsService} from "./comments/comments-service";
-import {CommentsRepository} from "./comments/commentsRepository";
 import {CommentsQwRepository} from "./comments/commentsQwRepository";
+import {CommentsRepository} from "./comments/commentsRepository";
+import {PostsController} from "./posts/postsController";
+import {PostsRepository} from "./posts/postsRepository";
 
 
 const userRepository = new UsersRepository()
+const postsRepository = new PostsRepository();
 const usersService = new UserService(userRepository)
 const blogsRepository = new BlogsRepository()
 const postsService = new PostsService()
@@ -28,6 +31,7 @@ const blogsController = new BlogsController(blogsService , postsService)
 const commentsController = new CommentsController(commentsService, commentsRepository , commentsQwRepository)
 const userQueryRepository = new UsersQwRepository()
 const authService = new AuthService(userRepository, usersService)
+const postsController = new PostsController(postsRepository, postsService , commentsService , commentsQwRepository)
 const authController = new AuthController(authService, userQueryRepository);
 const authBearerMiddleware = new AuthBearerGuard(usersService)
 const refreshTokenMiddleware = new RefreshTokenGuard(usersService)

@@ -12,16 +12,10 @@ import {CommentsService} from "../comments/comments-service";
 
 
 export class PostsController {
-    postsRepository: PostsRepository
-    postsService: PostsService
-    commentsService: CommentsService
-    commentsQwRepository: CommentsQwRepository
-
-    constructor() {
-        this.postsRepository = new PostsRepository();
-        this.postsService = new PostsService();
-        this.commentsService = new CommentsService();
-        this.commentsQwRepository = new CommentsQwRepository();
+    constructor(private postsRepository: PostsRepository,
+                private postsService: PostsService,
+                private commentsService: CommentsService,
+                private commentsQwRepository: CommentsQwRepository) {
     }
 
     async getCommentsByPostId(req: Request<{ id: string }, {}, {}, QueryInputType>,
@@ -195,3 +189,4 @@ export class PostsController {
         } else res.sendStatus(204)
     }
 }
+``
