@@ -12,11 +12,10 @@ import {UsersQwRepository} from "./usersQwRepository";
 import {UserService} from "./users-service";
 
 class UsersController {
-    usersQwRepository: UsersQwRepository
-    usersService: UserService
-    constructor() {
-        this.usersQwRepository = new UsersQwRepository();
-        this.usersService = new UserService();
+
+    constructor(private usersQwRepository: UsersQwRepository,
+    private usersService: UserService) {
+
     }
     async getUsers(
         req: Request<{}, {}, {}, UsersQueryInputType>,
@@ -79,6 +78,5 @@ class UsersController {
     }
 }
 
-export const userController = new UsersController();
 
 

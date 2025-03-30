@@ -13,9 +13,10 @@ export class BlogsController {
 
     constructor(
         private blogsService: BlogsService,
-    private postsService: PostsService) {
+        private postsService: PostsService) {
 
     }
+
 //чем отличаются поля private? и почему мы используем их
 
     async getBlogs(
