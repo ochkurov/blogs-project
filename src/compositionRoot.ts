@@ -15,29 +15,46 @@ import {CommentsQwRepository} from "./comments/commentsQwRepository";
 import {CommentsRepository} from "./comments/commentsRepository";
 import {PostsController} from "./posts/postsController";
 import {PostsRepository} from "./posts/postsRepository";
+import {SessionController} from "./sessions/sessionController";
+import {SessionRepository} from "./sessions/sessionRepository";
+import {SessionQwRepository} from "./sessions/sessionQwRepository";
+import {TestingRepository} from "./testing/testingRepository";
+import {UsersController} from "./users/usersController";
 
 
 const userRepository = new UsersRepository()
+const userQueryRepository = new UsersQwRepository()
 const postsRepository = new PostsRepository();
-const usersService = new UserService(userRepository)
 const blogsRepository = new BlogsRepository()
-const postsService = new PostsService()
 const commentsRepository = new CommentsRepository()
 const commentsQwRepository = new CommentsQwRepository()
-const commentsService = new CommentsService(commentsRepository , userRepository)
+const sessionRepository = new SessionRepository()
+const sessionQwRepository = new SessionQwRepository()
 
+const usersService = new UserService(userRepository)
+const postsService = new PostsService(postsRepository , blogsRepository)
+const authService = new AuthService(userRepository, usersService)
+const commentsService = new CommentsService(commentsRepository , userRepository)
 const blogsService = new BlogsService(blogsRepository)
+const testingRepository = new TestingRepository()
+
 const blogsController = new BlogsController(blogsService , postsService)
 const commentsController = new CommentsController(commentsService, commentsRepository , commentsQwRepository)
-const userQueryRepository = new UsersQwRepository()
-const authService = new AuthService(userRepository, usersService)
 const postsController = new PostsController(postsRepository, postsService , commentsService , commentsQwRepository)
+const sessionController = new SessionController(sessionQwRepository, sessionRepository)
 const authController = new AuthController(authService, userQueryRepository);
+const userController = new UsersController(userQueryRepository , usersService)
+
 const authBearerMiddleware = new AuthBearerGuard(usersService)
 const refreshTokenMiddleware = new RefreshTokenGuard(usersService)
 
 
 export {
+    blogsController,
+    commentsController,
+    postsController,
+    userController,
+    sessionController,
     authController,
     authBearerMiddleware,
     refreshTokenMiddleware,

@@ -2,13 +2,10 @@ import {Router} from "express";
 import {authorizationMidleware} from "../middlewares/authorizationMidleware";
 import {postBodyValidation} from "../middlewares/validation/field-validator";
 import {errorsResultMiddleware} from "../middlewares/errorsResultMiddleware";
-
 import {commentCredentialsValidate} from "../comments/middlewares/CommentCredentionalsValidate";
-import {PostsController} from "./postsController";
-import {authBearerMiddleware} from "../compositionRoot";
+import {authBearerMiddleware, postsController} from "../compositionRoot";
 export const postsRouter = Router();
 
-const postsController = new PostsController()
 
 postsRouter.get('/', postsController.getPosts.bind(postsController))
 postsRouter.get('/:id', postsController.getPostById.bind(postsController))

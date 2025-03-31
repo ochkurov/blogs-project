@@ -5,9 +5,9 @@ import {
     postsBodyWhithoutIdValidation
 } from "../middlewares/validation/field-validator";
 import {errorsResultMiddleware} from "../middlewares/errorsResultMiddleware";
-import {BlogsController} from "./blogsController";
+import {blogsController} from "../compositionRoot";
 
-const blogsController = new BlogsController()
+
 
 export const blogsRouter = Router()
 

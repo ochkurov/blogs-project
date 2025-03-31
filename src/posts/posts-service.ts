@@ -7,11 +7,10 @@ import {getPostViewModel} from "./output/getPostViewModel";
 
 
 export class PostsService {
-    postsRepository: PostsRepository
-    blogsRepository: BlogsRepository
-    constructor() {
-        this.postsRepository = new PostsRepository();
-        this.blogsRepository = new BlogsRepository();
+
+    constructor(private postsRepository: PostsRepository,
+    private blogsRepository: BlogsRepository) {
+
     }
     async getAllPosts (sortData:sortType): Promise<ResponsePostsType>
     {

@@ -3,13 +3,14 @@ import {ObjectId} from "mongodb";
 import {SessionQwRepository} from "./sessionQwRepository";
 import {SessionRepository} from "./sessionRepository";
 
-class SessionController {
-    sessionQwRepository: SessionQwRepository
-    sessionRepository: SessionRepository;
-    constructor() {
-        this.sessionQwRepository = new SessionQwRepository();
-        this.sessionRepository = new SessionRepository();
+export class SessionController {
+
+    constructor(
+        private sessionQwRepository: SessionQwRepository,
+        private sessionRepository: SessionRepository) {
+
     }
+
     async getAllDeviceSessions(req: Request, res: Response) {
 
         const userId = req.user?._id
@@ -85,4 +86,4 @@ class SessionController {
 
 }
 
-export const sessionController = new SessionController()
+

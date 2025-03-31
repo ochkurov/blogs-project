@@ -1,6 +1,5 @@
 import {Router} from "express";
-import {sessionController} from "./sessionController";
-import {refreshTokenMiddleware} from "../compositionRoot";
+import {refreshTokenMiddleware, sessionController} from "../compositionRoot";
 
 export const sessionRouter = Router();
 

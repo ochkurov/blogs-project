@@ -11,12 +11,13 @@ import {ObjectId} from "mongodb";
 import {UsersQwRepository} from "./usersQwRepository";
 import {UserService} from "./users-service";
 
-class UsersController {
+export class UsersController {
 
-    constructor(private usersQwRepository: UsersQwRepository,
-    private usersService: UserService) {
-
+    constructor(
+        private usersQwRepository: UsersQwRepository,
+        private usersService: UserService) {
     }
+
     async getUsers(
         req: Request<{}, {}, {}, UsersQueryInputType>,
         res: Response<ResponseUserType>) {
@@ -37,7 +38,7 @@ class UsersController {
         const body: UserInputModel = req.body
 
         console.log(this, ' hhh')
-        const result = await this.usersService.createUser(body , true)
+        const result = await this.usersService.createUser(body, true)
 
         if (result.errors && result.errors.length > 0) {
             res.status(400).send({errorsMessages: result.errors})
@@ -46,7 +47,7 @@ class UsersController {
 
         const user: UserSecureType = await this.usersService.getUserById(result.data!.userId)
 
-        const userForResponse:UserForResponseType = {
+        const userForResponse: UserForResponseType = {
             id: user._id.toString(),
             login: user.login,
             email: user.email,

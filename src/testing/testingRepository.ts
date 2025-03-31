@@ -1,6 +1,7 @@
 import {blogsCollection, postsCollection, usersCollection} from "../db/mongoDb";
 
-class TestingRepository {
+export class TestingRepository {
+
     async deleteAllBlogs() {
         return await blogsCollection.deleteMany({}) ,
 
