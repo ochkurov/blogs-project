@@ -14,11 +14,11 @@ export let deviceCollection: Collection<SessionType>
 export let countRequestsCollection: Collection<any>
 
 const BlogsSchema = new mongoose.Schema<BlogDbType>({
-    name: String,
-    description: String,
-    websiteUrl: String,
-    createdAt: String,
-    isMembership: Boolean
+    name: { type:String , required:true},
+    description: { type:String , required:true},
+    websiteUrl: { type:String , required:true},
+    createdAt: { type:String , required:true},
+    isMembership: { type: Boolean , required:true}
 })
 export const BlogsModel = mongoose.model(SETTINGS.DB_COLLECTION_NAME.BLOGS, BlogsSchema)
 
