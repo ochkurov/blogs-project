@@ -4,6 +4,7 @@ import type {Collection} from 'mongodb'
 import {SessionType} from "../sessions/types/session-types";
 import mongoose from "mongoose";
 import {BlogDbType} from "../types/blog-types";
+import {CreatePostType} from "../types/posts-types";
 
 
 export let postsCollection: Collection<any>
@@ -21,6 +22,17 @@ const BlogsSchema = new mongoose.Schema<BlogDbType>({
     isMembership: { type: Boolean , required:true}
 })
 export const BlogsModel = mongoose.model(SETTINGS.DB_COLLECTION_NAME.BLOGS, BlogsSchema)
+
+const PostsSchema = new mongoose.Schema<CreatePostType>({
+    title: { type:String, required:true},
+    shortDescription: { type:String, required:true},
+    content: { type:String, required:true},
+    blogId: { type:String, required:true},
+    blogName: { type:String, required:true},
+    createdAt: { type:String, required:true},
+})
+
+export const PostsModel = mongoose.model(SETTINGS.DB_COLLECTION_NAME.POSTS, PostsSchema)
 
 export async function runDb(url: string): Promise<boolean> {
     let client = new MongoClient(url)
