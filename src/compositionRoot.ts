@@ -20,6 +20,8 @@ import {SessionRepository} from "./sessions/sessionRepository";
 import {SessionQwRepository} from "./sessions/sessionQwRepository";
 import {TestingRepository} from "./testing/testingRepository";
 import {UsersController} from "./users/usersController";
+import {LikeService} from "./likes /application/like-service";
+import {LikeRepository} from "./likes /dal/like-repository";
 
 
 const userRepository = new UsersRepository()
@@ -30,11 +32,13 @@ const commentsRepository = new CommentsRepository()
 const commentsQwRepository = new CommentsQwRepository()
 const sessionRepository = new SessionRepository()
 const sessionQwRepository = new SessionQwRepository()
+const likeRepository = new LikeRepository()
 
 const usersService = new UserService(userRepository)
 const postsService = new PostsService(postsRepository , blogsRepository)
 const authService = new AuthService(userRepository, usersService)
-const commentsService = new CommentsService(commentsRepository , userRepository)
+const likeService = new LikeService(userRepository , likeRepository)
+const commentsService = new CommentsService(commentsRepository , userRepository , likeService)
 const blogsService = new BlogsService(blogsRepository)
 const testingRepository = new TestingRepository()
 

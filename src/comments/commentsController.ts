@@ -4,6 +4,7 @@ import {CommentsService} from "./comments-service";
 import {CommentsRepository} from "./commentsRepository";
 import {CommentsQwRepository} from "./commentsQwRepository";
 import {ObjectId} from "mongodb";
+import {LikeStatusEnum} from "../likes /domain/like.entity";
 
 export class CommentsController {
 
@@ -91,6 +92,16 @@ export class CommentsController {
             return
         }
         res.sendStatus(204)
+    }
+
+    async updateLikeStatus(req: Request<{ id: string }, {}, { likeStatus: LikeStatusEnum }>, res: Response) {
+        const commentId = req.params.id;
+        const likeStatus = req.body.likeStatus;
+        const userId = req.user!._id.toString();
+
+        const result = await this.commentsService.updateLikeStatus(commentId , likeStatus , userId)
+
+
     }
 }
 

@@ -31,6 +31,7 @@ export const SETTINGS = {
         COMMENTS: 'comments',
         TOKEN: 'token',
         RATE: 'rate',
+        LIKES: 'likes',
     },
 
     MONGO_URL: process.env.MONGO_URL || 'mongodb://0.0.0.0:27017',

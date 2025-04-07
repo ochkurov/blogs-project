@@ -1,4 +1,6 @@
 import {ObjectId} from "mongodb";
+import {HydratedDocument} from "mongoose";
+import {ILike} from "../likes /domain/like.entity";
 
 export type CommentsViewModel = {
     id: string
@@ -35,13 +37,15 @@ export type DbCommentType = {
     postId: string
 }
 type LikesInfoType = {
-
+    likesCount: number,
+    dislikesCount: number,
 }
 
-export type CommentsSchemaType = {
+export type IComment = {
     content: string
-    commentatorInfo: CommentatorInfo
     createdAt: string
     postId: string
-    likesInfo:
+    commentatorInfo: CommentatorInfo
+    likesInfo: LikesInfoType
 }
+export type CommentsDocument = HydratedDocument<IComment>;

@@ -20,9 +20,7 @@ export class BlogsRepository {
             .sort({[sortBy]: sortDirection})
             .skip((pageNumber - 1) * pageSize)
             .limit(pageSize)
-            .toArray()
-
-
+            .lean();
     }
     async getBlogCount (searchNameTerm: string | null):Promise<number> {
         let filter : any = {}
