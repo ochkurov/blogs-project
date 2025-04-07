@@ -10,11 +10,11 @@ export interface RefreshJWTPayload extends JwtPayload{
 }
 export const jwtService = {
     async createJWT(userId: string): Promise<string> {
-        return jwt.sign({userId}, SETTINGS.JWT_SECRET, {expiresIn: '10s'});
+        return jwt.sign({userId}, SETTINGS.JWT_SECRET, {expiresIn: '10m'});
 
     },
     async createRefresh(userId: string, deviceId: string): Promise<string> {
-        return jwt.sign({userId, deviceId}, SETTINGS.REFRESH_SECRET, {expiresIn: '20s'});
+        return jwt.sign({userId, deviceId}, SETTINGS.REFRESH_SECRET, {expiresIn: '30m'});
     },
     async getUserIdByToken(token: string) {
         try {

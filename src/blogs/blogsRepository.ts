@@ -1,6 +1,6 @@
-import {blogsCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
 import {BlogDbType, BlogInputModel, BlogResponseType} from "../types/blog-types";
+import {BlogsModel} from "../db/mongoDb";
 
 export class BlogsRepository {
     async getAllBlogs(pageNumber:number,
@@ -15,7 +15,7 @@ export class BlogsRepository {
             filter = {name: {$regex: searchNameTerm, $options: "i"}};
         }
 
-        return await blogsCollection
+        return await BlogsModel
             .find(filter)
             .sort({[sortBy]: sortDirection})
             .skip((pageNumber - 1) * pageSize)
@@ -30,29 +30,29 @@ export class BlogsRepository {
         if (searchNameTerm) {
             filter.name = {$regex: searchNameTerm , $options: "i" };
         }
-        return await blogsCollection.countDocuments(filter)
+        return await BlogsModel.countDocuments(filter)
     }
 
     async getBlogById(_id: ObjectId): Promise<BlogResponseType | null>  {
 
-        return await blogsCollection.findOne({_id} );
+        return await BlogsModel.findOne({_id} );
 
     }
 
     async getVideoByUUID(_id: ObjectId) {
 
-        return await blogsCollection.findOne({_id} )
+        return await BlogsModel.findOne({_id} )
     }
 
     async createBlog(newBlog: BlogDbType): Promise<ObjectId> {
 
-        const res = await blogsCollection.insertOne(newBlog)
+        const res = await BlogsModel.insertOne(newBlog)
         return res.insertedId
 
     }
 
     async updateBlog(_id: ObjectId, body: BlogInputModel): Promise<boolean> {
-        const res = await blogsCollection.updateOne(
+        const res = await BlogsModel.updateOne(
             {_id},
             {$set: {...body}},
         )
@@ -62,10 +62,10 @@ export class BlogsRepository {
 
     async deleteBlog(_id: ObjectId) {
 
-        const blog = await blogsCollection.findOne({ _id })
+        const blog = await BlogsModel.findOne({ _id })
 
         if (blog) {
-            const res = await blogsCollection.deleteOne({_id: blog._id})
+            const res = await BlogsModel.deleteOne({_id: blog._id})
             if (res.deletedCount > 0) return true
         }
         return false

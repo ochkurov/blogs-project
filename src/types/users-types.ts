@@ -104,3 +104,16 @@ export type UserFullDBModel = {
     emailConfirmation: EmailConfirmationViewType
     passwordRecovery: PasswordRecoveryViewType
 }
+
+type AccountDataType = {
+    login: string,
+    email: string,
+    passwordHash: string,
+    createdAt: string,
+}
+
+export type UsersSchemaType = {
+    accountData:AccountDataType
+    emailConfirmation: EmailConfirmationViewType
+    passwordRecovery: PasswordRecoveryViewType
+}

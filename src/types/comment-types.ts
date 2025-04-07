@@ -34,3 +34,14 @@ export type DbCommentType = {
     createdAt: string
     postId: string
 }
+type LikesInfoType = {
+
+}
+
+export type CommentsSchemaType = {
+    content: string
+    commentatorInfo: CommentatorInfo
+    createdAt: string
+    postId: string
+    likesInfo:
+}
