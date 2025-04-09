@@ -11,5 +11,6 @@ export interface ILike  {
     userId: Schema.Types.ObjectId;
     authorName: Schema.Types.String;
     parentId: Schema.Types.ObjectId;
+
 }
 export type LikeDocument = HydratedDocument<ILike>;

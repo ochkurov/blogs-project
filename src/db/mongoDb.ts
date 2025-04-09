@@ -2,7 +2,7 @@ import {SETTINGS} from "../settings";
 import {MongoClient} from "mongodb";
 import type {Collection} from 'mongodb'
 import {SessionType} from "../sessions/types/session-types";
-import mongoose, {Schema} from "mongoose";
+import mongoose, {HydratedDocument, Schema} from "mongoose";
 import {BlogDbType} from "../types/blog-types";
 import {CreatePostType} from "../types/posts-types";
 import {UserCreateTypeModel, UsersSchemaType} from "../types/users-types";
@@ -69,6 +69,7 @@ const CommentsSchema = new mongoose.Schema<IComment>({
 })
 
 export const CommentsModel = mongoose.model(SETTINGS.DB_COLLECTION_NAME.COMMENTS, CommentsSchema)
+export type CommentDocument = HydratedDocument<IComment>
 
 const LikesSchema = new mongoose.Schema<ILike>({
     status: {

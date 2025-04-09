@@ -47,7 +47,7 @@ export class CommentsService {
                 data: null
             }
         }
-        const updateLike = await this.likeService.setLikeStatus(parentId, likeStatus, userId)
+        const updateLike = await this.likeService.setLikeStatus(comment, likeStatus, userId )
         if (updateLike.status === 401 || updateLike.status === 404) {
             return {
                 status: updateLike.status,
@@ -55,13 +55,7 @@ export class CommentsService {
                 data: null
             }
         }
-        const likesCountInfo = await this.likeService.calculateLikesByParentId(parentId)
 
-        comment.likesInfo = {
-            likesCount: likesCountInfo.likesCount,
-            dislikesCount: likesCountInfo.dislikesCount,
-        }
-        await this.commentsRepository.save(comment)
         return {
             status: 204,
             errors: [],

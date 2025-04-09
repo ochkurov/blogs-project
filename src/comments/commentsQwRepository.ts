@@ -24,6 +24,7 @@ export class CommentsQwRepository {
             .toArray()
 
         const commentsCount = await commentsCollection.countDocuments({postId})
+        const likeCounts = 
         return {
             pagesCount: Math.ceil(commentsCount / pageSize),
             page: pageNumber,
