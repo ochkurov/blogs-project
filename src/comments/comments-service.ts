@@ -2,7 +2,7 @@ import {DbCommentType} from "../types/comment-types";
 import {CommentsRepository} from "./commentsRepository";
 import {UsersRepository} from "../users/usersRepository";
 import {LikeStatusEnum} from "../likes /domain/like.entity";
-import {CommentsModel} from "../db/mongoDb";
+import {CommentDocument, CommentsModel} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
 import {LikeService} from "../likes /application/like-service";
 
@@ -39,7 +39,7 @@ export class CommentsService {
     }
 
     async updateLikeStatus(parentId: string, likeStatus: LikeStatusEnum, userId: string) {
-        const comment = await CommentsModel.findById({_id: new ObjectId(parentId)})
+        const comment= await CommentsModel.findById({_id: new ObjectId(parentId)})
         if (!comment) {
             return {
                 status: 404,

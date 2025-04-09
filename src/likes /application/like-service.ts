@@ -80,7 +80,7 @@ private calcuteLikesCount ({
                         data: null
                     }
                 }
-                const presentLikeStatus = findLike.status
+                const presentLikeStatus: LikeStatusEnum = findLike.status
                 findLike.status = likeStatus
                 await findLike.validate()
                 await findLike.save()
@@ -93,13 +93,16 @@ private calcuteLikesCount ({
                 })
                 comment.likesInfo.likesCount = likesCount
                 comment.likesInfo.dislikesCount = dislikesCount
+
                 await comment.save()
+
                 return {
                     status: 204,
                     errors: [],
                     data: null
                 }
             }
+
             const newLike = new LikesModel({
                 status: likeStatus,
                 userId: userId,
@@ -108,13 +111,13 @@ private calcuteLikesCount ({
             })
 
             await this.likeRepository.save(newLike)
-            const {likesCount , dislikesCount} = this.calcuteLikesCount({
-                likesCount: comment.likesInfo.likesCount,
-                dislikesCount: comment.likesInfo.dislikesCount,
-                updatedLikeStatus: likeStatus
-            })
-            comment.likesInfo.likesCount = likesCount
-            comment.likesInfo.dislikesCount = dislikesCount
+
+            if (newLike.status === LikeStatusEnum.Like) {
+                comment.likesInfo.likesCount +=1
+            } else if (newLike.status === LikeStatusEnum.Dislike) {
+                comment.likesInfo.dislikesCount +=1
+            }
+
             await comment.save()
             return {
                 status: 204,
