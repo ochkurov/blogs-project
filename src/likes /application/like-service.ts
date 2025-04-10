@@ -125,7 +125,7 @@ private calcuteLikesCount ({
                 data: null
             }
         } catch (error:unknown) {
-            return {ы
+            return {
                 status: 400,
                 errors: [],
                 data: null
