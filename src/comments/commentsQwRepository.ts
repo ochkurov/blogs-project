@@ -9,7 +9,7 @@ export class CommentsQwRepository {
     }
     async getCommentById(id: string):Promise<DbResponseCommentType> {
         return await commentsCollection.findOne({_id: new ObjectId(id)})
-    }
+    }ddd
     async getCommentsByPostId(postId: string, commentQuery: QueryInputType) {
         const {sortBy, sortDirection, pageSize, pageNumber} = commentQuery
         const filteredComments: any = {}
