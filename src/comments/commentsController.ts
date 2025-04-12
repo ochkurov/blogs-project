@@ -17,6 +17,7 @@ export class CommentsController {
 
     async getCommentsById(req: Request<{ id: string }>, res: Response<CommentsViewModel>) {
         const commentId = req.params.id;
+        const userId = req.user!._id.toString()
 
         if (!commentId) {
             res.sendStatus(404)
@@ -32,7 +33,11 @@ export class CommentsController {
             content: comment.content,
             commentatorInfo: comment.commentatorInfo,
             createdAt: comment.createdAt,
-
+            likesInfo:{
+                likesCount:comment.likesInfo.likesCount,
+                dislikesCount:comment.likesInfo.dislikesCount,
+                myStatus: comment.likesInfo.myStatus
+            }
 
         }
         res.status(200).json(commentForResponse);
@@ -98,10 +103,8 @@ export class CommentsController {
         const commentId = req.params.id;
         const likeStatus = req.body.likeStatus;
         const userId = req.user!._id.toString();
-
         const result = await this.commentsService.updateLikeStatus(commentId , likeStatus , userId)
-
-
+        return res.sendStatus(result.status)
     }
-}x``
+}
 

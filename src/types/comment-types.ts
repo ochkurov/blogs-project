@@ -1,12 +1,17 @@
 import {ObjectId} from "mongodb";
 import {HydratedDocument} from "mongoose";
-import {ILike} from "../likes /domain/like.entity";
+import {LikeStatusEnum} from "../likes /domain/like.entity";
 
 export type CommentsViewModel = {
     id: string
     content: string
     commentatorInfo: CommentatorInfo
     createdAt: string
+    likesInfo: {
+        likesCount: number,
+        dislikesCount: number,
+        myStatus: LikeStatusEnum
+    }
 }
 export type DbResponseCommentType = {
     _id: ObjectId
@@ -14,7 +19,10 @@ export type DbResponseCommentType = {
     commentatorInfo: CommentatorInfo
     createdAt: string
     postId: string
-
+    likesInfo: {
+        likesCount: number,
+        dislikesCount: number,
+    }
 }
 
 export type CommentatorInfo = {
