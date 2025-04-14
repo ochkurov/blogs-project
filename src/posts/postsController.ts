@@ -21,6 +21,8 @@ export class PostsController {
 
     async getCommentsByPostId(req: Request<{ id: string }, {}, {}, QueryInputType>,
                               res: Response<CommentResponseType>) {
+
+        const userId = req.user!._id.toString()
         const postId = req.params.id;
         const query = req.query
         const commentQuery: QueryInputType = postQueryPagingDef(query)
@@ -41,7 +43,7 @@ export class PostsController {
             return
         }
 
-        const sortiredComments = await this.commentsQwRepository.getCommentsByPostId(postId, commentQuery);
+        const sortiredComments = await this.commentsQwRepository.getCommentsByPostId(postId, commentQuery,userId);
 
         if (!sortiredComments) {
             res.sendStatus(404)

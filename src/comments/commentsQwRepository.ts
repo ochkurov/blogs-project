@@ -1,5 +1,5 @@
 import {QueryInputType} from "../types/posts-types";
-import {commentsCollection, LikesModel} from "../db/mongoDb";
+import {CommentsModel, LikesModel} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
 import {CommentsViewModel, DbResponseCommentType} from "../types/comment-types";
 import {LikeStatusEnum} from "../likes /domain/like.entity";
@@ -10,9 +10,12 @@ export class CommentsQwRepository {
 
     }
 
-    async getCommentById(userId:string ,commentId: string): Promise<CommentsViewModel> {
+    async getCommentById(userId: string, commentId: string): Promise<CommentsViewModel | null> {
 
-        const comment = await commentsCollection.findOne({_id: new ObjectId(commentId)})
+        const comment = await CommentsModel.findOne({_id: new ObjectId(commentId)})
+        if (!comment) {
+            return null;
+        }
         let status = LikeStatusEnum.None;
         if (userId) {
             const like = await LikesModel.findOne({authorId: userId, parentId: commentId}).lean();
@@ -20,7 +23,7 @@ export class CommentsQwRepository {
                 status = like.status;
             }
         }
-        return mappedCommentToView(status , comment)
+        return mappedCommentToView(status, comment)
     }
 
     async getCommentsByPostId(postId: string, commentQuery: QueryInputType, userId: string) {
@@ -29,17 +32,17 @@ export class CommentsQwRepository {
         if (postId) {
             filteredComments.postId = postId;
         }
-        const comments = await commentsCollection
+        const comments = await CommentsModel
             .find(filteredComments)
             .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1})
             .skip((pageNumber - 1) * pageSize)
             .limit(pageSize)
-            .toArray()
+            .lean()
 
-        const commentsCount = await commentsCollection.countDocuments({postId})
+        const commentsCount = await CommentsModel.countDocuments({postId})
         let userLikesMap = new Map<string, LikeStatusEnum>();
         if (userId) {
-            const commentIds = comments.map((comment:) => comment._id.toString());
+            const commentIds = comments.map((comment) => comment._id.toString());
 
             // Найти все лайки, которые поставил пользователь для данных комментариев
             const userLikes = await LikesModel
@@ -58,8 +61,8 @@ export class CommentsQwRepository {
             pageSize,
             totalCount: commentsCount,
             items: comments.map((c: DbResponseCommentType): CommentsViewModel => {
-                const likeStatus = userLikesMap.get(c._id.toString()) ?? LikeStatusEnum.None;
-                return mappedCommentToView(likeStatus , c)
+                    const likeStatus = userLikesMap.get(c._id.toString()) ?? LikeStatusEnum.None;
+                    return mappedCommentToView(likeStatus, c)
                 }
             )
         }
