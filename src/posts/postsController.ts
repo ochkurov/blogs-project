@@ -9,6 +9,7 @@ import {sortType} from "../types/sort-types";
 import {PostsService} from "./posts-service";
 import {APIErrorResultType} from "../types/errors-types";
 import {CommentsService} from "../comments/comments-service";
+import {LikeStatusEnum} from "../likes /domain/like.entity";
 
 
 export class PostsController {
@@ -133,7 +134,7 @@ export class PostsController {
             return
         }
 
-        const comment = await this.commentsQwRepository.getCommentById(commentId)
+        const comment = await this.commentsQwRepository.getCommentById(commentId,userId)
 
         if (!comment) {
             res.sendStatus(404)
@@ -141,13 +142,18 @@ export class PostsController {
         }
 
         const commentForResponse: CommentsViewModel = {
-            id: comment._id.toString(),
+            id: comment.id.toString(),
             content: comment.content,
             commentatorInfo: {
                 userId: comment.commentatorInfo.userId,
                 userLogin: comment.commentatorInfo.userLogin
             },
-            createdAt: comment.createdAt
+            createdAt: comment.createdAt,
+            likesInfo: {
+                likesCount: 0,
+                dislikesCount: 0 ,
+                myStatus: LikeStatusEnum.None
+            }
 
         }
         res.status(201).json(commentForResponse)
@@ -189,4 +195,4 @@ export class PostsController {
         } else res.sendStatus(204)
     }
 }
-``
+

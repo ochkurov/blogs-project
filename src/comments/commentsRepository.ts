@@ -4,7 +4,7 @@ import {ObjectId} from "mongodb";
 
 export class CommentsRepository {
     async getCommentById(id: string): Promise<DbResponseCommentType | null> {
-        return await CommentsModel.findOne({_id: new ObjectId(id)}); //??
+        return CommentsModel.findOne({_id: new ObjectId(id)}); //??
     }
     async updateComment(id: string, content: string): Promise<boolean> {
         const res = await CommentsModel.updateOne(
@@ -15,7 +15,7 @@ export class CommentsRepository {
     }
     async createComment(comment: DbCommentType) {
         let res = await CommentsModel.insertOne(comment)
-        return res.insertedId.toString()
+        return res._id.toString();
     }
     async deleteComment(id: string): Promise<boolean> {
         const deletedRes = await CommentsModel.deleteOne({_id: new ObjectId(id)})

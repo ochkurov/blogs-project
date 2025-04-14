@@ -94,8 +94,6 @@ export async function runDb(url: string): Promise<boolean> {
 
     try {
         await mongoose.connect(url);
-        /*await client.connect();*/
-        /*await db.command({ping: 1});*/
         if (mongoose.connection.readyState !== 1) {
             throw new Error('Error connecting to MongoDB')
         }

@@ -1,18 +1,29 @@
 import {QueryInputType} from "../types/posts-types";
-import {commentsCollection} from "../db/mongoDb";
+import {commentsCollection, LikesModel} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
 import {CommentsViewModel, DbResponseCommentType} from "../types/comment-types";
+import {LikeStatusEnum} from "../likes /domain/like.entity";
+import {mappedCommentToView} from "./mapper/mappedCommentToView";
 
 export class CommentsQwRepository {
     async getComments() {
 
     }
 
-    async getCommentById(id: string): Promise<DbResponseCommentType> {
-        return await commentsCollection.findOne({_id: new ObjectId(id)})
+    async getCommentById(userId:string ,commentId: string): Promise<CommentsViewModel> {
+
+        const comment = await commentsCollection.findOne({_id: new ObjectId(commentId)})
+        let status = LikeStatusEnum.None;
+        if (userId) {
+            const like = await LikesModel.findOne({authorId: userId, parentId: commentId}).lean();
+            if (like) {
+                status = like.status;
+            }
+        }
+        return mappedCommentToView(status , comment)
     }
 
-    async getCommentsByPostId(postId: string, commentQuery: QueryInputType) {
+    async getCommentsByPostId(postId: string, commentQuery: QueryInputType, userId: string) {
         const {sortBy, sortDirection, pageSize, pageNumber} = commentQuery
         const filteredComments: any = {}
         if (postId) {
@@ -26,31 +37,31 @@ export class CommentsQwRepository {
             .toArray()
 
         const commentsCount = await commentsCollection.countDocuments({postId})
-        const likeStatus
+        let userLikesMap = new Map<string, LikeStatusEnum>();
+        if (userId) {
+            const commentIds = comments.map((comment:) => comment._id.toString());
+
+            // Найти все лайки, которые поставил пользователь для данных комментариев
+            const userLikes = await LikesModel
+                .find({authorId: userId, parentId: {$in: commentIds}})
+                .lean();
+
+            // Создаем Map для быстрого поиска лайков по commentId
+            userLikes.forEach((like) => {
+                userLikesMap.set(like.parentId.toString(), like.status);
+            });
+        }
+
         return {
             pagesCount: Math.ceil(commentsCount / pageSize),
             page: pageNumber,
             pageSize,
             totalCount: commentsCount,
             items: comments.map((c: DbResponseCommentType): CommentsViewModel => {
-                    return {
-                        id: c._id.toString(),
-                        content: c.content,
-                        commentatorInfo: {
-                            userId: c.commentatorInfo.userId,
-                            userLogin: c.commentatorInfo.userLogin
-                        },
-                        createdAt: c.createdAt,
-                        likesInfo: {
-                            likesCount: c.likesInfo.likesCount,
-                            dislikesCount: c.likesInfo.likesCount,
-                            myStatus:
-
-                        }
-                    }
+                const likeStatus = userLikesMap.get(c._id.toString()) ?? LikeStatusEnum.None;
+                return mappedCommentToView(likeStatus , c)
                 }
             )
         }
     }
 }
-

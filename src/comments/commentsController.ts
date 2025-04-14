@@ -23,24 +23,12 @@ export class CommentsController {
             res.sendStatus(404)
             return;
         }
-        const comment = await this.commentsQwRepository.getCommentById(commentId);
-        if (!comment) {
+        const result = await this.commentsQwRepository.getCommentById( userId , commentId);
+        if (!result) {
             res.sendStatus(404)
             return
         }
-        const commentForResponse: CommentsViewModel = {
-            id: comment._id.toString(),
-            content: comment.content,
-            commentatorInfo: comment.commentatorInfo,
-            createdAt: comment.createdAt,
-            likesInfo:{
-                likesCount:comment.likesInfo.likesCount,
-                dislikesCount:comment.likesInfo.dislikesCount,
-                myStatus: comment.likesInfo.myStatus
-            }
-
-        }
-        res.status(200).json(commentForResponse);
+        res.status(200).json(result);
 
     }
 
