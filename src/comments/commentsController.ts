@@ -6,6 +6,7 @@ import {CommentsQwRepository} from "./commentsQwRepository";
 import {ObjectId} from "mongodb";
 import {LikeStatusEnum} from "../likes /domain/like.entity";
 
+
 export class CommentsController {
 
     constructor(
@@ -17,13 +18,13 @@ export class CommentsController {
 
     async getCommentsById(req: Request<{ id: string }>, res: Response<CommentsViewModel>) {
         const commentId = req.params.id;
-        const userId = req.user!._id.toString()
+        const userId = req.user?._id?.toString()
 
         if (!commentId) {
             res.sendStatus(404)
             return;
         }
-        const result = await this.commentsQwRepository.getCommentById( userId , commentId);
+        const result = await this.commentsQwRepository.getCommentById( commentId , userId );
         if (!result) {
             res.sendStatus(404)
             return
@@ -87,14 +88,23 @@ export class CommentsController {
         res.sendStatus(204)
     }
 
-    async updateLikeStatus(req: Request<{ id: string }, {}, { likeStatus: LikeStatusEnum }>, res: Response) {
+    async updateLikeStatus(req: Request<{ id: string }, any, { likeStatus: LikeStatusEnum }>, res: Response) {
         const commentId = req.params.id;
         const likeStatus = req.body.likeStatus;
         const userId = req.user!._id.toString();
-        if (!userId) return res.sendStatus(404)
+
+        if (!commentId) {
+            res.sendStatus(404)
+            return;
+        }
+
+        if (!userId) {
+            res.sendStatus(404)
+            return
+        }
 
         const result = await this.commentsService.updateLikeStatus(commentId , likeStatus , userId)
-
+        console.log(result + ` vlad`)
         res.sendStatus(result.status)
         return
     }

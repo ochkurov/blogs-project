@@ -6,19 +6,18 @@ import {LikeStatusEnum} from "../likes /domain/like.entity";
 import {mappedCommentToView} from "./mapper/mappedCommentToView";
 
 export class CommentsQwRepository {
-    async getComments() {
 
-    }
-
-    async getCommentById(commentId: string,userId: string ): Promise<CommentsViewModel | null> {
+    async getCommentById(commentId: string, userId: string | undefined  ): Promise<CommentsViewModel | null> {
 
         const comment = await CommentsModel.findOne({_id: new ObjectId(commentId)})
+
         if (!comment) {
             return null;
         }
+
         let status = LikeStatusEnum.None;
         if (userId) {
-            const like = await LikesModel.findOne({authorId: userId, parentId: commentId}).lean();
+            const like = await LikesModel.findOne({userId: new ObjectId(userId), parentId: new ObjectId(commentId)}).lean();
             if (like) {
                 status = like.status;
             }
@@ -46,7 +45,7 @@ export class CommentsQwRepository {
 
             // Найти все лайки, которые поставил пользователь для данных комментариев
             const userLikes = await LikesModel
-                .find({authorId: userId, parentId: {$in: commentIds}})
+                .find({ userId: new ObjectId(userId) , parentId: {$in: commentIds}})
                 .lean();
 
             // Создаем Map для быстрого поиска лайков по commentId

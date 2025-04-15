@@ -10,7 +10,7 @@ export const getUserIdMiddleware = async (req: Request<any ,any , any , any>, re
             const userId: any = await jwtService.getUserIdByToken(token); // Используем decode без проверки подписи
             console.log(userId, 'extractUserIdMiddleware');
             if (userId) {
-                req.user!._id = userId; // Добавляем userId в req
+                req.user = {...req.user! , _id: userId}// Добавляем userId в req
             }
         } catch (error) {
             console.error("Error decoding token:", error);
