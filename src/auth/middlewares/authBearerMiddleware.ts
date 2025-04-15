@@ -9,7 +9,7 @@ export class AuthBearerGuard {
 
     }
 
-    public execute = async (req: Request, res: Response, next: NextFunction) => {
+    public execute = async (req: Request<any ,any , any , any>, res: Response, next: NextFunction) => {
 
         if (!req.headers.authorization) {
             res.sendStatus(401)

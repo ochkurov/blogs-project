@@ -43,6 +43,7 @@ export type DbCommentType = {
     commentatorInfo: CommentatorInfo
     createdAt: string
     postId: string
+    likesInfo: LikesInfoType
 }
 type LikesInfoType = {
     likesCount: number,

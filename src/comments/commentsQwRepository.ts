@@ -10,7 +10,7 @@ export class CommentsQwRepository {
 
     }
 
-    async getCommentById(userId: string, commentId: string): Promise<CommentsViewModel | null> {
+    async getCommentById(commentId: string,userId: string ): Promise<CommentsViewModel | null> {
 
         const comment = await CommentsModel.findOne({_id: new ObjectId(commentId)})
         if (!comment) {

@@ -1,7 +1,7 @@
 import {Request, Response, NextFunction} from "express";
 import {jwtService} from "../application/jwt-service";
 
-export const getUserIdMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+export const getUserIdMiddleware = async (req: Request<any ,any , any , any>, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization || '';
 
     if (authHeader && authHeader.startsWith("Bearer ")) {

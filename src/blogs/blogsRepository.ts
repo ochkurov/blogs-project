@@ -1,6 +1,6 @@
 import {ObjectId} from "mongodb";
 import {BlogDbType, BlogInputModel, BlogResponseType} from "../types/blog-types";
-import {BlogsModel} from "../db/mongoDb";
+import {blogsCollection, BlogsModel} from "../db/mongoDb";
 
 export class BlogsRepository {
     async getAllBlogs(pageNumber:number,
@@ -15,12 +15,12 @@ export class BlogsRepository {
             filter = {name: {$regex: searchNameTerm, $options: "i"}};
         }
 
-        return await BlogsModel
+        return await blogsCollection
             .find(filter)
             .sort({[sortBy]: sortDirection})
             .skip((pageNumber - 1) * pageSize)
             .limit(pageSize)
-            .lean();
+            .toArray();
     }
     async getBlogCount (searchNameTerm: string | null):Promise<number> {
         let filter : any = {}
@@ -28,29 +28,29 @@ export class BlogsRepository {
         if (searchNameTerm) {
             filter.name = {$regex: searchNameTerm , $options: "i" };
         }
-        return await BlogsModel.countDocuments(filter)
+        return await blogsCollection.countDocuments(filter)
     }
 
     async getBlogById(_id: ObjectId): Promise<BlogResponseType | null>  {
 
-        return await BlogsModel.findOne({_id} );
+        return await blogsCollection.findOne({_id} );
 
     }
 
     async getVideoByUUID(_id: ObjectId) {
 
-        return await BlogsModel.findOne({_id} )
+        return await blogsCollection.findOne({_id} )
     }
 
     async createBlog(newBlog: BlogDbType): Promise<ObjectId> {
 
-        const res = await BlogsModel.insertOne(newBlog)
+        const res = await blogsCollection.insertOne(newBlog)
         return res.insertedId
 
     }
 
     async updateBlog(_id: ObjectId, body: BlogInputModel): Promise<boolean> {
-        const res = await BlogsModel.updateOne(
+        const res = await blogsCollection.updateOne(
             {_id},
             {$set: {...body}},
         )
@@ -60,10 +60,10 @@ export class BlogsRepository {
 
     async deleteBlog(_id: ObjectId) {
 
-        const blog = await BlogsModel.findOne({ _id })
+        const blog = await blogsCollection.findOne({ _id })
 
         if (blog) {
-            const res = await BlogsModel.deleteOne({_id: blog._id})
+            const res = await blogsCollection.deleteOne({_id: blog._id})
             if (res.deletedCount > 0) return true
         }
         return false

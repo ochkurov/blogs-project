@@ -91,8 +91,12 @@ export class CommentsController {
         const commentId = req.params.id;
         const likeStatus = req.body.likeStatus;
         const userId = req.user!._id.toString();
+        if (!userId) return res.sendStatus(404)
+
         const result = await this.commentsService.updateLikeStatus(commentId , likeStatus , userId)
-        return res.sendStatus(result.status)
+
+        res.sendStatus(result.status)
+        return
     }
 }
 

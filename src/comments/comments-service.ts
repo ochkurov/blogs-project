@@ -31,11 +31,13 @@ export class CommentsService {
             },
             createdAt: new Date().toISOString(),
             postId: postId,
+            likesInfo: {
+                likesCount: 0,
+                dislikesCount: 0
+            }
 
         }
-
         return await this.commentsRepository.createComment(comment);
-
     }
 
     async updateLikeStatus(parentId: string, likeStatus: LikeStatusEnum, userId: string) {

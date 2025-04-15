@@ -10,6 +10,7 @@ import {PostsService} from "./posts-service";
 import {APIErrorResultType} from "../types/errors-types";
 import {CommentsService} from "../comments/comments-service";
 import {LikeStatusEnum} from "../likes /domain/like.entity";
+import {log} from "node:util";
 
 
 export class PostsController {
@@ -25,6 +26,7 @@ export class PostsController {
         const userId = req.user!._id.toString()
         const postId = req.params.id;
         const query = req.query
+
         const commentQuery: QueryInputType = postQueryPagingDef(query)
 
         if (!postId) {
@@ -43,7 +45,7 @@ export class PostsController {
             return
         }
 
-        const sortiredComments = await this.commentsQwRepository.getCommentsByPostId(postId, commentQuery,userId);
+        const sortiredComments = await this.commentsQwRepository.getCommentsByPostId(postId, commentQuery, userId);
 
         if (!sortiredComments) {
             res.sendStatus(404)
@@ -132,14 +134,13 @@ export class PostsController {
         const commentId = await this.commentsService.createComment(userId, postId, content)
 
         if (!commentId) {
-            res.sendStatus(404)
+            res.sendStatus(500)
             return
         }
 
-        const comment = await this.commentsQwRepository.getCommentById(commentId,userId)
-
+        const comment = await this.commentsQwRepository.getCommentById(commentId, userId)
         if (!comment) {
-            res.sendStatus(404)
+            res.sendStatus(500)
             return
         }
 
@@ -153,7 +154,7 @@ export class PostsController {
             createdAt: comment.createdAt,
             likesInfo: {
                 likesCount: 0,
-                dislikesCount: 0 ,
+                dislikesCount: 0,
                 myStatus: LikeStatusEnum.None
             }
 

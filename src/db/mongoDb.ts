@@ -13,6 +13,8 @@ import {ILike, LikeStatusEnum} from "../likes /domain/like.entity";
 export let deviceCollection: Collection<SessionType>
 export let countRequestsCollection: Collection<any>
 export let usersCollection: Collection<any>
+export let postsCollection: Collection<any>
+export let blogsCollection: Collection<any>
 
 const BlogsSchema = new mongoose.Schema<BlogDbType>({
     name: { type:String , required:true},
@@ -93,6 +95,9 @@ export async function runDb(url: string): Promise<boolean> {
     deviceCollection = db.collection<SessionType>(SETTINGS.DB_COLLECTION_NAME.TOKEN)
     countRequestsCollection = db.collection<any>(SETTINGS.DB_COLLECTION_NAME.RATE)
     usersCollection = db.collection<any>(SETTINGS.DB_COLLECTION_NAME.USERS)
+    postsCollection = db.collection<any>(SETTINGS.DB_COLLECTION_NAME.POSTS)
+    blogsCollection = db.collection<any>(SETTINGS.DB_COLLECTION_NAME.BLOGS)
+
 
     try {
         await mongoose.connect(url);

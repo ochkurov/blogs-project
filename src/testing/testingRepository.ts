@@ -1,11 +1,11 @@
-import {BlogsModel, PostsModel, usersCollection} from "../db/mongoDb";
+import {blogsCollection, BlogsModel, postsCollection, PostsModel, usersCollection} from "../db/mongoDb";
 
 export class TestingRepository {
 
     async deleteAllBlogs() {
-        return await BlogsModel.deleteMany({}) ,
+        return await blogsCollection.deleteMany({}) ,
 
-            await PostsModel.deleteMany({}) ,
+            await postsCollection.deleteMany({}) ,
 
             await usersCollection.deleteMany({})
     }
