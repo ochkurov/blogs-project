@@ -61,7 +61,7 @@ export class CommentsController {
         } else res.sendStatus(204)
 
     }
-
+s
     async deleteComment(req: Request<{ id: string }>, res: Response): Promise<void> {
         const commentId = req.params.id;
         const userId = req.user?._id || ''
