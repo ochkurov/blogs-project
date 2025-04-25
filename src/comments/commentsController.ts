@@ -26,7 +26,7 @@ export class CommentsController {
         }
         const result = await this.commentsQwRepository.getCommentById( commentId , userId );
         if (!result) {
-            res.sendStatus(404)c
+            res.sendStatus(404)
             return
         }
         res.status(200).json(result);
