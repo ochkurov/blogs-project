@@ -1,4 +1,5 @@
 import {ObjectId} from "mongodb";
+import {LikeStatusEnum} from "../likes /domain/like.entity";
 
 export type PostViewModel = {
     id: string;
@@ -25,6 +26,17 @@ export type CreatePostType = {
     blogId: string
     blogName: string
     createdAt: string,
+    extendedLikesInfo: {
+        likesCount: number,
+        dislikesCount: number,
+        myStatus: LikeStatusEnum,
+        newestLikes: [
+            {
+                addedAt: string,
+                userId: string,
+                login: string
+            }]
+    }
 }
 export type PostInputModel = {
     title: string,

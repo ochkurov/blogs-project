@@ -4,6 +4,7 @@ import {sortType} from "../types/sort-types";
 import {PostsRepository} from "./postsRepository";
 import {BlogsRepository} from "../blogs/blogsRepository";
 import {getPostViewModel} from "./output/getPostViewModel";
+import {LikeStatusEnum} from "../likes /domain/like.entity";
 
 
 export class PostsService {
@@ -74,6 +75,17 @@ export class PostsService {
             blogId: body.blogId,
             blogName: blog.name || " new Name " ,
             createdAt: new Date().toISOString(),
+            extendedLikesInfo: {
+                likesCount: 0,
+                dislikesCount: 0,
+                myStatus: LikeStatusEnum.None,
+                newestLikes: [
+                    {
+                        addedAt: new Date().toISOString(),
+                        userId: string,
+                        login: string
+        }]
+    }
         }
 
         return await this.postsRepository.createPost(newPost)

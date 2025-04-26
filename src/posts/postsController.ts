@@ -197,9 +197,10 @@ export class PostsController {
             return
         } else res.sendStatus(204)
     }
-    async updateLikeStatus (req: Request<{ id: string }, any, { likeStatus: LikeStatusEnum }> , res: Response) {
+
+    async updateLikeStatus(req: Request<{ id: string }, any, { likeStatus: LikeStatusEnum }>, res: Response) {
         const postId = req.params.id
-const likeStatus = req.body.likeStatus
+        const likeStatus = req.body.likeStatus
     }
 }
 
