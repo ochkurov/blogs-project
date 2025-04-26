@@ -104,7 +104,6 @@ export class CommentsController {
         }
 
         const result = await this.commentsService.updateLikeStatus(commentId , likeStatus , userId)
-        console.log(result + ` vlad`)
         res.sendStatus(result.status)
         return
     }

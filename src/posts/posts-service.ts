@@ -5,17 +5,23 @@ import {PostsRepository} from "./postsRepository";
 import {BlogsRepository} from "../blogs/blogsRepository";
 import {getPostViewModel} from "./output/getPostViewModel";
 import {LikeStatusEnum} from "../likes /domain/like.entity";
+import {PostMapper} from "./mapper /PostMapper";
+import {PostModel} from "./domain/postSchema";
+import {PostsModel} from "../db/mongoDb";
+import {LikeService} from "../likes /application/like-service";
 
 
 export class PostsService {
 
     constructor(private postsRepository: PostsRepository,
-    private blogsRepository: BlogsRepository) {
+                private blogsRepository: BlogsRepository,
+                private likeService: LikeService
+    ) {
 
     }
-    async getAllPosts (sortData:sortType): Promise<ResponsePostsType>
-    {
-        const { pageNumber , pageSize , sortBy , sortDirection } = sortData
+
+    async getAllPosts(sortData: sortType): Promise<ResponsePostsType> {
+        const {pageNumber, pageSize, sortBy, sortDirection} = sortData
 
         const posts = await this.postsRepository.getAllPosts(sortData)
 
@@ -23,79 +29,76 @@ export class PostsService {
         const mappedPosts = posts.map(getPostViewModel)
 
         return {
-            pagesCount: Math.ceil( postsCount / pageSize),
+            pagesCount: Math.ceil(postsCount / pageSize),
             page: pageNumber,
             pageSize,
             totalCount: postsCount,
-            items : mappedPosts
+            items: mappedPosts
         }
     }
-    async getPostsFromBlogId ( blogId: string, sortData: sortType ) {
 
-        const { pageNumber , pageSize , sortBy , sortDirection } = sortData
+    async getPostsFromBlogId(blogId: string, sortData: sortType) {
 
-        const posts = await this.postsRepository.getPostsByBlogId(blogId , sortData)
+        const {pageNumber, pageSize, sortBy, sortDirection} = sortData
+
+        const posts = await this.postsRepository.getPostsByBlogId(blogId, sortData)
         if (posts.length < 1) return null
 
         const postsCount = await this.postsRepository.getPostsCountById(blogId)
         const mappedPosts = posts.map(getPostViewModel)
 
         return {
-            pagesCount: Math.ceil( postsCount / pageSize),
+            pagesCount: Math.ceil(postsCount / pageSize),
             page: pageNumber,
             pageSize,
             totalCount: postsCount,
-            items : mappedPosts
+            items: mappedPosts
         }
 
     }
-    async getPostById ( id: string ):Promise<PostViewModel | null> {
-        return this.postsRepository.getPostById( new ObjectId( id ) )
-            .then(post => post ?  getPostViewModel(post): null)
+
+    async getPostById(id: string): Promise<PostViewModel | null> {
+        return this.postsRepository.getPostById(new ObjectId(id))
+            .then(post => post ? getPostViewModel(post) : null)
     }
-    async getPostByMongoID (_id: ObjectId) {
+
+    async getPostByMongoID(_id: ObjectId) {
         return this.postsRepository.getPostById(_id)
             .then(post => post ? getPostViewModel(post) : null)
     }
 
-    async createPost (body: PostInputModel) : Promise<ObjectId | null> {
+    async createPost(body: PostInputModel): Promise<ObjectId | null> {
 
-        let blog = await this.blogsRepository.getBlogById( new ObjectId(body.blogId) )
+        let blog = await this.blogsRepository.getBlogById(new ObjectId(body.blogId))
 
 
         if (!blog) {
             return null
         }
-
-
-        let newPost: CreatePostType = {
-            title: body.title,
-            shortDescription: body.shortDescription,
-            content: body.content,
-            blogId: body.blogId,
-            blogName: blog.name || " new Name " ,
-            createdAt: new Date().toISOString(),
-            extendedLikesInfo: {
-                likesCount: 0,
-                dislikesCount: 0,
-                myStatus: LikeStatusEnum.None,
-                newestLikes: [
-                    {
-                        addedAt: new Date().toISOString(),
-                        userId: string,
-                        login: string
-        }]
+        const newPost = PostMapper.makePostDTO(body, blog.name)
+        const post = PostModel.makeInstanse(newPost)
+        const result = await this.postsRepository.save(post)
+        return result._id
     }
+
+    async updateLikeStatus(parentId: string, likeStatus: LikeStatusEnum, userId: string) {
+        const post = await PostModel.findById({_id: new ObjectId(parentId)})
+        if (!post) {
+            return {
+                status: 404,
+                errors: [],
+                data: null
+            }
         }
-
-        return await this.postsRepository.createPost(newPost)
-
+        const updateLike = await this.likeService.setLikeStatusByPost(post , likeStatus , userId)
     }
-    async updatePost (id: string, body: PostInputModel ) {
 
-        return await this.postsRepository.updatePost( new ObjectId(id), body )
+    async updatePost(id: string, body: PostInputModel) {
+
+        return await this.postsRepository.updatePost(new ObjectId(id), body)
     }
-    async deletePost (id: string) {
-        return await this.postsRepository.deletePost( new ObjectId(id) )
+
+    async deletePost(id: string) {
+        return await this.postsRepository.deletePost(new ObjectId(id))
     }
 }

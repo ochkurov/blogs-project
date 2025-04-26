@@ -34,7 +34,6 @@ const PostsSchema = new mongoose.Schema<CreatePostType>({
     createdAt: { type:String, required:true},
 })
 
-export const PostsModel = mongoose.model(SETTINGS.DB_COLLECTION_NAME.POSTS, PostsSchema)
 
 const UsersSchema = new mongoose.Schema<UsersSchemaType>({
     accountData: {

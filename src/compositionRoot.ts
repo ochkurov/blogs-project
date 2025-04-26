@@ -35,10 +35,10 @@ const sessionQwRepository = new SessionQwRepository()
 const likeRepository = new LikeRepository()
 
 const usersService = new UserService(userRepository)
-const postsService = new PostsService(postsRepository , blogsRepository)
 const authService = new AuthService(userRepository, usersService)
-const likeService = new LikeService(userRepository , likeRepository)
+const likeService = new LikeService(userRepository , likeRepository, postsRepository)
 const commentsService = new CommentsService(commentsRepository , userRepository , likeService)
+const postsService = new PostsService(postsRepository , blogsRepository, likeService)
 const blogsService = new BlogsService(blogsRepository)
 const testingRepository = new TestingRepository()
 

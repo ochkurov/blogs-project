@@ -3,8 +3,8 @@ import {IPost, IPostNewestLikes} from "./post-types";
 import {LikeStatusEnum} from "../../likes /domain/like.entity";
 import {PostInputModel} from "../../types/posts-types";
 import {ObjectId} from "mongodb";
+import {SETTINGS} from "../../settings";
 
-export type PostDocument = HydratedDocument<IPost , IPostMethods>
 
  interface IPostMethods {
     updatePost : (postDto: PostInputModel) => void,
@@ -99,4 +99,5 @@ postSchema.static('makeInstanse' , function makeInstanse (postDto:any): PostDocu
         }
     })
 })
-export const PostModel = model<IPost, IPostModel>("posts", postSchema);
+export const PostModel = mongoose.model<IPost, IPostModel>(SETTINGS.DB_COLLECTION_NAME.POSTS, postSchema);
+export type PostDocument = HydratedDocument<IPost , IPostMethods>

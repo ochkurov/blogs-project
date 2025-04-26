@@ -2,6 +2,8 @@ import {postsCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
 import {sortType} from "../types/sort-types";
 import {PostInputModel} from "../types/posts-types";
+import {IPost} from "./domain/post-types";
+import {PostDocument} from "./domain/postSchema";
 
 export class PostsRepository {
 
@@ -19,6 +21,7 @@ export class PostsRepository {
             .toArray()
 
     }
+
     async getPostsByBlogId(blogId: string, sortData: sortType) {
         const {sortBy, sortDirection, pageSize, pageNumber} = sortData;
 
@@ -28,7 +31,7 @@ export class PostsRepository {
             filteredPosts.blogId = blogId;
         }
         return await postsCollection
-            .find(filteredPosts )
+            .find(filteredPosts)
             .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1})
             .skip((pageNumber - 1) * pageSize)
             .limit(pageSize)
@@ -51,13 +54,10 @@ export class PostsRepository {
 
     }
 
-    async createPost(newPost: PostInputModel): Promise<ObjectId | null> {
-
-
-        const res = await postsCollection.insertOne(newPost)
-        return res.insertedId
-
+    async save(post: PostDocument): Promise<PostDocument> {
+        return post.save()
     }
+
     async updatePost(_id: ObjectId, body: PostInputModel): Promise<boolean> {
 
         const res = await postsCollection.updateOne(
@@ -67,6 +67,7 @@ export class PostsRepository {
         return res.matchedCount === 1
 
     }
+
     async deletePost(_id: ObjectId) {
 
         const post = await postsCollection.findOne({_id})

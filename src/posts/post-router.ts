@@ -2,7 +2,7 @@ import {Router} from "express";
 import {authorizationMidleware} from "../middlewares/authorizationMidleware";
 import {postBodyValidation} from "../middlewares/validation/field-validator";
 import {errorsResultMiddleware} from "../middlewares/errorsResultMiddleware";
-import {commentCredentialsValidate} from "../comments/middlewares/CommentCredentionalsValidate";
+import {commentCredentialsValidate, likeStatusValidate} from "../comments/middlewares/CommentCredentionalsValidate";
 import {authBearerMiddleware, postsController} from "../compositionRoot";
 import {getUserIdMiddleware} from "../auth/middlewares/getUserIdMiddleware";
 
@@ -19,4 +19,4 @@ postsRouter.delete('/:id', authorizationMidleware , postsController.deletePost.b
 
 // bearer auth
 postsRouter.post('/:id/comments' , authBearerMiddleware.execute, ...commentCredentialsValidate , errorsResultMiddleware , postsController.createCommentByPostId.bind(postsController))
-postsRouter.post('/:id/like-status' , authBearerMiddleware.execute , postsController.updateLikeStatus.bind(postsController))
+postsRouter.post('/:id/like-status' , authBearerMiddleware.execute , likeStatusValidate, errorsResultMiddleware , postsController.updateLikeStatus.bind(postsController))

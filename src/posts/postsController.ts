@@ -100,6 +100,7 @@ export class PostsController {
         }
 
         const newPost = await this.postsService.getPostByMongoID(postId)
+
         if (!newPost) {
             res.sendStatus(404)
             return
@@ -201,6 +202,17 @@ export class PostsController {
     async updateLikeStatus(req: Request<{ id: string }, any, { likeStatus: LikeStatusEnum }>, res: Response) {
         const postId = req.params.id
         const likeStatus = req.body.likeStatus
+        const userId = req.user!._id.toString();
+        if (!postId) {
+            res.sendStatus(404)
+            return
+        }
+        if (!userId) {
+            res.sendStatus(404)
+            return
+        }
+const result = this.postsService.updateLikeStatus(postId , likeStatus , userId)
+
     }
 }
 
