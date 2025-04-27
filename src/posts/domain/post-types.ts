@@ -7,7 +7,7 @@ export type IPost = {
     content: string, //maxLength: 1000
     blogId: Schema.Types.ObjectId,
     blogName: string,
-    createdAt: string,
+    createdAt: Date,
     extendedLikesInfo: IPostExtendedLikesInfo
 }
 export type IPostExtendedLikesInfo = {
@@ -20,4 +20,14 @@ export type IPostNewestLikes = {
     addedAt: string,
     userId:  string,
     login: string,
+}
+export type PostResponseModel = {
+    id: string,
+    title: string;
+    shortDescription: string, //maxLength: 100
+    content: string, //maxLength: 1000
+    blogId: string,
+    blogName: string,
+    createdAt: string,
+    extendedLikesInfo: IPostExtendedLikesInfo
 }

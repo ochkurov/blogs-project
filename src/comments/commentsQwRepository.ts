@@ -39,6 +39,7 @@ export class CommentsQwRepository {
             .lean()
 
         const commentsCount = await CommentsModel.countDocuments({postId})
+
         let userLikesMap = new Map<string, LikeStatusEnum>();
         if (userId) {
             const commentIds = comments.map((comment) => comment._id.toString());

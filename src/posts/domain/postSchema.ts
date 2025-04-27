@@ -8,14 +8,9 @@ import {SETTINGS} from "../../settings";
 
  interface IPostMethods {
     updatePost : (postDto: PostInputModel) => void,
-    setLikesInfo: (likesDto: LikesDtoType) => void
+    setLikesInfo: (likesDto: IPostNewestLikes[]) => void
 }
 
-type LikesDtoType = {
-    likesCount: number,
-    dislikesCount: number,
-    newLikesInfo: IPostNewestLikes[]
-}
 
 interface IPostModel extends Model<IPost, {}, IPostMethods> {
     makeInstanse: (postDto:any) => PostDocument
@@ -76,10 +71,8 @@ postSchema.method('updatePost' , function updatePost (postDto: any) {
     this.blogName = postDto.blogName;
 })
 
-postSchema.method('setLikesInfo' , function setLikesInfo (likesDto: LikesDtoType) {
-    this.extendedLikesInfo.likesCount = likesDto.likesCount;
-    this.extendedLikesInfo.dislikesCount = likesDto.dislikesCount;
-    this.extendedLikesInfo.newestLikes = likesDto.newLikesInfo;
+postSchema.method('setLikesInfo' , function setLikesInfo (likesDto: IPostNewestLikes[]) {
+    this.extendedLikesInfo.newestLikes = likesDto;
 })
 
 postSchema.static('makeInstanse' , function makeInstanse (postDto:any): PostDocument {

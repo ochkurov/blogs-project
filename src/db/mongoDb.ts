@@ -82,6 +82,10 @@ const LikesSchema = new mongoose.Schema<ILike>({
     userId: {type: Schema.Types.ObjectId, required: true},
     authorName: {type: String, required: true},
     parentId: {type: Schema.Types.ObjectId, required: true},
+    createdAt: {
+        type: Date,
+        default: new Date(),
+    },
 })
 
 export const LikesModel = mongoose.model(SETTINGS.DB_COLLECTION_NAME.LIKES, LikesSchema)

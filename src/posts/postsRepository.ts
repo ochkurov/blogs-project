@@ -1,26 +1,14 @@
-import {postsCollection} from "../db/mongoDb";
+import {LikesModel, postsCollection} from "../db/mongoDb";
 import {ObjectId} from "mongodb";
 import {sortType} from "../types/sort-types";
 import {PostInputModel} from "../types/posts-types";
 import {IPost} from "./domain/post-types";
-import {PostDocument} from "./domain/postSchema";
+import {PostDocument, PostModel} from "./domain/postSchema";
+import {LikeStatusEnum} from "../likes /domain/like.entity";
 
 export class PostsRepository {
 
-    async getAllPosts(sortData: sortType) {
 
-        const {pageNumber, pageSize, sortBy, sortDirection} = sortData
-
-        const filter: any = {}
-
-        return await postsCollection
-            .find(filter)
-            .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1})
-            .skip((pageNumber - 1) * pageSize)
-            .limit(pageSize)
-            .toArray()
-
-    }
 
     async getPostsByBlogId(blogId: string, sortData: sortType) {
         const {sortBy, sortDirection, pageSize, pageNumber} = sortData;

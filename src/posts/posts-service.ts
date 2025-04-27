@@ -1,4 +1,4 @@
-import {CreatePostType, PostInputModel, PostViewModel, ResponsePostsType} from "../types/posts-types";
+import {PostInputModel, PostViewModel, ResponsePostsType} from "../types/posts-types";
 import {ObjectId} from "mongodb";
 import {sortType} from "../types/sort-types";
 import {PostsRepository} from "./postsRepository";
@@ -7,23 +7,26 @@ import {getPostViewModel} from "./output/getPostViewModel";
 import {LikeStatusEnum} from "../likes /domain/like.entity";
 import {PostMapper} from "./mapper /PostMapper";
 import {PostModel} from "./domain/postSchema";
-import {PostsModel} from "../db/mongoDb";
 import {LikeService} from "../likes /application/like-service";
+import {LikeQwRepository} from "../likes /dal/like-QwRepository";
+import {IPostNewestLikes} from "./domain/post-types";
 
 
 export class PostsService {
 
     constructor(private postsRepository: PostsRepository,
                 private blogsRepository: BlogsRepository,
-                private likeService: LikeService
+                private likeService: LikeService,
+            private likeQwRepository: LikeQwRepository
     ) {
 
     }
 
-    async getAllPosts(sortData: sortType): Promise<ResponsePostsType> {
+/*
+    async getAllPosts(sortData: sortType , userId:string): Promise<ResponsePostsType> {
         const {pageNumber, pageSize, sortBy, sortDirection} = sortData
 
-        const posts = await this.postsRepository.getAllPosts(sortData)
+        const posts = await this.postsRepository.getAllPosts(sortData , userId)
 
         const postsCount = await this.postsRepository.getPostsCount()
         const mappedPosts = posts.map(getPostViewModel)
@@ -36,6 +39,7 @@ export class PostsService {
             items: mappedPosts
         }
     }
+*/
 
     async getPostsFromBlogId(blogId: string, sortData: sortType) {
 
@@ -91,6 +95,21 @@ export class PostsService {
             }
         }
         const updateLike = await this.likeService.setLikeStatusByPost(post , likeStatus , userId)
+        if (updateLike.status === 401 || updateLike.status === 404) {
+            return {
+                status: updateLike.status,
+                errors: [],
+                data: null
+            }
+        }
+        const newestLikes:IPostNewestLikes[] = await this.likeQwRepository.getNewestLikesByParentId(post._id.toString() , 3)
+        post.setLikesInfo(newestLikes) //тут может быть ошибка
+        await this.postsRepository.save(post)
+        return {
+            status: updateLike.status,
+            errors: updateLike.errors,
+            data: updateLike.data
+        }
     }
 
     async updatePost(id: string, body: PostInputModel) {

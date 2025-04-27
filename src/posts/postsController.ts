@@ -10,14 +10,16 @@ import {PostsService} from "./posts-service";
 import {APIErrorResultType} from "../types/errors-types";
 import {CommentsService} from "../comments/comments-service";
 import {LikeStatusEnum} from "../likes /domain/like.entity";
-import {log} from "node:util";
+import {PostsQwRepository} from "./postsQwRepository";
 
 
 export class PostsController {
     constructor(private postsRepository: PostsRepository,
                 private postsService: PostsService,
                 private commentsService: CommentsService,
-                private commentsQwRepository: CommentsQwRepository) {
+                private commentsQwRepository: CommentsQwRepository,
+                private postsQwRepository: PostsQwRepository
+    ) {
     }
 
     async getCommentsByPostId(req: Request<{ id: string }, {}, {}, QueryInputType>,
@@ -59,6 +61,7 @@ export class PostsController {
         req: Request<{}, {}, {}, QueryInputType>,
         res: Response<ResponsePostsType>) {
         const {pageNumber, pageSize, sortBy, sortDirection} = postQueryPagingDef(req.query)
+        const userId = req.user!._id.toString()
 
         const sortData: sortType = {
             pageNumber,
@@ -66,7 +69,7 @@ export class PostsController {
             sortBy,
             sortDirection,
         }
-        const posts = await this.postsService.getAllPosts(sortData)
+        const posts = await this.postsQwRepository.getAllPosts(sortData , undefined ,userId)
         res.status(200).json(posts)
     }
 
@@ -74,7 +77,7 @@ export class PostsController {
         req: Request<{ id: string }, {}, {}>,
         res: Response<PostViewModel>) {
 
-
+        const userId = req.user!._id.toString()
         const id = req.params.id;
         const currentPost = await this.postsService.getPostById(id)
 
@@ -211,8 +214,9 @@ export class PostsController {
             res.sendStatus(404)
             return
         }
-const result = this.postsService.updateLikeStatus(postId , likeStatus , userId)
-
+        const result = await this.postsService.updateLikeStatus(postId, likeStatus, userId)
+        res.sendStatus(result.status)
+        return
     }
 }
 

@@ -1,0 +1,64 @@
+import {ObjectId, WithId} from "mongodb";
+import {IPost, PostResponseModel} from "./domain/post-types";
+import {LikeStatusEnum} from "../likes /domain/like.entity";
+import {sortType} from "../types/sort-types";
+import {PostModel} from "./domain/postSchema";
+import {LikesModel} from "../db/mongoDb";
+import {PaginationType} from "../types/pagination-types";
+
+export class PostsQwRepository {
+    _mappedPostsToResponse (post:WithId<IPost> , likeStatus:LikeStatusEnum):PostResponseModel {
+        return {
+            id:post._id.toString(),
+            title:post.title,
+            shortDescription:post.shortDescription,
+            content: post.content,
+            blogId: post.blogId.toString(),
+            blogName: post.blogName,
+            createdAt: post.createdAt.toISOString(),
+            extendedLikesInfo: {
+                likesCount: post.extendedLikesInfo.likesCount,
+                dislikesCount: post.extendedLikesInfo.dislikesCount,
+                myStatus: likeStatus,
+                newestLikes: post.extendedLikesInfo.newestLikes,
+            }
+        }
+    }
+    async getAllPosts(sortData: sortType, blogId?: string | undefined , userId?: string | null):Promise<PaginationType<PostResponseModel>> {
+
+        const {pageNumber, pageSize, sortBy, sortDirection} = sortData
+
+        const filter: any = {}
+
+        const posts = await PostModel
+            .find(filter)
+            .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1})
+            .skip((pageNumber - 1) * pageSize)
+            .limit(pageSize)
+            .lean()
+        let postMap = new Map<string, LikeStatusEnum>()
+        if (userId) {
+            const postIds = posts.map(post => post._id.toString());
+            const userLikes = await LikesModel.find({
+                userId: new ObjectId(userId),
+                parentId: {$in: postIds}
+            })
+                .lean()
+            userLikes.forEach((like) => {
+                postMap.set(like._id.toString(), like.status);
+            })
+        }
+        const findFilter = blogId ? {blogId} : {}
+        const postsCount =  await PostModel.countDocuments(findFilter);
+        return {
+            pagesCount: Math.ceil(postsCount / pageSize),
+            page: pageNumber,
+            pageSize,
+            totalCount: postsCount,
+            items: posts.map((post:WithId<IPost>)=> {
+               return this._mappedPostsToResponse(post , postMap.get(post._id.toString()) ?? LikeStatusEnum.None)
+            })
+        }
+
+    }
+}

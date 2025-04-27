@@ -8,8 +8,8 @@ import {getUserIdMiddleware} from "../auth/middlewares/getUserIdMiddleware";
 
 export const postsRouter = Router();
 
-postsRouter.get('/', postsController.getPosts.bind(postsController))
-postsRouter.get('/:id', postsController.getPostById.bind(postsController))
+postsRouter.get('/', getUserIdMiddleware ,postsController.getPosts.bind(postsController))
+postsRouter.get('/:id',getUserIdMiddleware, postsController.getPostById.bind(postsController))
 postsRouter.get('/:id/comments' , getUserIdMiddleware , postsController.getCommentsByPostId.bind(postsController) )
 
 // basic auth
