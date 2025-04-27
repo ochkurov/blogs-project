@@ -46,7 +46,9 @@ export class CommentsQwRepository {
 
             // Найти все лайки, которые поставил пользователь для данных комментариев
             const userLikes = await LikesModel
-                .find({ userId: new ObjectId(userId) , parentId: {$in: commentIds}})
+                .find({
+                    userId: new ObjectId(userId) ,
+                    parentId: {$in: commentIds}})
                 .lean();
 
             // Создаем Map для быстрого поиска лайков по commentId

@@ -7,7 +7,7 @@ export type IPost = {
     content: string, //maxLength: 1000
     blogId: Schema.Types.ObjectId,
     blogName: string,
-    createdAt: Date,
+    createdAt: string,
     extendedLikesInfo: IPostExtendedLikesInfo
 }
 export type IPostExtendedLikesInfo = {

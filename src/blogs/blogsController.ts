@@ -89,7 +89,7 @@ export class BlogsController {
         req: Request<
             { blogId: string }, {}, PostInputModel>,
         res: Response<PostViewModel>) {
-
+        const userId = req.user!._id.toString()
         const blogId = req.params.blogId;
         let body = {...req.body, blogId: blogId};
 
@@ -101,7 +101,7 @@ export class BlogsController {
             return
         }
 
-        const newPost = await this.postsService.getPostByMongoID(postId)
+        const newPost = await this.postsQwRepository.getPostById(postId.toString() , userId);
         if (!newPost) {
             res.sendStatus(404)
             return

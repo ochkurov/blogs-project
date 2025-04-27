@@ -16,7 +16,7 @@ export class PostsQwRepository {
             content: post.content,
             blogId: post.blogId.toString(),
             blogName: post.blogName,
-            createdAt: post.createdAt.toISOString(),
+            createdAt: post.createdAt,
             extendedLikesInfo: {
                 likesCount: post.extendedLikesInfo.likesCount,
                 dislikesCount: post.extendedLikesInfo.dislikesCount,
@@ -64,7 +64,7 @@ export class PostsQwRepository {
 
     }
 
-    async getPostById(id: string, userId?: string | null): Promise<PostViewModel | null> {
+    async getPostById(id: string, userId?: ObjectId | null): Promise<PostViewModel | null> {
         const post = await PostModel.findById({_id: new ObjectId(id)}).lean()
         if (!post) {
             return null;
