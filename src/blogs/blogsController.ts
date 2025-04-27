@@ -6,6 +6,7 @@ import {PostInputModel, PostViewModel, QueryInputType} from "../types/posts-type
 import {postQueryPagingDef} from "../helpers/post_paginations_values";
 import {PostsService} from "../posts/posts-service";
 import {APIErrorResultType} from "../types/errors-types";
+import {PostsQwRepository} from "../posts/postsQwRepository";
 
 
 export class BlogsController {
@@ -13,7 +14,9 @@ export class BlogsController {
 
     constructor(
         private blogsService: BlogsService,
-        private postsService: PostsService) {
+        private postsService: PostsService,
+        private postsQwRepository: PostsQwRepository
+    ) {
 
     }
 
@@ -54,10 +57,14 @@ export class BlogsController {
         req: Request<{ blogId: string }, {}, {}, QueryInputType>,
         res: Response) {
 
-
+        const userId = req.user!._id.toString()
         const blogId = req.params.blogId;
-
-        const currentPosts = await this.postsService.getPostsFromBlogId(blogId, postQueryPagingDef(req.query))
+        if (!blogId) {
+            res.sendStatus(404)
+            return
+        }
+        const sortData = postQueryPagingDef(req.query)
+        const currentPosts = await this.postsQwRepository.getAllPosts(sortData, blogId, userId)
 
         if (!currentPosts) {
             res.sendStatus(404)

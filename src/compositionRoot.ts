@@ -46,7 +46,7 @@ const postsService = new PostsService(postsRepository , blogsRepository, likeSer
 const blogsService = new BlogsService(blogsRepository)
 const testingRepository = new TestingRepository()
 
-const blogsController = new BlogsController(blogsService , postsService)
+const blogsController = new BlogsController(blogsService , postsService,postsQwRepository)
 const commentsController = new CommentsController(commentsService, commentsRepository , commentsQwRepository)
 const postsController = new PostsController(postsRepository ,postsService , commentsService , commentsQwRepository,postsQwRepository)
 const sessionController = new SessionController(sessionQwRepository, sessionRepository)
