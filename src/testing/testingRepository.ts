@@ -1,4 +1,4 @@
-import {blogsCollection, BlogsModel, postsCollection, PostsModel, usersCollection} from "../db/mongoDb";
+import {blogsCollection, BlogsModel, postsCollection, usersCollection} from "../db/mongoDb";
 
 export class TestingRepository {
 

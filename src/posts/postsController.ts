@@ -95,6 +95,7 @@ export class PostsController {
         res: Response<PostViewModel | APIErrorResultType>
     ) {
 
+        const userId = req.user!._id.toString()
         const postId = await this.postsService.createPost(req.body)
 
         if (!postId) {
@@ -102,7 +103,7 @@ export class PostsController {
             return
         }
 
-        const newPost = await this.postsService.getPostByMongoID(postId)
+        const newPost = await this.postsQwRepository.getPostById(postId.toString() , userId)
 
         if (!newPost) {
             res.sendStatus(404)

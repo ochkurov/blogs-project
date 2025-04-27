@@ -13,7 +13,7 @@ postsRouter.get('/:id',getUserIdMiddleware, postsController.getPostById.bind(pos
 postsRouter.get('/:id/comments' , getUserIdMiddleware , postsController.getCommentsByPostId.bind(postsController) )
 
 // basic auth
-postsRouter.post('/', authorizationMidleware, postBodyValidation , errorsResultMiddleware , postsController.createPost.bind(postsController))
+postsRouter.post('/', authorizationMidleware, getUserIdMiddleware ,postBodyValidation , errorsResultMiddleware , postsController.createPost.bind(postsController))
 postsRouter.put('/:id', authorizationMidleware,postBodyValidation , errorsResultMiddleware, postsController.updatePost.bind(postsController))
 postsRouter.delete('/:id', authorizationMidleware , postsController.deletePost.bind(postsController))
 
