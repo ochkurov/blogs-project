@@ -79,7 +79,7 @@ export class PostsController {
 
         const userId = req.user!._id.toString()
         const id = req.params.id;
-        const currentPost = await this.postsService.getPostById(id)
+        const currentPost = await this.postsQwRepository.getPostById(id , userId)
 
         if (!currentPost) {
             res.sendStatus(404)

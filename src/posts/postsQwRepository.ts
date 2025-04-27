@@ -5,13 +5,14 @@ import {sortType} from "../types/sort-types";
 import {PostModel} from "./domain/postSchema";
 import {LikesModel} from "../db/mongoDb";
 import {PaginationType} from "../types/pagination-types";
+import {PostViewModel} from "../types/posts-types";
 
 export class PostsQwRepository {
-    _mappedPostsToResponse (post:WithId<IPost> , likeStatus:LikeStatusEnum):PostResponseModel {
+    _mappedPostsToResponse(post: WithId<IPost>, likeStatus: LikeStatusEnum): PostResponseModel {
         return {
-            id:post._id.toString(),
-            title:post.title,
-            shortDescription:post.shortDescription,
+            id: post._id.toString(),
+            title: post.title,
+            shortDescription: post.shortDescription,
             content: post.content,
             blogId: post.blogId.toString(),
             blogName: post.blogName,
@@ -24,7 +25,8 @@ export class PostsQwRepository {
             }
         }
     }
-    async getAllPosts(sortData: sortType, blogId?: string | undefined , userId?: string | null):Promise<PaginationType<PostResponseModel>> {
+
+    async getAllPosts(sortData: sortType, blogId?: string | undefined, userId?: string | null): Promise<PaginationType<PostResponseModel>> {
 
         const {pageNumber, pageSize, sortBy, sortDirection} = sortData
 
@@ -49,16 +51,25 @@ export class PostsQwRepository {
             })
         }
         const findFilter = blogId ? {blogId} : {}
-        const postsCount =  await PostModel.countDocuments(findFilter);
+        const postsCount = await PostModel.countDocuments(findFilter);
         return {
             pagesCount: Math.ceil(postsCount / pageSize),
             page: pageNumber,
             pageSize,
             totalCount: postsCount,
-            items: posts.map((post:WithId<IPost>)=> {
-               return this._mappedPostsToResponse(post , postMap.get(post._id.toString()) ?? LikeStatusEnum.None)
+            items: posts.map((post: WithId<IPost>) => {
+                return this._mappedPostsToResponse(post, postMap.get(post._id.toString()) ?? LikeStatusEnum.None)
             })
         }
 
+    }
+
+    async getPostById(id: string, userId?: string | null): Promise<PostViewModel | null> {
+        const post = await PostModel.findById({_id: new ObjectId(id)}).lean()
+        if (!post) {
+            return null;
+        }
+        const likeStatus = await LikesModel.findOne({userId, parentId: id})
+        return this._mappedPostsToResponse(post, likeStatus?.status ?? LikeStatusEnum.None)
     }
 }
