@@ -57,7 +57,7 @@ export class BlogsController {
         req: Request<{ blogId: string }, {}, {}, QueryInputType>,
         res: Response) {
 
-        const userId = req.user!._id.toString()
+        const userId = req.user?._id.toString()
         const blogId = req.params.blogId;
         if (!blogId) {
             res.sendStatus(404)
@@ -89,7 +89,7 @@ export class BlogsController {
         req: Request<
             { blogId: string }, {}, PostInputModel>,
         res: Response<PostViewModel>) {
-        const userId = req.user!._id.toString()
+        const userId = req.user?._id.toString()
         const blogId = req.params.blogId;
         let body = {...req.body, blogId: blogId};
 
