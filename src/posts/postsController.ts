@@ -25,7 +25,7 @@ export class PostsController {
     async getCommentsByPostId(req: Request<{ id: string }, {}, {}, QueryInputType>,
                               res: Response<CommentResponseType>) {
 
-        const userId = req.user!._id.toString()
+        const userId = req.user?._id.toString()
         const postId = req.params.id;
         const query = req.query
 
@@ -77,7 +77,7 @@ export class PostsController {
         req: Request<{ id: string }, {}, {}>,
         res: Response<PostViewModel>) {
 
-        const userId = req.user!._id.toString()
+        const userId = req.user?._id.toString()
         const id = req.params.id;
         const currentPost = await this.postsQwRepository.getPostById(id , userId)
 
@@ -95,7 +95,8 @@ export class PostsController {
         res: Response<PostViewModel | APIErrorResultType>
     ) {
 
-        const userId = req.user!._id.toString()
+        const userId = req.user?._id.toString()
+
         const postId = await this.postsService.createPost(req.body)
 
         if (!postId) {
@@ -103,7 +104,7 @@ export class PostsController {
             return
         }
 
-        const newPost = await this.postsQwRepository.getPostById(postId.toString() , userId)
+        const newPost = await this.postsQwRepository.getPostById(postId.toString() , userId )
 
         if (!newPost) {
             res.sendStatus(404)

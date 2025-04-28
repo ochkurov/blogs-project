@@ -25,7 +25,7 @@ export class CommentsQwRepository {
         return mappedCommentToView(status, comment)
     }
 
-    async getCommentsByPostId(postId: string, commentQuery: QueryInputType, userId: string) {
+    async getCommentsByPostId(postId: string, commentQuery: QueryInputType, userId: string|undefined) {
         const {sortBy, sortDirection, pageSize, pageNumber} = commentQuery
         const filteredComments: any = {}
         if (postId) {
