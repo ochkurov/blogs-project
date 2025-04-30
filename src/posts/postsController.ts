@@ -61,7 +61,8 @@ export class PostsController {
         req: Request<{}, {}, {}, QueryInputType>,
         res: Response<ResponsePostsType>) {
         const {pageNumber, pageSize, sortBy, sortDirection} = postQueryPagingDef(req.query)
-        const userId = req.user!._id.toString()
+
+        const userId = req.user?._id.toString()
 
         const sortData: sortType = {
             pageNumber,

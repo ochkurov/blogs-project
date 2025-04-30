@@ -23,3 +23,4 @@ authRouter.post('/refresh-token' ,refreshTokenMiddleware.execute ,authController
 authRouter.post('/logout' , refreshTokenMiddleware.execute , authController.logout.bind(authController))
 authRouter.post('/password-recovery' , rateLimitMiddleware , userCredentialsValidate[1] , errorsResultMiddleware , authController.passwordRecovery.bind(authController))
 authRouter.post('/new-password' , rateLimitMiddleware , newPasswordValidate , recoveryCodeValidate , errorsResultMiddleware , authController.newPassword.bind(authController))
+ы

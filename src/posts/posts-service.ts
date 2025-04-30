@@ -103,6 +103,7 @@ export class PostsService {
             }
         }
         const newestLikes:IPostNewestLikes[] = await this.likeQwRepository.getNewestLikesByParentId(post._id.toString() , 3)
+        console.log(post , newestLikes ,`ssss`)
         post.setLikesInfo(newestLikes) //тут может быть ошибка
         await this.postsRepository.save(post)
         return {

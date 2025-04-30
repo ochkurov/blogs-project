@@ -19,4 +19,4 @@ postsRouter.delete('/:id', authorizationMidleware , postsController.deletePost.b
 
 // bearer auth
 postsRouter.post('/:id/comments' , authBearerMiddleware.execute, ...commentCredentialsValidate , errorsResultMiddleware , postsController.createCommentByPostId.bind(postsController))
-postsRouter.post('/:id/like-status' , authBearerMiddleware.execute , likeStatusValidate, errorsResultMiddleware , postsController.updateLikeStatus.bind(postsController))
+postsRouter.put('/:id/like-status' , authBearerMiddleware.execute , likeStatusValidate, errorsResultMiddleware , postsController.updateLikeStatus.bind(postsController))

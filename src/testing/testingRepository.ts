@@ -1,13 +1,25 @@
-import {blogsCollection, BlogsModel, postsCollection, usersCollection} from "../db/mongoDb";
+import {
+    blogsCollection,
+    BlogsModel,
+    CommentsModel,
+    LikesModel,
+    postsCollection,
+    usersCollection,
+    UsersModel
+} from "../db/mongoDb";
+import {PostModel} from "../posts/domain/postSchema";
 
 export class TestingRepository {
 
     async deleteAllBlogs() {
-        return await blogsCollection.deleteMany({}) ,
-
-            await postsCollection.deleteMany({}) ,
-
-            await usersCollection.deleteMany({})
+        return Promise.all([
+            BlogsModel.deleteMany(),
+            PostModel.deleteMany(),
+            UsersModel.deleteMany(),
+            LikesModel.deleteMany(),
+            usersCollection.deleteMany(),
+            CommentsModel.deleteMany(),
+        ])
     }
 }
 

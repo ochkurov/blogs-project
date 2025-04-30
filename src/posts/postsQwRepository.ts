@@ -26,11 +26,11 @@ export class PostsQwRepository {
         }
     }
 
-    async getAllPosts(sortData: sortType, blogId?: string | undefined, userId?: string | null): Promise<PaginationType<PostResponseModel>> {
+    async getAllPosts(sortData: sortType, blogId?: string | undefined, userId?: string | undefined): Promise<PaginationType<PostResponseModel>> {
 
         const {pageNumber, pageSize, sortBy, sortDirection} = sortData
 
-        const filter: any = {}
+        const filter: any = blogId ? {blogId} : {}
 
         const posts = await PostModel
             .find(filter)
@@ -39,19 +39,20 @@ export class PostsQwRepository {
             .limit(pageSize)
             .lean()
         let postMap = new Map<string, LikeStatusEnum>()
+
         if (userId) {
-            const postIds = posts.map(post => post._id.toString());
+            const postIds = posts.map(post => post._id);
             const userLikes = await LikesModel.find({
                 userId: new ObjectId(userId),
                 parentId: {$in: postIds}
             })
                 .lean()
             userLikes.forEach((like) => {
-                postMap.set(like._id.toString(), like.status);
+                postMap.set(like.parentId.toString(), like.status);
             })
         }
-        const findFilter = blogId ? {blogId} : {}
-        const postsCount = await PostModel.countDocuments(findFilter);
+
+        const postsCount = await PostModel.countDocuments(filter);
         return {
             pagesCount: Math.ceil(postsCount / pageSize),
             page: pageNumber,

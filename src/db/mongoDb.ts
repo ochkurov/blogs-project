@@ -84,7 +84,7 @@ const LikesSchema = new mongoose.Schema<ILike>({
     parentId: {type: Schema.Types.ObjectId, required: true},
     createdAt: {
         type: Date,
-        default: new Date(),
+        default:  () => new Date(),
     },
 })
 

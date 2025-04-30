@@ -7,7 +7,7 @@ export const getUserIdMiddleware = async (req: Request<any ,any , any , any>, re
     if (authHeader && authHeader.startsWith("Bearer ")) {
         const token = authHeader.split(" ")[1];
         try {
-            const userId: any = await jwtService.getUserIdByToken(token); // Используем decode без проверки подписи
+            const userId = await jwtService.getUserIdByToken(token); // Используем decode без проверки подписи
             console.log(userId, 'extractUserIdMiddleware');
             if (userId) {
                 req.user = {...req.user! , _id: userId}// Добавляем userId в req
