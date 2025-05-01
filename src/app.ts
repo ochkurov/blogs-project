@@ -28,7 +28,7 @@ export const initApp = ()=>{
     app.use(SETTINGS.PATH.SESSIONS , sessionRouter)
 
 
-    return appddasdas
+    return app
 }
 
 
