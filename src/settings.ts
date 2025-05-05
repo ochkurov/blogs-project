@@ -10,7 +10,6 @@ config()
 export const SETTINGS = {
 
     PORT: process.env.PORT || 3003,
-
     CREDENTIAL: {
       LOGIN: 'admin',
       PASSWORD: 'qwerty',
