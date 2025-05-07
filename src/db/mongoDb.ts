@@ -101,7 +101,7 @@ export async function runDb(url: string): Promise<boolean> {
     postsCollection = db.collection<any>(SETTINGS.DB_COLLECTION_NAME.POSTS)
     blogsCollection = db.collection<any>(SETTINGS.DB_COLLECTION_NAME.BLOGS)
 
-
+postsCollection.
     try {
         await mongoose.connect(url);
         if (mongoose.connection.readyState !== 1) {
