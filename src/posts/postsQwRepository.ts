@@ -31,7 +31,7 @@ export class PostsQwRepository {
         const {pageNumber, pageSize, sortBy, sortDirection} = sortData
 
         const filter: any = blogId ? {blogId} : {}
-
+ы
         const posts = await PostModel
             .find(filter)
             .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1})
