@@ -36,7 +36,7 @@ export class PostsQwRepository {
             .find(filter)
             .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1})
             .skip((pageNumber - 1) * pageSize)
-            .limit(pageSize)
+            .limit(pageSize)в
             .lean()
         let postMap = new Map<string, LikeStatusEnum>()
 
