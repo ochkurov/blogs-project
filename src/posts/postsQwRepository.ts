@@ -40,7 +40,7 @@ export class PostsQwRepository {
             .lean()
         let postMap = new Map<string, LikeStatusEnum>()
 
-        if (userId) {
+        if (userId) {ллл
             const postIds = posts.map(post => post._id);
             const userLikes = await LikesModel.find({
                 userId: new ObjectId(userId),
