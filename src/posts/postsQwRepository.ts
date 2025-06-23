@@ -39,7 +39,7 @@ export class PostsQwRepository {
             .limit(pageSize)
             .lean()
         let postMap = new Map<string, LikeStatusEnum>()
-
+ооо
         if (userId) {
             const postIds = posts.map(post => post._id);
             const userLikes = await LikesModel.find({
