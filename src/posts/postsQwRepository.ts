@@ -44,7 +44,7 @@ export class PostsQwRepository {
             const postIds = posts.map(post => post._id);
             const userLikes = await LikesModel.find({
                 userId: new ObjectId(userId),
-                parentId: {$in: postIds}ыыыы
+                parentId: {$in: postIds}
             })
                 .lean()
             userLikes.forEach((like) => {
