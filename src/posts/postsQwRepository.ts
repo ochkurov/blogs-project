@@ -46,7 +46,7 @@ export class PostsQwRepository {
                 userId: new ObjectId(userId),
                 parentId: {$in: postIds}
             })
-                .lean()
+                .lean()ллл
             userLikes.forEach((like) => {
                 postMap.set(like.parentId.toString(), like.status);
             })
